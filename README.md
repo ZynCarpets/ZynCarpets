@@ -37,6 +37,21 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
   - Smooth scrolling navigation
   - Social media integration
 
+- **Analytics & SEO**
+  - Google Analytics integration
+  - Google Search Console verification
+  - Custom event tracking
+  - SEO-optimized meta tags
+  - XML sitemap
+  - Robots.txt configuration
+
+- **Security & Performance**
+  - Environment variable protection
+  - Security headers implementation
+  - Automated form submission backups
+  - Rate limiting and spam protection
+  - Content Security Policy
+
 ## Project Structure
 
 ```
@@ -45,6 +60,10 @@ zyncarpets/
 ├── styles.css          # CSS styles
 ├── script.js           # Frontend JavaScript
 ├── config.js           # Configuration file
+├── .env               # Environment variables (not tracked)
+├── .github/           # GitHub Actions workflows
+│   └── workflows/
+│       └── deploy.yml # Deployment configuration
 ├── logo.png           # Company logo
 ├── TODO.md            # Project tasks and notes
 └── README.md          # Documentation
@@ -57,6 +76,12 @@ zyncarpets/
   - CSS3 (Flexbox, Grid, Custom Properties)
   - JavaScript (ES6+)
   - Font Awesome for icons
+
+- **Backend & Services**
+  - Formspree for form handling
+  - Google Analytics for tracking
+  - GitHub Actions for CI/CD
+  - Automated backup system
 
 ## Getting Started
 
@@ -91,6 +116,13 @@ zyncarpets/
 ## Deployment
 
 ### GitHub Pages Deployment with GitHub Actions
+
+The project uses GitHub Actions for automated deployment to GitHub Pages. The workflow is configured to:
+- Build and deploy on push to main branch
+- Inject environment variables securely
+- Generate and deploy sitemap
+- Handle custom domain configuration
+- Implement security headers
 
 1. Set up GitHub repository secrets:
    - Go to your repository settings
@@ -162,11 +194,17 @@ zyncarpets/
 
 ## Security
 
-### Configuration and Environment Variables
-- Sensitive information is stored in environment variables
-- Use `config.template.js` as a base for your configuration
-- Create a `.env` file with your actual values (not tracked in git)
-- Never commit sensitive data to the repository
+### Implemented Security Features
+- Environment variables for sensitive data
+- Content Security Policy headers
+- X-Frame-Options protection
+- X-Content-Type-Options headers
+- Referrer-Policy configuration
+- X-XSS-Protection headers
+- Form submission rate limiting
+- Automated backup system for form submissions
+- 30-day backup retention policy
+- GitHub repository secrets for sensitive data
 
 ### Required Environment Variables
 1. `GOOGLE_ANALYTICS_ID`: Your Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
@@ -189,6 +227,9 @@ zyncarpets/
 3. Implement Content Security Policy (CSP)
 4. Regular security audits
 5. Follow OWASP security guidelines
+6. Automated backup system
+7. Rate limiting for form submissions
+8. Spam protection through Formspree
 
 ### Setting Up Local Development
 1. Copy `config.template.js` to `config.js`
