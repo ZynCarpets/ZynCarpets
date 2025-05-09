@@ -3,6 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; 
+                   style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
+                   img-src 'self' data: https:; 
+                   font-src 'self' https://cdnjs.cloudflare.com; 
+                   connect-src 'self' https://www.google-analytics.com; 
+                   frame-src 'self'; 
+                   object-src 'none'; 
+                   base-uri 'self'; 
+                   form-action 'self' https://formspree.io">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
     <meta name="google-site-verification" content="process.env.GOOGLE_SITE_VERIFICATION" />
     <title>Zyn Carpets - Find Your Peace in Clean Carpets</title>
     
@@ -34,6 +52,7 @@
     </script>
     
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 </head>
 <body>
@@ -201,6 +220,10 @@
 
     <script src="config.js"></script>
     <script src="script.js"></script>
+    <script src="backup.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
     <script src="test-links.js"></script>
     <script src="test-contact-form.js"></script>
     <script src="test-responsive.js"></script>

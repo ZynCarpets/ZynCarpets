@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /logs/
+Disallow: /test-*.js
 
+# Sitemap
 Sitemap: https://zyncarpets.com/sitemap.xml 

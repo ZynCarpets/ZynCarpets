@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found</title>
+    <title>Page Not Found - Zyn Carpets</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         :root {
             --primary: #CDB773;      /* Gold */
@@ -64,13 +65,68 @@
             color: var(--bg-dark);
             transform: translateY(-2px);
         }
+
+        .error-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        .error-logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+
+        .error-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-muted);
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .error-button {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+        }
+
+        .error-button:hover {
+            background-color: var(--primary);
+            color: var(--bg-dark);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>404</h1>
-        <p>Page not found</p>
-        <a href="/">Return Home</a>
+    <div class="error-container">
+        <img src="logo.png" alt="Zyn Carpets Logo" class="error-logo">
+        <h1 class="error-title">404 - Page Not Found</h1>
+        <p class="error-message">The page you're looking for seems to have vanished like a stubborn carpet stain after our cleaning.</p>
+        <div class="error-actions">
+            <a href="/" class="error-button">Return Home</a>
+            <a href="/#contact" class="error-button">Contact Us</a>
+        </div>
     </div>
 </body>
 </html> 

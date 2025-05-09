@@ -750,35 +750,64 @@ function hideValidationMessage(elementId) {
 function showFormValidation(message, isSuccess = false) {
     console.log('Showing form validation message:', { message, isSuccess });
     
-    const formMessage = document.getElementById('form-message');
+    const formMessage = document.getElementById('form-validation');
     if (!formMessage) {
         console.error('Form message element not found');
         return;
     }
 
-    formMessage.textContent = message;
-    formMessage.className = `form-message ${isSuccess ? 'success' : 'error'}`;
-    formMessage.style.display = 'block';
+    // Create success message with icon
+    if (isSuccess) {
+        formMessage.innerHTML = `
+            <div class="success-message">
+                <div class="success-icon"></div>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        // Add success animation to form
+        const form = document.getElementById('contact-form');
+        form.classList.add('form-success');
+        
+        // Show toast notification
+        showToast(message);
+        
+        // Remove success class after animation
+        setTimeout(() => {
+            form.classList.remove('form-success');
+        }, 1000);
+    } else {
+        formMessage.textContent = message;
+        formMessage.className = 'validation-message error';
+    }
     
+    formMessage.style.display = 'block';
     console.log('Form validation message displayed');
 }
 
 /**
- * Hides the form-wide validation message
+ * Shows a toast notification
+ * @param {string} message - The message to display
  */
-function hideFormValidation() {
-    console.log('Hiding form validation message');
+function showToast(message) {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+        <div class="success-icon"></div>
+        <span>${message}</span>
+    `;
     
-    const formMessage = document.getElementById('form-message');
-    if (!formMessage) {
-        console.error('Form message element not found');
-        return;
-    }
-
-    formMessage.style.display = 'none';
-    formMessage.textContent = '';
+    // Add to document
+    document.body.appendChild(toast);
     
-    console.log('Form validation message hidden');
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 500);
+    }, 3000);
 }
 
 /**
@@ -788,212 +817,67 @@ function hideFormValidation() {
 function initializeContactForm() {
     console.log('Initializing contact form...');
     const form = document.getElementById('contact-form');
-    if (!form) {
-        console.error('Contact form element not found!');
-        return;
-    }
+    const formBackup = new FormBackup();
+    const submitButton = form.querySelector('button[type="submit"]');
 
-    // Get form fields
-    const nameInput = document.getElementById('name');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const streetInput = document.getElementById('street');
-    const zipInput = document.getElementById('zip');
-    const messageInput = document.getElementById('message');
-
-    console.log('Form fields found:', {
-        name: nameInput ? 'Found' : 'Not found',
-        email: emailInput ? 'Found' : 'Not found',
-        phone: phoneInput ? 'Found' : 'Not found',
-        street: streetInput ? 'Found' : 'Not found',
-        zip: zipInput ? 'Found' : 'Not found',
-        message: messageInput ? 'Found' : 'Not found'
-    });
-
-    // Add input event listeners for real-time validation
-    nameInput?.addEventListener('input', () => {
-        console.log('Validating name input...');
-        validateName(nameInput.value);
-    });
-
-    emailInput?.addEventListener('input', () => {
-        console.log('Validating email input...');
-        validateEmail(emailInput.value);
-    });
-
-    phoneInput?.addEventListener('input', () => {
-        console.log('Validating phone input...');
-        validatePhone(phoneInput.value);
-    });
-
-    streetInput?.addEventListener('input', () => {
-        console.log('Validating street input...');
-        validateStreet(streetInput.value);
-    });
-
-    zipInput?.addEventListener('input', () => {
-        console.log('Validating zip code input...');
-        validateZip(zipInput.value);
-    });
-
-    // Form submission handler
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        console.log('Form submission started...');
+        
+        // Add loading state to button
+        submitButton.classList.add('loading');
+        
+        // Get form data
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            street: document.getElementById('street').value,
+            zip: document.getElementById('zip').value
+        };
 
-        // Validate all fields
-        const isNameValid = validateName(nameInput.value);
-        const isEmailValid = validateEmail(emailInput.value);
-        const isPhoneValid = validatePhone(phoneInput.value);
-        const isStreetValid = validateStreet(streetInput.value);
-        const isZipValid = validateZip(zipInput.value);
+        // Validate form data
+        if (!validateFormData(formData)) {
+            submitButton.classList.remove('loading');
+            return;
+        }
 
-        console.log('Form validation results:', {
-            name: isNameValid,
-            email: isEmailValid,
-            phone: isPhoneValid,
-            street: isStreetValid,
-            zip: isZipValid
-        });
-
-        if (isNameValid && isEmailValid && isPhoneValid && isStreetValid && isZipValid) {
-            console.log('All form fields are valid, preparing submission...');
-            const formData = {
-                name: nameInput.value,
-                email: emailInput.value,
-                phone: phoneInput.value,
-                street: streetInput.value,
-                zip: zipInput.value,
-                message: messageInput.value
-            };
-
-            try {
-                console.log('Sending form data to server...');
-                const formspreeId = contactForm.dataset.formspreeId;
-                const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    console.log('Form submitted successfully!');
-                    showFormValidation('Thank you for your message! We will get back to you soon.', true);
-                    form.reset();
-                } else {
-                    console.error('Form submission failed:', response.status);
-                    showFormValidation('Sorry, there was an error submitting your message. Please try again.');
+        try {
+            // Submit to Formspree
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                showFormValidation('Sorry, there was an error submitting your message. Please try again.');
+            });
+
+            if (response.ok) {
+                // Backup the submission
+                await formBackup.backupSubmission(formData);
+                
+                // Show success message
+                showFormValidation('Thank you for your submission! We will contact you soon.', true);
+                form.reset();
+                
+                // Add success animation to all fields
+                const fields = form.querySelectorAll('input');
+                fields.forEach(field => {
+                    field.classList.add('field-success');
+                    setTimeout(() => {
+                        field.classList.remove('field-success');
+                    }, 1000);
+                });
+            } else {
+                throw new Error('Form submission failed');
             }
-        } else {
-            console.warn('Form submission prevented due to validation errors');
-            showFormValidation('Please correct the errors in the form before submitting.');
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            showFormValidation('There was an error submitting your form. Please try again.', false);
+        } finally {
+            // Remove loading state
+            submitButton.classList.remove('loading');
         }
     });
-}
-
-/**
- * Validates a name input
- * @param {string} name - The name to validate
- * @returns {boolean} Whether the name is valid
- */
-function validateName(name) {
-    console.log('Validating name:', name);
-    const isValid = name.length >= 2 && /^[a-zA-Z\s-']+$/.test(name);
-    console.log('Name validation result:', isValid);
-    
-    if (isValid) {
-        showValidationMessage('name', 'Name looks good!', true);
-    } else {
-        showValidationMessage('name', 'Please enter a valid name (at least 2 characters, letters only)');
-    }
-    
-    return isValid;
-}
-
-/**
- * Validates an email address
- * @param {string} email - The email to validate
- * @returns {boolean} Whether the email is valid
- */
-function validateEmail(email) {
-    console.log('Validating email:', email);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailRegex.test(email);
-    console.log('Email validation result:', isValid);
-    
-    if (isValid) {
-        showValidationMessage('email', 'Email looks good!', true);
-    } else {
-        showValidationMessage('email', 'Please enter a valid email address');
-    }
-    
-    return isValid;
-}
-
-/**
- * Validates a phone number
- * @param {string} phone - The phone number to validate
- * @returns {boolean} Whether the phone number is valid
- */
-function validatePhone(phone) {
-    console.log('Validating phone:', phone);
-    const phoneRegex = /^\+?[\d\s-()]{10,}$/;
-    const isValid = phoneRegex.test(phone);
-    console.log('Phone validation result:', isValid);
-    
-    if (isValid) {
-        showValidationMessage('phone', 'Phone number looks good!', true);
-    } else {
-        showValidationMessage('phone', 'Please enter a valid phone number');
-    }
-    
-    return isValid;
-}
-
-/**
- * Validates a street address
- * @param {string} street - The street address to validate
- * @returns {boolean} Whether the street address is valid
- */
-function validateStreet(street) {
-    console.log('Validating street address:', street);
-    const isValid = street.length >= 5;
-    console.log('Street validation result:', isValid);
-    
-    if (isValid) {
-        showValidationMessage('street', 'Address looks good!', true);
-    } else {
-        showValidationMessage('street', 'Please enter a valid street address');
-    }
-    
-    return isValid;
-}
-
-/**
- * Validates a ZIP code
- * @param {string} zip - The ZIP code to validate
- * @returns {boolean} Whether the ZIP code is valid
- */
-function validateZip(zip) {
-    console.log('Validating ZIP code:', zip);
-    const zipRegex = /^\d{5}(-\d{4})?$/;
-    const isValid = zipRegex.test(zip);
-    console.log('ZIP validation result:', isValid);
-    
-    if (isValid) {
-        showValidationMessage('zip', 'ZIP code looks good!', true);
-        checkZipCodeCoverage(zip);
-    } else {
-        showValidationMessage('zip', 'Please enter a valid ZIP code');
-    }
-    
-    return isValid;
 }
 
 // Add this function at the end of the file

@@ -2,9 +2,8 @@
   "name": "zyncarpets",
   "version": "1.0.0",
   "description": "Zyn Carpets landing page",
-  "main": "config.js",
   "scripts": {
-    "start": "node config.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "dotenv": "^16.3.1"
