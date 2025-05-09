@@ -239,7 +239,18 @@ nav {
     }
 
     .logo-img {
-        height: 35px;
+        height: 25px;
+    }
+
+    .logo-container {
+        gap: 0.5rem;
+        padding: 0.2rem 0;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+        padding: 0.3rem;
+        margin-left: 0.5rem;
     }
 
     .nav-links {
@@ -264,16 +275,6 @@ nav {
     .nav-links a {
         font-size: 1.2rem;
         padding: 0.5rem 0;
-    }
-
-    .mobile-menu-btn {
-        display: block;
-        padding: 0.3rem;
-    }
-
-    .mobile-menu-btn span {
-        width: 22px;
-        margin: 4px 0;
     }
 
     .hero h1 {
@@ -335,11 +336,6 @@ nav {
     
     .social-links a i {
         font-size: 1.3rem;
-    }
-
-    .logo-container {
-        gap: 1.5rem;
-        padding: 0.2rem 0;
     }
 
     .logo {
