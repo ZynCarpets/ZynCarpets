@@ -40,8 +40,8 @@ const CONFIG = {
     // Service Areas Information
     serviceAreasInfo: {
         title: 'Currently serving',
-        areas: (process.env.SERVICE_AREAS || 'Madison,Huntsville,Athens').split(','),
-        states: (process.env.SERVICE_STATES || 'Alabama').split(',')
+        areas: ['Madison', 'Huntsville', 'Athens'],
+        states: ['Alabama']
     },
 
     // Slider Images
@@ -66,19 +66,19 @@ const CONFIG = {
 
     // Company Information
     company: {
-        name: process.env.COMPANY_NAME || 'Zyn Carpets',
-        tagline: process.env.COMPANY_TAGLINE || 'Your trusted partner in carpet care',
-        description: process.env.COMPANY_DESCRIPTION || 'Experience exceptional carpet cleaning services with our expert team.',
-        phone: process.env.COMPANY_PHONE || 'Coming Soon',
-        email: process.env.COMPANY_EMAIL || 'zyncarpetcare@gmail.com',
-        address: process.env.COMPANY_ADDRESS || 'Coming Soon'
+        name: 'Zyn Carpets',
+        tagline: 'Your trusted partner in carpet care',
+        description: 'Experience exceptional carpet cleaning services with our expert team.',
+        phone: '(555) 123-4567',
+        email: 'zyncarpetcare@gmail.com',
+        address: '123 Zen Street, Peaceful City, PC 12345'
     },
 
     // Social Media Links
     socialMedia: {
-        facebook: process.env.FACEBOOK_URL || 'https://facebook.com/zyncarpets',
-        instagram: process.env.INSTAGRAM_URL || 'https://instagram.com/zyncarpets',
-        twitter: process.env.TWITTER_URL || 'https://twitter.com/zyncarpets'
+        facebook: 'https://facebook.com/zyncarpets',
+        instagram: 'https://instagram.com/zyncarpets',
+        twitter: 'https://twitter.com/zyncarpets'
     },
 
     // Services
@@ -246,13 +246,13 @@ const CONFIG = {
     ],
 
     // Google Analytics and Search Console
-    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID || '',
-    GOOGLE_SITE_VERIFICATION: process.env.GOOGLE_SITE_VERIFICATION || '',
+    GOOGLE_ANALYTICS_ID: 'G-2N6JWQ6RQ1',
+    GOOGLE_SITE_VERIFICATION: 'i0o7NkRMms2nPz-bI4kE9CMW6Hf--QojqA8ExNg8tOo',
 
     // Formspree Configuration
     formspree: {
-        endpoint: `https://formspree.io/f/${process.env.FORMSPREE_FORM_ID || ''}`,
-        formId: process.env.FORMSPREE_FORM_ID || ''
+        endpoint: 'https://formspree.io/f/xzzrvpeb',
+        formId: 'xzzrvpeb'
     }
 };
 
