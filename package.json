@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Zyn Carpets landing page",
   "scripts": {
+    "build": "mkdir -p dist && cp -r js css images index.html dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

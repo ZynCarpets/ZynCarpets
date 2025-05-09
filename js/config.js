@@ -69,9 +69,9 @@ const CONFIG = {
         name: 'Zyn Carpets',
         tagline: 'Your trusted partner in carpet care',
         description: 'Experience exceptional carpet cleaning services with our expert team.',
-        phone: '(555) 123-4567',
-        email: 'zyncarpetcare@gmail.com',
-        address: '123 Zen Street, Peaceful City, PC 12345'
+        phone: 'Coming Soon',
+        email: 'contact@example.com',
+        address: 'Coming Soon'
     },
 
     // Social Media Links
@@ -246,13 +246,13 @@ const CONFIG = {
     ],
 
     // Google Analytics and Search Console
-    GOOGLE_ANALYTICS_ID: 'G-2N6JWQ6RQ1',
-    GOOGLE_SITE_VERIFICATION: 'i0o7NkRMms2nPz-bI4kE9CMW6Hf--QojqA8ExNg8tOo',
+    GOOGLE_ANALYTICS_ID: '***',
+    GOOGLE_SITE_VERIFICATION: 'YOUR_VERIFICATION_CODE',
 
     // Formspree Configuration
     formspree: {
-        endpoint: 'https://formspree.io/f/xzzrvpeb',
-        formId: 'xzzrvpeb'
+        endpoint: 'YOUR_FORMSPREE_ENDPOINT',
+        formId: 'YOUR_FORMSPREE_ID'
     }
 };
 
