@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyn Carpets - Find Your Peace in Clean Carpets</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="logo.png" alt="Zyn Carpets Logo" class="logo-img" loading="lazy">
+            </div>
+            <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#special-offers">Offers</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#coverage">Coverage</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="logo-showcase">
+            <div class="logo-showcase-container">
+                <img src="logo.png" alt="Zyn Carpets Logo" class="showcase-logo" loading="lazy">
+                <h2>Welcome to Zyn Carpets</h2>
+                <p id="welcome-tagline">Your trusted partner in carpet care excellence</p>
+            </div>
+        </section>
+
+        <section class="hero">
+            <div class="slider" id="slider">
+                <!-- Slides will be dynamically inserted here -->
+            </div>
+            <div class="slider-dots" id="slider-dots">
+                <!-- Dots will be dynamically inserted here -->
+            </div>
+            <div class="hero-content">
+                <h1 id="tagline">Find Your Peace in Clean Carpets</h1>
+                <p id="description">Let us handle the mess while you find your zen. Locally owned and operated with mindful care.</p>
+                <a href="#contact" class="cta-button">Experience the Difference</a>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <h2>Our Mindful Services</h2>
+            <div class="service-grid" id="services-grid">
+                <!-- Services will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section id="special-offers" class="special-offers">
+            <h2>Special Offers</h2>
+            <div class="offers-container">
+                <!-- Special offers will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <h2>Why Choose Zyn?</h2>
+            <div class="features" id="features-grid">
+                <!-- Features will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonials-grid" id="testimonials-grid">
+                <!-- Testimonials will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing">
+            <h2>Choose Your Path to Cleanliness</h2>
+            <p class="pricing-subtitle">All packages include a minimum of 200 square feet</p>
+            <div class="pricing-grid" id="pricing-grid">
+                <!-- Pricing cards will be dynamically inserted here -->
+            </div>
+            <div class="pricing-note">
+                <p>* Prices are per square foot. Final price will be calculated based on your carpet area.</p>
+                <p>* Additional charges may apply for heavily soiled areas or special treatments.</p>
+            </div>
+        </section>
+
+        <section id="coverage" class="coverage">
+            <h2>Check Your Area</h2>
+            <p class="coverage-subtitle" id="coverage-subtitle"></p>
+            <div class="coverage-container">
+                <p class="coverage-intro">Enter your zip code to see if we service your area</p>
+                <div class="zip-code-check">
+                    <input type="text" id="zip-code" placeholder="Enter your zip code" maxlength="5" pattern="[0-9]{5}">
+                    <button type="button" id="check-coverage" class="secondary-button">Check Coverage</button>
+                    <p id="coverage-result" class="coverage-message"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="blog">
+            <h2>Latest Insights</h2>
+            <div class="blog-grid" id="blog-grid">
+                <!-- Blog posts will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <h2>Book Now</h2>
+            <div class="contact-container">
+                <form id="contact-form" action="https://formspree.io/f/xzzrvpeb" method="POST">
+                    <div class="form-validation-message" id="form-validation"></div>
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        <div class="validation-message" id="name-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        <div class="validation-message" id="email-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="phone" name="phone" placeholder="Your Phone" required>
+                        <div class="validation-message" id="phone-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="street" name="street" placeholder="Street Address" required>
+                        <div class="validation-message" id="street-validation"></div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="zip" name="zip" placeholder="Zip Code" maxlength="5" pattern="[0-9]{5}" required>
+                        <div class="validation-message" id="zip-validation"></div>
+                    </div>
+                    <input type="hidden" name="_subject" value="New Booking Request from Zyn Carpets Website">
+                    <input type="hidden" name="_template" value="table">
+                    <button type="submit" class="cta-button">Submit</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 id="footer-company-name">Zyn Carpets</h3>
+                <p id="footer-description">Bringing peace and cleanliness to your space, one carpet at a time.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <p><i class="fas fa-phone"></i> <span id="footer-phone">(555) 123-4567</span></p>
+                <p><i class="fas fa-envelope"></i> <span id="footer-email">peace@zyncarpets.com</span></p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Our Journey</h3>
+                <div class="social-links" id="social-links">
+                    <!-- Social links will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 <span id="copyright-name">Zyn Carpets</span>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
