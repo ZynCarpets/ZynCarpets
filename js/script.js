@@ -550,6 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         console.log('DOM Content Loaded and CONFIG is available');
         initializePage();
+        initializeMobileMenu();
         startSlideShow();
         
         // Pause slideshow when hovering over the slider
