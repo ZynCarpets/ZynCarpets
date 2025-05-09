@@ -1,3 +1,6 @@
+// Load environment variables
+require('dotenv').config();
+
 const CONFIG = {
     // Available section types:
     // - hero: Main hero section with slider
@@ -39,8 +42,8 @@ const CONFIG = {
     // Service Areas Information
     serviceAreasInfo: {
         title: 'Currently serving',
-        areas: ['Madison', 'Huntsville', 'Athens'],
-        states: ['Alabama']
+        areas: (process.env.SERVICE_AREAS || 'Madison,Huntsville,Athens').split(','),
+        states: (process.env.SERVICE_STATES || 'Alabama').split(',')
     },
 
     // Slider Images
@@ -65,19 +68,19 @@ const CONFIG = {
 
     // Company Information
     company: {
-        name: 'Zyn Carpets',
-        tagline: 'Your trusted partner in carpet care',
-        description: 'Experience exceptional carpet cleaning services with our expert team. We combine professional expertise with personalized care to deliver outstanding results for your home or business.',
-        phone: '(555) 123-4567',
-        email: 'zyncarpetcare@gmail.com',
-        address: '123 Zen Street, Peaceful City, PC 12345'
+        name: process.env.COMPANY_NAME || 'Zyn Carpets',
+        tagline: process.env.COMPANY_TAGLINE || 'Your trusted partner in carpet care',
+        description: process.env.COMPANY_DESCRIPTION || 'Experience exceptional carpet cleaning services with our expert team.',
+        phone: process.env.COMPANY_PHONE || '(555) 123-4567',
+        email: process.env.COMPANY_EMAIL || 'zyncarpetcare@gmail.com',
+        address: process.env.COMPANY_ADDRESS || '123 Zen Street, Peaceful City, PC 12345'
     },
 
     // Social Media Links
     socialMedia: {
-        facebook: 'https://facebook.com/zyncarpets',
-        instagram: 'https://instagram.com/zyncarpets',
-        twitter: 'https://twitter.com/zyncarpets'
+        facebook: process.env.FACEBOOK_URL || 'https://facebook.com/zyncarpets',
+        instagram: process.env.INSTAGRAM_URL || 'https://instagram.com/zyncarpets',
+        twitter: process.env.TWITTER_URL || 'https://twitter.com/zyncarpets'
     },
 
     // Services

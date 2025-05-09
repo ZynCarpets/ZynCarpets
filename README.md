@@ -13,6 +13,7 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
 - [Deployment](#deployment)
 - [Customization](#customization)
 - [Browser Support](#browser-support)
+- [Security](#security)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -131,6 +132,26 @@ zyncarpets/
 - Safari (latest)
 - Edge (latest)
 - Mobile browsers (iOS Safari, Android Chrome)
+
+## Security
+
+### Configuration and Environment Variables
+- Sensitive information is stored in environment variables
+- Use `config.template.js` as a base for your configuration
+- Create a `.env` file with your actual values (not tracked in git)
+- Never commit sensitive data to the repository
+
+### Security Best Practices
+1. Keep dependencies updated
+2. Use HTTPS for all external resources
+3. Implement Content Security Policy (CSP)
+4. Regular security audits
+5. Follow OWASP security guidelines
+
+### Setting Up Local Development
+1. Copy `config.template.js` to `config.js`
+2. Create a `.env` file with your configuration
+3. Never commit the actual `config.js` or `.env` files
 
 ## Contributing
 
