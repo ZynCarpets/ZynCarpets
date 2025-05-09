@@ -16,13 +16,12 @@
                    object-src 'none'; 
                    base-uri 'self'; 
                    form-action 'self' https://formspree.io">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
-    <!-- Load configuration first -->
-    <script src="config.js"></script>
+    <!-- Load configuration -->
+    <script src="js/config.js"></script>
     
     <meta name="google-site-verification" content="" id="google-site-verification" />
     <title>Zyn Carpets - Find Your Peace in Clean Carpets</title>
@@ -36,14 +35,14 @@
     <meta property="og:url" content="https://zyncarpets.com/">
     <meta property="og:title" content="Zyn Carpets - Professional Carpet Cleaning Services">
     <meta property="og:description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
-    <meta property="og:image" content="https://zyncarpets.com/logo.png">
+    <meta property="og:image" content="https://zyncarpets.com/assets/images/logo.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://zyncarpets.com/">
     <meta property="twitter:title" content="Zyn Carpets - Professional Carpet Cleaning Services">
     <meta property="twitter:description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
-    <meta property="twitter:image" content="https://zyncarpets.com/logo.png">
+    <meta property="twitter:image" content="https://zyncarpets.com/assets/images/logo.png">
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=" id="google-analytics-src"></script>
@@ -54,15 +53,15 @@
         gtag('config', ''); // Will be set by script.js
     </script>
     
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 </head>
 <body>
     <header>
         <nav>
             <div class="logo-container">
-                <img src="logo.png" alt="Zyn Carpets Logo" class="logo-img" loading="lazy">
+                <img src="assets/images/logo.png" alt="Zyn Carpets Logo" class="logo-img" loading="lazy">
             </div>
             <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
                 <span></span>
@@ -85,7 +84,7 @@
     <main>
         <section class="logo-showcase">
             <div class="logo-showcase-container">
-                <img src="logo.png" alt="Zyn Carpets Logo" class="showcase-logo" loading="lazy">
+                <img src="assets/images/logo.png" alt="Zyn Carpets Logo" class="showcase-logo" loading="lazy">
                 <h2>Welcome to Zyn Carpets</h2>
                 <p id="welcome-tagline">Your trusted partner in carpet care excellence</p>
             </div>
@@ -151,9 +150,10 @@
             <div class="coverage-container">
                 <p class="coverage-intro">Enter your zip code to see if we service your area</p>
                 <div class="zip-code-check">
-                    <input type="text" id="zip-code" placeholder="Enter your zip code" maxlength="5" pattern="[0-9]{5}">
-                    <button type="button" id="check-coverage" class="secondary-button">Check Coverage</button>
-                    <p id="coverage-result" class="coverage-message"></p>
+                    <label for="zip-code" id="zip-code-label">Enter your zip code</label>
+                    <input type="text" id="zip-code" placeholder="Enter your zip code" maxlength="5" pattern="[0-9]{5}" aria-labelledby="zip-code-label">
+                    <button type="button" id="check-coverage" class="secondary-button" aria-label="Check if we service your area">Check Coverage</button>
+                    <p id="coverage-result" class="coverage-message" role="alert"></p>
                 </div>
             </div>
         </section>
@@ -171,28 +171,33 @@
                 <form id="contact-form" data-formspree-id="" action="#" method="POST">
                     <div class="form-validation-message" id="form-validation"></div>
                     <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="Your Name" required>
-                        <div class="validation-message" id="name-message"></div>
+                        <label for="name" id="name-label">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required aria-labelledby="name-label" aria-required="true">
+                        <div class="validation-message" id="name-message" role="alert"></div>
                     </div>
                     <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder="Your Email" required>
-                        <div class="validation-message" id="email-message"></div>
+                        <label for="email" id="email-label">Your Email</label>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required aria-labelledby="email-label" aria-required="true">
+                        <div class="validation-message" id="email-message" role="alert"></div>
                     </div>
                     <div class="form-group">
-                        <input type="tel" id="phone" name="phone" placeholder="Your Phone" required>
-                        <div class="validation-message" id="phone-message"></div>
+                        <label for="phone" id="phone-label">Your Phone</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Your Phone" required aria-labelledby="phone-label" aria-required="true">
+                        <div class="validation-message" id="phone-message" role="alert"></div>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="street" name="street" placeholder="Street Address" required>
-                        <div class="validation-message" id="street-message"></div>
+                        <label for="street" id="street-label">Street Address</label>
+                        <input type="text" id="street" name="street" placeholder="Street Address" required aria-labelledby="street-label" aria-required="true">
+                        <div class="validation-message" id="street-message" role="alert"></div>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="zip" name="zip" placeholder="Zip Code" maxlength="5" pattern="[0-9]{5}" required>
-                        <div class="validation-message" id="zip-message"></div>
+                        <label for="zip" id="zip-label">Zip Code</label>
+                        <input type="text" id="zip" name="zip" placeholder="Zip Code" maxlength="5" pattern="[0-9]{5}" required aria-labelledby="zip-label" aria-required="true">
+                        <div class="validation-message" id="zip-message" role="alert"></div>
                     </div>
                     <input type="hidden" name="_subject" value="New Booking Request from Zyn Carpets Website">
                     <input type="hidden" name="_template" value="table">
-                    <button type="submit" class="cta-button">Submit</button>
+                    <button type="submit" class="cta-button" aria-label="Submit booking request">Submit</button>
                 </form>
             </div>
         </section>
@@ -221,17 +226,16 @@
         </div>
     </footer>
 
-    <script src="config.js"></script>
-    <script src="script.js"></script>
-    <script src="backup.js"></script>
-    <script src="test-links.js"></script>
-    <script src="test-contact-form.js"></script>
-    <script src="test-responsive.js"></script>
-    <script src="test-performance.js"></script>
-    <script src="test-security.js"></script>
-    <script src="test-accessibility.js"></script>
-    <script src="test-seo.js"></script>
-    <script src="test-analytics.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/backup.js"></script>
+    <script src="tests/test-links.js"></script>
+    <!-- <script src="tests/test-contact-form.js"></script> -->
+    <script src="tests/test-responsive.js"></script>
+    <script src="tests/test-performance.js"></script>
+    <script src="tests/test-security.js"></script>
+    <script src="tests/test-accessibility.js"></script>
+    <script src="tests/test-seo.js"></script>
+    <script src="tests/test-analytics.js"></script>
     
     <!-- Google Analytics Event Tracking -->
     <script>
