@@ -69,9 +69,9 @@ const CONFIG = {
         name: 'Zyn Carpets',
         tagline: 'Your trusted partner in carpet care',
         description: 'Experience exceptional carpet cleaning services with our expert team.',
-        phone: '(555) 123-4567',
+        phone: 'Coming Soon',
         email: 'zyncarpetcare@gmail.com',
-        address: '123 Zen Street, Peaceful City, PC 12345'
+        address: 'Coming Soon'
     },
 
     // Social Media Links
@@ -207,43 +207,19 @@ const CONFIG = {
     testimonials: [
         {
             rating: 5,
-            content: "Zyn Carpets transformed our living room! The team was professional, thorough, and left our carpets looking brand new. The eco-friendly products they use are a huge plus.",
-            author: "Sarah M."
-        },
-        {
-            rating: 5,
-            content: "I've tried many carpet cleaning services, but Zyn Carpets stands out. Their attention to detail and commitment to customer satisfaction is unmatched. Highly recommend!",
-            author: "Michael R."
-        },
-        {
-            rating: 5,
-            content: "The pet odor removal service was a game-changer for our home. The team was understanding of our situation and delivered exceptional results. Thank you!",
-            author: "Jennifer K."
+            content: "Zyn Carpets transformed our bedroom! Paul was professional, thorough, and left our carpets looking brand new. Don't waste your time with other companies, Zyn Carpets is the way to go!",
+            author: "Jacob R."
         }
     ],
 
     // Blog Posts
     blogPosts: [
         {
-            title: "The Importance of Professional Carpet Cleaning",
+            title: "How often should you clean your carpets?",
             date: "March 15, 2024",
             image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
             excerpt: "Discover why regular professional carpet cleaning is essential for maintaining a healthy home environment and extending your carpet's lifespan.",
-            link: "#"
-        },
-        {
-            title: "Eco-Friendly Carpet Cleaning Solutions",
-            date: "March 10, 2024",
-            image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-            excerpt: "Learn about our eco-friendly cleaning methods that effectively clean your carpets while protecting your family's health and the environment.",
-            link: "#"
-        },
-        {
-            title: "Expert Tips for Carpet Maintenance",
-            date: "March 5, 2024",
-            image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-            excerpt: "Professional advice on maintaining your carpets between cleanings to keep them looking fresh and beautiful.",
-            link: "#"
+            link: "https://www.youtube.com/watch?v=5j4lQAB0jv0"
         }
     ],
 
@@ -267,7 +243,12 @@ const CONFIG = {
             details: 'Minimum charges apply. Not valid with other offers.',
             type: 'discount'
         }
-    ]
+    ],
+
+    // Configuration object that will be populated during deployment
+    GOOGLE_ANALYTICS_ID: 'process.env.GOOGLE_ANALYTICS_ID',
+    GOOGLE_SITE_VERIFICATION: 'process.env.GOOGLE_SITE_VERIFICATION',
+    FORMSPREE_FORM_ID: 'process.env.FORMSPREE_FORM_ID'
 };
 
 // Make CONFIG globally available

@@ -4,9 +4,16 @@
  */
 function initializePage() {
     // Check if configuration is loaded
-    if (typeof CONFIG === 'undefined') {
-        console.error('CONFIG is not loaded! Please check if config.js is properly included.');
+    if (!CONFIG) {
+        console.error('Configuration not loaded');
         return;
+    }
+
+    // Prevent scroll to hash on page load
+    if (window.location.hash) {
+        window.scrollTo(0, 0);
+        // Remove the hash without triggering a page reload
+        history.replaceState(null, null, window.location.pathname);
     }
 
     console.log('Starting page initialization...');
@@ -556,6 +563,25 @@ document.addEventListener('DOMContentLoaded', () => {
         images.forEach(img => {
             img.loading = 'lazy';
         });
+
+        // Set configuration values
+        const googleSiteVerification = document.getElementById('google-site-verification');
+        if (googleSiteVerification) {
+            googleSiteVerification.content = CONFIG.GOOGLE_SITE_VERIFICATION;
+        }
+
+        const googleAnalyticsSrc = document.getElementById('google-analytics-src');
+        if (googleAnalyticsSrc) {
+            googleAnalyticsSrc.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.GOOGLE_ANALYTICS_ID}`;
+        }
+        if (window.gtag) {
+            gtag('config', CONFIG.GOOGLE_ANALYTICS_ID);
+        }
+
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.setAttribute('data-formspree-id', CONFIG.FORMSPREE_FORM_ID);
+        }
     }, 100); // Small delay to ensure CONFIG is loaded
 });
 

@@ -11,7 +11,7 @@
                    style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; 
                    img-src 'self' data: https:; 
                    font-src 'self' https://cdnjs.cloudflare.com; 
-                   connect-src 'self' https://www.google-analytics.com; 
+                   connect-src 'self' https://www.google-analytics.com https://formspree.io; 
                    frame-src 'self'; 
                    object-src 'none'; 
                    base-uri 'self'; 
@@ -21,7 +21,10 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
-    <meta name="google-site-verification" content="process.env.GOOGLE_SITE_VERIFICATION" />
+    <!-- Load configuration first -->
+    <script src="config.js"></script>
+    
+    <meta name="google-site-verification" content="" id="google-site-verification" />
     <title>Zyn Carpets - Find Your Peace in Clean Carpets</title>
     
     <!-- Primary Meta Tags -->
@@ -43,12 +46,12 @@
     <meta property="twitter:image" content="https://zyncarpets.com/logo.png">
     
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=process.env.GOOGLE_ANALYTICS_ID"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=" id="google-analytics-src"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', process.env.GOOGLE_ANALYTICS_ID);
+        gtag('config', ''); // Will be set by script.js
     </script>
     
     <link rel="stylesheet" href="styles.css">
@@ -165,7 +168,7 @@
         <section id="contact" class="contact">
             <h2>Book Now</h2>
             <div class="contact-container">
-                <form id="contact-form" data-formspree-id="process.env.FORMSPREE_FORM_ID" action="#" method="POST">
+                <form id="contact-form" data-formspree-id="" action="#" method="POST">
                     <div class="form-validation-message" id="form-validation"></div>
                     <div class="form-group">
                         <input type="text" id="name" name="name" placeholder="Your Name" required>
@@ -221,9 +224,6 @@
     <script src="config.js"></script>
     <script src="script.js"></script>
     <script src="backup.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', initializePage);
-    </script>
     <script src="test-links.js"></script>
     <script src="test-contact-form.js"></script>
     <script src="test-responsive.js"></script>

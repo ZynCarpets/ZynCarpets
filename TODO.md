@@ -235,8 +235,116 @@
 ## Security Checklist
 1. [ ] Verify all sensitive data is in environment variables
 2. [ ] Check that no API keys are exposed in code
-3. [ ] Ensure .env file is in .gitignore
-4. [ ] Verify GitHub repository secrets are properly set
+3. [x] Ensure .env file is in .gitignore
+4. [x] Verify GitHub repository secrets are properly set
 5. [ ] Test production deployment with environment variables
 6. [ ] Review and update security headers
-7. [ ] Implement rate limiting for form submissions 
+7. [ ] Implement rate limiting for form submissions
+
+# Zyncarpets Website Issues TODO
+
+## Critical Issues
+1. [ ] Fix process.env reference error
+   - Error: Uncaught ReferenceError: process is not defined
+   - Location: index:51:24
+
+2. [ ] Fix Formspree integration
+   - Error: Formspree form ID is not properly configured
+   - Error: Form submission handler not called
+   - Error: Failed to fetch due to Content Security Policy violation
+   - Location: script.js:600
+
+3. [ ] Fix Content Security Policy
+   - Issue: CSP blocking Formspree connection
+   - Current directive: "connect-src 'self' https://www.google-analytics.com"
+   - Need to add formspree.io to allowed domains
+
+4. [ ] Fix X-Frame-Options header
+   - Issue: X-Frame-Options set in meta tag instead of HTTP header
+   - Location: zyncarpets.com/:19
+
+## Security Issues
+1. [ ] Implement CSRF protection for contact form
+2. [ ] Add input validation for form fields:
+   - name
+   - street
+3. [ ] Configure secure cookie flags (Secure and HttpOnly)
+
+## Accessibility Issues
+1. [ ] Add proper labels to form controls:
+   - zip-code
+   - name
+   - email
+   - phone
+   - street
+   - zip
+   - unnamed control
+
+## Performance Optimizations
+1. [ ] Add width and height attributes to images:
+   - logo.png
+   - Unsplash images
+2. [ ] Resize large images:
+   - Unsplash images (currently 1950px wide)
+3. [ ] Add async/defer to scripts:
+   - script.js
+   - backup.js
+   - test-*.js files
+   - inline scripts
+4. [ ] Add media queries to:
+   - styles.css
+   - animations.css
+   - Font Awesome CSS
+5. [ ] Implement resource optimization:
+   - Add preload hints for critical resources
+   - Add preconnect hints for external domains
+   - Implement lazy loading for non-critical resources
+
+## SEO Improvements
+1. [ ] Fix meta description length
+2. [ ] Add schema markup
+3. [ ] Add Twitter card meta tags:
+   - twitter:card
+   - twitter:title
+   - twitter:description
+   - twitter:image
+4. [ ] Add canonical URL
+5. [ ] Add robots meta tag
+
+## Analytics Implementation
+1. [ ] Implement form tracking:
+   - form_submission
+   - coverage_check
+   - scroll_depth
+2. [ ] Add custom dimensions:
+   - user_type
+   - subscription_status
+   - service_area
+3. [ ] Implement e-commerce events:
+   - view_item
+   - add_to_cart
+   - begin_checkout
+   - purchase
+4. [ ] Add enhanced measurements:
+   - page_view
+   - scroll
+   - click
+   - file_download
+   - form_start
+   - form_submit
+   - video_start
+   - video_progress
+   - video_complete
+5. [ ] Implement consent management
+6. [ ] Configure cross-domain tracking
+
+## External Link Verification
+1. [ ] Verify external links:
+   - Font Awesome CDN
+   - Google Tag Manager
+   - Other external resources
+
+## Code Fixes
+1. [ ] Fix validateFormData function
+   - Error: ReferenceError: validateFormData is not defined
+   - Location: script.js:839 

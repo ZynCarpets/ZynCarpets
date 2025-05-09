@@ -1,0 +1,43 @@
+name: Backup Form Submissions
+
+on:
+  push:
+    paths:
+      - 'form-submissions.json'
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Create backup directory
+        run: mkdir -p backups
+
+      - name: Backup form submissions
+        run: |
+          if [ -f form-submissions.json ]; then
+            cp form-submissions.json "backups/form-submissions-$(date +%Y%m%d).json"
+          fi
+
+      - name: Upload backup
+        uses: actions/upload-artifact@v2
+        with:
+          name: form-submissions-backup
+          path: backups/
+          retention-days: 30
+
+      - name: Clean up old backups
+        run: |
+          find backups -name "form-submissions-*.json" -mtime +30 -delete 
