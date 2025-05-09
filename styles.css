@@ -360,6 +360,10 @@ nav {
     main {
         margin-top: 70px;
     }
+
+    .logo-showcase {
+        display: none;
+    }
 }
 
 /* Hero Section */
