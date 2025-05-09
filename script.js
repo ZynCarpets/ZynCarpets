@@ -101,6 +101,7 @@ function initializePage() {
     initializeContactZipValidation();
     initializeContactForm();
     initializeLazyLoading();
+    initializePhoneFormatting();
     console.log('Page initialization complete!');
 }
 
@@ -1015,4 +1016,54 @@ function initializeLazyLoading() {
     document.querySelectorAll('img[data-src]').forEach(img => {
         lazyLoadObserver.observe(img);
     });
+}
+
+/**
+ * Formats a phone number as the user types
+ * @param {HTMLInputElement} input - The phone input element
+ */
+function formatPhoneNumber(input) {
+    // Remove all non-numeric characters
+    let value = input.value.replace(/\D/g, '');
+    
+    // Limit to 10 digits
+    value = value.substring(0, 10);
+    
+    // Format the number as (XXX) XXX-XXXX
+    if (value.length > 0) {
+        if (value.length <= 3) {
+            value = `(${value}`;
+        } else if (value.length <= 6) {
+            value = `(${value.substring(0, 3)}) ${value.substring(3)}`;
+        } else {
+            value = `(${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(6)}`;
+        }
+    }
+    
+    // Update input value
+    input.value = value;
+}
+
+// Initialize phone number formatting
+function initializePhoneFormatting() {
+    const phoneInput = document.getElementById('phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            formatPhoneNumber(this);
+        });
+        
+        // Format on focus if empty
+        phoneInput.addEventListener('focus', function(e) {
+            if (!this.value) {
+                this.value = '(';
+            }
+        });
+        
+        // Handle backspace to maintain formatting
+        phoneInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace' && this.value.length === 1) {
+                this.value = '';
+            }
+        });
+    }
 } 
