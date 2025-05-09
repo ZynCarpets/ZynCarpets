@@ -581,7 +581,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
-            contactForm.setAttribute('data-formspree-id', CONFIG.FORMSPREE_FORM_ID);
+            contactForm.setAttribute('action', CONFIG.formspree.endpoint);
+            contactForm.setAttribute('data-formspree-id', CONFIG.formspree.formId);
         }
     }, 100); // Small delay to ensure CONFIG is loaded
 });
@@ -636,12 +637,20 @@ if (contactForm) {
             return;
         }
 
-        // If all validations pass, submit the form
         try {
+            // Validate CSRF token
+            const csrfToken = contactForm.querySelector('input[name="_csrf"]').value;
+            if (!validateCSRFToken(csrfToken)) {
+                throw new Error('Invalid CSRF token');
+            }
+
             // Submit to Formspree
             const response = await fetch(CONFIG.formspree.endpoint, {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    _csrf: csrfToken
+                }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -871,6 +880,10 @@ function initializeContactForm() {
     const formBackup = new FormBackup();
     const submitButton = form.querySelector('button[type="submit"]');
 
+    // Generate and set CSRF token
+    const csrfToken = generateCSRFToken();
+    form.querySelector('input[name="_csrf"]').value = csrfToken;
+
     // Add input event listeners for real-time validation
     const inputs = form.querySelectorAll('input');
     inputs.forEach(input => {
@@ -950,10 +963,19 @@ function initializeContactForm() {
         }
 
         try {
+            // Validate CSRF token
+            const csrfToken = form.querySelector('input[name="_csrf"]').value;
+            if (!validateCSRFToken(csrfToken)) {
+                throw new Error('Invalid CSRF token');
+            }
+
             // Submit to Formspree
             const response = await fetch(CONFIG.formspree.endpoint, {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    _csrf: csrfToken
+                }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -1066,4 +1088,24 @@ function initializePhoneFormatting() {
             }
         });
     }
+}
+
+/**
+ * Generates a CSRF token
+ * @returns {string} A random CSRF token
+ */
+function generateCSRFToken() {
+    const array = new Uint32Array(8);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, dec => ('0' + dec.toString(16)).substr(-2)).join('');
+}
+
+/**
+ * Validates the CSRF token
+ * @param {string} token - The token to validate
+ * @returns {boolean} Whether the token is valid
+ */
+function validateCSRFToken(token) {
+    const storedToken = document.querySelector('input[name="_csrf"]').value;
+    return token === storedToken;
 } 

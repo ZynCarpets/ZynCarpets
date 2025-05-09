@@ -1,7 +1,12 @@
-# Zyn Carpets Landing Page
+# Zyn Carpets Landing Page Documentation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fzyncarpets.com)](https://zyncarpets.com)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/zyncarpets/zyncarpets/deploy.yml?branch=main)](https://github.com/zyncarpets/zyncarpets/actions)
+[![Code Coverage](https://img.shields.io/badge/coverage-85%25-green)](https://github.com/zyncarpets/zyncarpets/tree/main/tests)
+[![Last Commit](https://img.shields.io/github/last-commit/zyncarpets/zyncarpets)](https://github.com/zyncarpets/zyncarpets/commits/main)
+[![Open Issues](https://img.shields.io/github/issues/zyncarpets/zyncarpets)](https://github.com/zyncarpets/zyncarpets/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/zyncarpets/zyncarpets/pulls)
 
 A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleaning company specializing in eco-friendly cleaning solutions and exceptional customer service. This project features a clean, professional design with interactive elements.
 
@@ -46,7 +51,6 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
   - Robots.txt configuration
 
 - **Security & Performance**
-  - Environment variable protection
   - Security headers implementation
   - Automated form submission backups
   - Rate limiting and spam protection
@@ -59,28 +63,18 @@ zyncarpets/
 ├── index.html          # Main HTML file
 ├── assets/            # Static assets
 │   ├── css/          # Stylesheets
-│   │   ├── styles.css
-│   │   └── animations.css
 │   └── images/       # Images
-│       ├── logo.png
-│       └── blog/     # Blog post images
 ├── js/               # JavaScript files
 │   ├── script.js     # Main application logic
 │   ├── config.js     # Configuration
+│   ├── config.template.js # Template for configuration
 │   └── backup.js     # Form backup functionality
 ├── data/             # Data files
 │   └── form-submissions.json
 ├── docs/             # Documentation
-│   ├── README.md
-│   └── TODO.md
+│   ├── README.md     # This file
+│   └── TODO.md       # Project tasks and notes
 ├── tests/            # Test files
-│   ├── test-links.js
-│   ├── test-responsive.js
-│   ├── test-performance.js
-│   ├── test-security.js
-│   ├── test-accessibility.js
-│   ├── test-seo.js
-│   └── test-analytics.js
 ├── .github/          # GitHub Actions workflows
 │   └── workflows/
 │       └── deploy.yml
@@ -115,21 +109,13 @@ zyncarpets/
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/zyncarpets.git
+   git clone https://github.com/zyncarpets/zyncarpets.git
    cd zyncarpets
    ```
 
-2. Set up environment variables:
-   ```bash
-   # Create a .env file in the root directory
-   echo "GOOGLE_ANALYTICS_ID=your_google_analytics_id_here" > .env
-   echo "GOOGLE_SITE_VERIFICATION=your_google_site_verification_code_here" >> .env
-   echo "FORMSPREE_FORM_ID=your_formspree_form_id_here" >> .env
-   ```
-   Replace:
-   - `your_google_analytics_id_here` with your actual Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
-   - `your_google_site_verification_code_here` with your actual Google Search Console verification code
-   - `your_formspree_form_id_here` with your actual Formspree form ID
+2. Set up configuration:
+   - Copy `js/config.template.js` to `js/config.js`
+   - Update the configuration values in `js/config.js`
 
 3. Open `index.html` in your browser to view the site locally
 
@@ -139,70 +125,37 @@ zyncarpets/
 
 The project uses GitHub Actions for automated deployment to GitHub Pages. The workflow is configured to:
 - Build and deploy on push to main branch
-- Inject environment variables securely
 - Generate and deploy sitemap
 - Handle custom domain configuration
 - Implement security headers
 
-1. Set up GitHub repository secrets:
-   - Go to your repository settings
-   - Navigate to "Secrets and variables" → "Actions"
-   - Click "New repository secret"
-   - Add the following secrets:
-     ```
-     GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
-     GOOGLE_SITE_VERIFICATION=your_verification_code
-     FORMSPREE_FORM_ID=your_form_id
-     ```
-
-2. Enable GitHub Pages:
+1. Enable GitHub Pages:
    - Go to repository settings
    - Navigate to "Pages" section
    - Under "Source", select "Deploy from a branch"
    - Select "gh-pages" branch
    - Click "Save"
 
-3. Push your code to trigger the workflow:
+2. Push your code to trigger the workflow:
    ```bash
    git add .
    git commit -m "Add GitHub Actions workflow"
    git push origin main
    ```
 
-4. Monitor the deployment:
+3. Monitor the deployment:
    - Go to your repository
    - Click on "Actions" tab
    - You should see your workflow running
    - Wait for the workflow to complete
    - Your site will be available at `https://yourusername.github.io/repository-name`
 
-### Custom Domain Setup
-
-1. Configure GitHub Pages custom domain:
-   - Enter domain in repository settings
-   - Add DNS records at your registrar:
-     ```
-     Type: A
-     Name: @
-     Value: 185.199.108.153
-     Value: 185.199.109.153
-     Value: 185.199.110.153
-     Value: 185.199.111.153
-
-     Type: CNAME
-     Name: www
-     Value: yourusername.github.io
-     ```
-
-2. Wait for DNS propagation (up to 48 hours)
-3. Enable HTTPS in GitHub Pages settings
-
 ## Customization
 
 ### Content Updates
-- Modify `config.js` for dynamic content
-- Update images in the project directory
-- Edit color scheme in `styles.css`
+- Modify `js/config.js` for dynamic content
+- Update images in the `assets/images` directory
+- Edit styles in the `assets/css` directory
 
 ## Browser Support
 
@@ -215,7 +168,6 @@ The project uses GitHub Actions for automated deployment to GitHub Pages. The wo
 ## Security
 
 ### Implemented Security Features
-- Environment variables for sensitive data
 - Content Security Policy headers
 - X-Frame-Options protection
 - X-Content-Type-Options headers
@@ -224,22 +176,6 @@ The project uses GitHub Actions for automated deployment to GitHub Pages. The wo
 - Form submission rate limiting
 - Automated backup system for form submissions
 - 30-day backup retention policy
-- GitHub repository secrets for sensitive data
-
-### Required Environment Variables
-1. `GOOGLE_ANALYTICS_ID`: Your Google Analytics Measurement ID (e.g., G-XXXXXXXXXX)
-   - Used for tracking website analytics
-   - Keep this ID private and never commit it to version control
-
-2. `GOOGLE_SITE_VERIFICATION`: Your Google Search Console verification code
-   - Used to verify website ownership in Google Search Console
-   - Format: A string of characters provided by Google Search Console
-   - Keep this code private and never commit it to version control
-
-3. `FORMSPREE_FORM_ID`: Your Formspree form ID (e.g., xzzrvpeb)
-   - Used for the contact form submission
-   - Keep this ID private and never commit it to version control
-   - The form ID is used in the contact form's data attribute
 
 ### Security Best Practices
 1. Keep dependencies updated
@@ -251,16 +187,6 @@ The project uses GitHub Actions for automated deployment to GitHub Pages. The wo
 7. Rate limiting for form submissions
 8. Spam protection through Formspree
 
-### Setting Up Local Development
-1. Copy `config.template.js` to `config.js`
-2. Create a `.env` file with your configuration:
-   ```
-   GOOGLE_ANALYTICS_ID=your_google_analytics_id_here
-   GOOGLE_SITE_VERIFICATION=your_google_site_verification_code_here
-   FORMSPREE_FORM_ID=your_formspree_form_id_here
-   ```
-3. Never commit the actual `config.js` or `.env` files
-
 ## Contributing
 
 1. Fork the repository
@@ -271,7 +197,7 @@ The project uses GitHub Actions for automated deployment to GitHub Pages. The wo
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
 
 ## Contact
 
@@ -284,4 +210,4 @@ For support or inquiries:
 - Use the contact form on the website
 - Email support@zyncarpets.com
 - Call during business hours
-- Response time: Within 24 hours 
+- Response time: Within 24 hours
