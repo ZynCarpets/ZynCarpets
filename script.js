@@ -596,12 +596,13 @@ if (contactForm) {
         // If all validations pass, submit the form
         try {
             const formData = new FormData(contactForm);
-            const response = await fetch(contactForm.action, {
+            const formspreeId = contactForm.dataset.formspreeId;
+            const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
                 method: 'POST',
-                body: formData,
                 headers: {
-                    'Accept': 'application/json'
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
             });
 
             if (response.ok) {
@@ -868,7 +869,8 @@ function initializeContactForm() {
 
             try {
                 console.log('Sending form data to server...');
-                const response = await fetch('/submit-contact', {
+                const formspreeId = contactForm.dataset.formspreeId;
+                const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

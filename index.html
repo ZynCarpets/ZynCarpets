@@ -3,10 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="process.env.GOOGLE_SITE_VERIFICATION" />
     <title>Zyn Carpets - Find Your Peace in Clean Carpets</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Zyn Carpets - Professional Carpet Cleaning Services">
+    <meta name="description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zyncarpets.com/">
+    <meta property="og:title" content="Zyn Carpets - Professional Carpet Cleaning Services">
+    <meta property="og:description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
+    <meta property="og:image" content="https://zyncarpets.com/logo.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://zyncarpets.com/">
+    <meta property="twitter:title" content="Zyn Carpets - Professional Carpet Cleaning Services">
+    <meta property="twitter:description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
+    <meta property="twitter:image" content="https://zyncarpets.com/logo.png">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=process.env.GOOGLE_ANALYTICS_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', process.env.GOOGLE_ANALYTICS_ID);
+    </script>
+    
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
-    
 </head>
 <body>
     <header>
@@ -118,7 +146,7 @@
         <section id="contact" class="contact">
             <h2>Book Now</h2>
             <div class="contact-container">
-                <form id="contact-form" action="https://formspree.io/f/xzzrvpeb" method="POST">
+                <form id="contact-form" data-formspree-id="process.env.FORMSPREE_FORM_ID" action="#" method="POST">
                     <div class="form-validation-message" id="form-validation"></div>
                     <div class="form-group">
                         <input type="text" id="name" name="name" placeholder="Your Name" required>
@@ -173,5 +201,62 @@
 
     <script src="config.js"></script>
     <script src="script.js"></script>
+    
+    <!-- Google Analytics Event Tracking -->
+    <script>
+        // Track form submissions
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            gtag('event', 'form_submission', {
+                'event_category': 'Contact',
+                'event_label': 'Contact Form'
+            });
+        });
+
+        // Track coverage area checks
+        document.getElementById('check-coverage').addEventListener('click', function() {
+            const zipCode = document.getElementById('zip-code').value;
+            gtag('event', 'coverage_check', {
+                'event_category': 'Coverage',
+                'event_label': zipCode
+            });
+        });
+
+        // Track navigation clicks
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                gtag('event', 'navigation_click', {
+                    'event_category': 'Navigation',
+                    'event_label': this.getAttribute('href')
+                });
+            });
+        });
+
+        // Track CTA button clicks
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                gtag('event', 'cta_click', {
+                    'event_category': 'CTA',
+                    'event_label': this.textContent.trim()
+                });
+            });
+        });
+
+        // Track scroll depth
+        let scrollDepthTriggered = new Set();
+        window.addEventListener('scroll', function() {
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            const depths = [25, 50, 75, 90];
+            
+            depths.forEach(depth => {
+                if (scrollPercent >= depth && !scrollDepthTriggered.has(depth)) {
+                    scrollDepthTriggered.add(depth);
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': `${depth}%`
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html> 
