@@ -601,27 +601,42 @@ if (contactForm) {
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        // Get form data
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            street: document.getElementById('street').value,
+            zip: document.getElementById('zip').value
+        };
+
         // Validate all fields
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const street = document.getElementById('street').value;
-        const zip = document.getElementById('zip').value;
+        let hasError = false;
+        const validations = {
+            name: validateName(formData.name),
+            email: validateEmail(formData.email),
+            phone: validatePhone(formData.phone),
+            street: validateStreet(formData.street),
+            zip: validateZip(formData.zip)
+        };
 
-        const isNameValid = validateName(name);
-        const isEmailValid = validateEmail(email);
-        const isPhoneValid = validatePhone(phone);
-        const isStreetValid = validateStreet(street);
-        const isZipValid = validateZip(zip);
+        // Show validation messages for all fields
+        Object.entries(validations).forEach(([field, error]) => {
+            if (error) {
+                showValidationMessage(field, error, false);
+                hasError = true;
+            } else {
+                hideValidationMessage(field);
+            }
+        });
 
-        if (!isNameValid || !isEmailValid || !isPhoneValid || !isStreetValid || !isZipValid) {
+        if (hasError) {
             showFormValidation('Please correct the errors in the form before submitting.');
             return;
         }
 
         // If all validations pass, submit the form
         try {
-            const formData = new FormData(contactForm);
             const formspreeId = contactForm.dataset.formspreeId;
             const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
                 method: 'POST',
@@ -634,6 +649,15 @@ if (contactForm) {
             if (response.ok) {
                 showFormValidation('Thank you for your message! We will get back to you soon.', true);
                 contactForm.reset();
+                
+                // Add success animation to all fields
+                const fields = contactForm.querySelectorAll('input');
+                fields.forEach(field => {
+                    field.classList.add('field-success');
+                    setTimeout(() => {
+                        field.classList.remove('field-success');
+                    }, 1000);
+                });
             } else {
                 throw new Error('Form submission failed');
             }
@@ -846,6 +870,44 @@ function initializeContactForm() {
     const formBackup = new FormBackup();
     const submitButton = form.querySelector('button[type="submit"]');
 
+    // Add input event listeners for real-time validation
+    const inputs = form.querySelectorAll('input');
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const value = this.value.trim();
+            let errorMessage = '';
+            
+            switch(this.id) {
+                case 'name':
+                    errorMessage = validateName(value);
+                    break;
+                case 'email':
+                    errorMessage = validateEmail(value);
+                    break;
+                case 'phone':
+                    errorMessage = validatePhone(value);
+                    break;
+                case 'street':
+                    errorMessage = validateStreet(value);
+                    break;
+                case 'zip':
+                    errorMessage = validateZip(value);
+                    break;
+            }
+            
+            if (errorMessage) {
+                showValidationMessage(this.id, errorMessage, false);
+            } else {
+                hideValidationMessage(this.id);
+            }
+        });
+
+        // Clear validation on focus
+        input.addEventListener('focus', function() {
+            hideValidationMessage(this.id);
+        });
+    });
+
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
@@ -861,8 +923,27 @@ function initializeContactForm() {
             zip: document.getElementById('zip').value
         };
 
-        // Validate form data
-        if (!validateFormData(formData)) {
+        // Validate all fields
+        let hasError = false;
+        const validations = {
+            name: validateName(formData.name),
+            email: validateEmail(formData.email),
+            phone: validatePhone(formData.phone),
+            street: validateStreet(formData.street),
+            zip: validateZip(formData.zip)
+        };
+
+        // Show validation messages for all fields
+        Object.entries(validations).forEach(([field, error]) => {
+            if (error) {
+                showValidationMessage(field, error, false);
+                hasError = true;
+            } else {
+                hideValidationMessage(field);
+            }
+        });
+
+        if (hasError) {
             submitButton.classList.remove('loading');
             return;
         }
