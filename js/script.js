@@ -638,13 +638,13 @@ if (contactForm) {
 
         // If all validations pass, submit the form
         try {
-            const formspreeId = contactForm.dataset.formspreeId;
-            const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
+            // Submit to Formspree
+            const response = await fetch(CONFIG.formspree.endpoint, {
                 method: 'POST',
+                body: JSON.stringify(formData),
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
+                }
             });
 
             if (response.ok) {
@@ -951,7 +951,7 @@ function initializeContactForm() {
 
         try {
             // Submit to Formspree
-            const response = await fetch(form.action, {
+            const response = await fetch(CONFIG.formspree.endpoint, {
                 method: 'POST',
                 body: JSON.stringify(formData),
                 headers: {
