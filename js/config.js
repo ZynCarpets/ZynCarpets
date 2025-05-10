@@ -134,16 +134,20 @@ const CONFIG = {
     // Slider Images
     sliderImages: [
         {
-            url: 'assets/images/slider/slide1.jpg',
-            alt: 'Professional Carpet Cleaning'
+            url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Professional carpet cleaning service'
         },
         {
-            url: 'assets/images/slider/slide2.jpg',
-            alt: 'Expert Carpet Care'
+            url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Clean, modern carpet'
         },
         {
-            url: 'assets/images/slider/slide3.jpg',
-            alt: 'Quality Service'
+            url: 'https://images.unsplash.com/photo-1583845112239-97ef1341b271?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Carpet cleaning equipment'
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1583845112265-7dc320c5f677?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Fresh, clean carpet'
         }
     ],
 

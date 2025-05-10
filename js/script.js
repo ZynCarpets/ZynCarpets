@@ -141,12 +141,15 @@ function initializePage() {
     // Initialize all components
     console.log('Initializing all page components...');
     try {
+        console.log('Initializing mobile menu...');
+        initializeMobileMenu();
+        console.log('Mobile menu initialization complete');
+        
         initializeSlider();
         initializeServices();
         initializeFeatures();
         initializeSocialLinks();
         initializePricing();
-        initializeMobileMenu();
         initializeTestimonials();
         initializeBlogPosts();
         initializeSpecialOffers();
@@ -639,11 +642,15 @@ function initializeScrollAnimations() {
 
 // Initialize everything when the page loads
 function initializeApp() {
+    console.log('=== Starting Application Initialization ===');
+    
     // Prevent multiple initializations
     if (window.pageInitialized) {
+        console.log('Application already initialized, skipping...');
         return;
     }
     window.pageInitialized = true;
+    console.log('Initialization flag set');
 
     if (typeof CONFIG === 'undefined') {
         console.error('CONFIG not loaded. Retrying in 100ms...');
@@ -651,48 +658,92 @@ function initializeApp() {
         return;
     }
 
-    console.log('Initializing application with CONFIG:', CONFIG);
+    console.log('CONFIG loaded successfully:', {
+        hasCompany: !!CONFIG.company,
+        hasSliderImages: !!CONFIG.sliderImages,
+        hasServices: !!CONFIG.services,
+        hasFeatures: !!CONFIG.features,
+        hasSocialMedia: !!CONFIG.socialMedia,
+        hasPricing: !!CONFIG.pricing,
+        hasTestimonials: !!CONFIG.testimonials,
+        hasBlogPosts: !!CONFIG.blogPosts,
+        hasSpecialOffers: !!CONFIG.specialOffers,
+        hasServiceAreas: !!CONFIG.serviceAreas,
+        hasFormspree: !!CONFIG.formspree
+    });
     
     try {
+        console.log('Starting page initialization...');
         initializePage();
+        console.log('Page initialization complete');
+
+        console.log('Starting slideshow...');
         startSlideShow();
+        console.log('Slideshow started');
         
         // Pause slideshow when hovering over the slider
         const slider = document.querySelector('.slider');
         if (slider) {
-            slider.addEventListener('mouseenter', stopSlideShow);
-            slider.addEventListener('mouseleave', startSlideShow);
+            console.log('Setting up slider hover events');
+            slider.addEventListener('mouseenter', () => {
+                console.log('Slider hover detected, pausing slideshow');
+                stopSlideShow();
+            });
+            slider.addEventListener('mouseleave', () => {
+                console.log('Slider hover ended, resuming slideshow');
+                startSlideShow();
+            });
+        } else {
+            console.warn('Slider element not found');
         }
 
         // Add lazy loading to images
+        console.log('Setting up lazy loading for images...');
         const images = document.querySelectorAll('img');
-        images.forEach(img => {
+        console.log(`Found ${images.length} images to process`);
+        images.forEach((img, index) => {
             img.loading = 'lazy';
+            console.log(`Set lazy loading for image ${index + 1}`);
         });
 
         // Set configuration values
+        console.log('Setting up configuration values...');
+        
         const googleSiteVerification = document.getElementById('google-site-verification');
         if (googleSiteVerification) {
+            console.log('Setting Google site verification');
             googleSiteVerification.content = CONFIG.GOOGLE_SITE_VERIFICATION;
+        } else {
+            console.warn('Google site verification element not found');
         }
 
         const googleAnalyticsSrc = document.getElementById('google-analytics-src');
         if (googleAnalyticsSrc) {
+            console.log('Setting up Google Analytics');
             googleAnalyticsSrc.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.GOOGLE_ANALYTICS_ID}`;
-        }
-        if (window.gtag) {
-            gtag('config', CONFIG.GOOGLE_ANALYTICS_ID);
+            if (window.gtag) {
+                console.log('Initializing gtag with ID:', CONFIG.GOOGLE_ANALYTICS_ID);
+                gtag('config', CONFIG.GOOGLE_ANALYTICS_ID);
+            } else {
+                console.warn('gtag function not found');
+            }
+        } else {
+            console.warn('Google Analytics source element not found');
         }
 
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
+            console.log('Setting up contact form configuration');
             contactForm.setAttribute('action', CONFIG.formspree.endpoint);
             contactForm.setAttribute('data-formspree-id', CONFIG.formspree.formId);
+        } else {
+            console.warn('Contact form element not found');
         }
 
-        console.log('Application initialized successfully');
+        console.log('=== Application Initialization Complete ===');
     } catch (error) {
         console.error('Error during initialization:', error);
+        console.error('Error stack:', error.stack);
     }
 }
 
