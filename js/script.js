@@ -22,11 +22,17 @@ function initializePage() {
     
     // Set company information in the DOM
     console.log('Setting company information in DOM elements...');
-    document.getElementById('tagline').textContent = CONFIG.company.tagline;
-    document.getElementById('welcome-tagline').textContent = CONFIG.company.tagline;
-    document.getElementById('description').textContent = CONFIG.company.description;
-    document.getElementById('footer-company-name').textContent = CONFIG.company.name;
-    document.getElementById('footer-description').textContent = CONFIG.company.description;
+    const tagline = document.getElementById('tagline');
+    const welcomeTagline = document.getElementById('welcome-tagline');
+    const description = document.getElementById('description');
+    const footerCompanyName = document.getElementById('footer-company-name');
+    const footerDescription = document.getElementById('footer-description');
+    
+    if (tagline) tagline.textContent = CONFIG.company.tagline;
+    if (welcomeTagline) welcomeTagline.textContent = CONFIG.company.tagline;
+    if (description) description.textContent = CONFIG.company.description;
+    if (footerCompanyName) footerCompanyName.textContent = CONFIG.company.name;
+    if (footerDescription) footerDescription.textContent = CONFIG.company.description;
     
     // Set contact information
     const footerPhone = document.getElementById('footer-phone');
@@ -60,6 +66,11 @@ function initializePage() {
     // Reorder sections based on configuration
     console.log('Reordering page sections according to configuration...');
     const main = document.querySelector('main');
+    if (!main) {
+        console.error('Main element not found!');
+        return;
+    }
+
     const sections = Array.from(main.children);
     
     // Create a map of section IDs to their elements for easier access
@@ -72,37 +83,58 @@ function initializePage() {
         }
     });
 
-    // Clear main element and rebuild in configured order
-    main.innerHTML = '';
-    console.log('Rebuilding sections in configured order:', CONFIG.sectionOrder);
+    // Store original content as backup
+    const originalContent = main.innerHTML;
 
-    // Add sections in the specified order
-    CONFIG.sectionOrder.forEach(sectionId => {
-        const section = sectionMap[sectionId];
-        if (section) {
-            main.appendChild(section);
-            console.log(`Added section: ${sectionId}`);
-        } else {
-            console.warn(`Section not found: ${sectionId}`);
+    try {
+        // Clear main element and rebuild in configured order
+        main.innerHTML = '';
+        console.log('Rebuilding sections in configured order:', CONFIG.sectionOrder);
+
+        // Add sections in the specified order
+        CONFIG.sectionOrder.forEach(sectionId => {
+            const section = sectionMap[sectionId];
+            if (section) {
+                main.appendChild(section);
+                console.log(`Added section: ${sectionId}`);
+            } else {
+                console.warn(`Section not found: ${sectionId}`);
+            }
+        });
+
+        // Verify that content was added
+        if (main.children.length === 0) {
+            console.error('No sections were added! Restoring original content...');
+            main.innerHTML = originalContent;
+            return;
         }
-    });
+    } catch (error) {
+        console.error('Error during section reordering:', error);
+        // Restore original content if something goes wrong
+        main.innerHTML = originalContent;
+        return;
+    }
 
     // Initialize all components
     console.log('Initializing all page components...');
-    initializeSlider();
-    initializeServices();
-    initializeFeatures();
-    initializeSocialLinks();
-    initializePricing();
-    initializeMobileMenu();
-    initializeTestimonials();
-    initializeBlogPosts();
-    initializeSpecialOffers();
-    initializeContactZipValidation();
-    initializeContactForm();
-    initializeLazyLoading();
-    initializePhoneFormatting();
-    console.log('Page initialization complete!');
+    try {
+        initializeSlider();
+        initializeServices();
+        initializeFeatures();
+        initializeSocialLinks();
+        initializePricing();
+        initializeMobileMenu();
+        initializeTestimonials();
+        initializeBlogPosts();
+        initializeSpecialOffers();
+        initializeContactZipValidation();
+        initializeContactForm();
+        initializeLazyLoading();
+        initializePhoneFormatting();
+        console.log('Page initialization complete!');
+    } catch (error) {
+        console.error('Error during component initialization:', error);
+    }
 }
 
 /**
@@ -336,23 +368,8 @@ function initializeBlogPosts() {
 function initializeMobileMenu() {
     console.log('Initializing mobile menu...');
     
-    // Ensure DOM is fully loaded
-    if (document.readyState !== 'complete') {
-        console.log('DOM not fully loaded, waiting...');
-        window.addEventListener('load', () => {
-            console.log('DOM fully loaded, initializing mobile menu...');
-            setupMobileMenu();
-        });
-        return;
-    }
-    
-    setupMobileMenu();
-}
-
-function setupMobileMenu() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
-    const navLinksItems = document.querySelectorAll('.nav-links a');
 
     if (!mobileMenuBtn || !navLinks) {
         console.error('Mobile menu elements not found:', {
@@ -362,9 +379,7 @@ function setupMobileMenu() {
         return;
     }
 
-    console.log('Mobile menu elements found, setting up event listeners...');
-
-    // Remove any existing event listeners
+    // Remove any existing event listeners by cloning and replacing elements
     const newMobileMenuBtn = mobileMenuBtn.cloneNode(true);
     mobileMenuBtn.parentNode.replaceChild(newMobileMenuBtn, mobileMenuBtn);
     
@@ -373,7 +388,8 @@ function setupMobileMenu() {
 
     // Toggle menu on button click
     newMobileMenuBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent event from bubbling up
+        e.preventDefault();
+        e.stopPropagation();
         console.log('Mobile menu button clicked');
         newMobileMenuBtn.classList.toggle('active');
         newNavLinks.classList.toggle('active');
