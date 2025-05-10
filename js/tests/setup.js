@@ -1,10 +1,5 @@
 // Test setup file
 const { JSDOM } = require('jsdom');
-const { TextEncoder, TextDecoder } = require('util');
-
-// Set up TextEncoder and TextDecoder globally before creating JSDOM
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
 
 // Create a new JSDOM instance
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {

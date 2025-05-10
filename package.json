@@ -18,21 +18,5 @@
     "jest-environment-jsdom": "^29.7.0",
     "jsdom": "^22.1.0",
     "identity-obj-proxy": "^3.0.0"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "setupFiles": ["./js/tests/setup.js"],
-    "moduleFileExtensions": ["js", "json"],
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
-    },
-    "testMatch": ["**/tests/**/*.test.js"],
-    "globals": {
-      "TextEncoder": "require('util').TextEncoder",
-      "TextDecoder": "require('util').TextDecoder"
-    }
   }
 } 
