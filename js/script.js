@@ -636,6 +636,12 @@ function initializeScrollAnimations() {
 
 // Initialize everything when the page loads
 function initializeApp() {
+    // Prevent multiple initializations
+    if (window.pageInitialized) {
+        return;
+    }
+    window.pageInitialized = true;
+
     if (typeof CONFIG === 'undefined') {
         console.error('CONFIG not loaded. Retrying in 100ms...');
         setTimeout(initializeApp, 100);

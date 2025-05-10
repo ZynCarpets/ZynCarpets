@@ -245,6 +245,8 @@
         </div>
     </footer>
 
+    <!-- Load configuration first, then main script -->
+    <script src="js/config.js"></script>
     <script src="js/script.js"></script>
     <script src="js/backup.js"></script>
     <script src="tests/test-links.js"></script>
@@ -312,20 +314,6 @@
             });
         });
     </script>
-    <script>
-        // Initialize the page when the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Wait for config.js to load
-            if (typeof CONFIG === 'undefined') {
-                console.error('CONFIG not loaded. Make sure config.js is loaded before script.js');
-                return;
-            }
-            initializePage();
-        });
-    </script>
     <meta name="google-site-verification" content="" id="google-site-verification" />
-    <!-- Load configuration first, then main script -->
-    <script src="js/config.js"></script>
-    <script src="js/script.js"></script>
 </body>
 </html> 
