@@ -1,4 +1,5 @@
 // Configuration object
+console.log('Loading configuration...');
 const CONFIG = {
     // Available section types:
     // - hero: Main hero section with slider
@@ -255,6 +256,7 @@ const CONFIG = {
         formId: 'YOUR_FORMSPREE_ID'
     }
 };
+console.log('Configuration loaded successfully:', CONFIG);
 
 // Make CONFIG globally available
 window.CONFIG = CONFIG; 
