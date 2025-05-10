@@ -1,3 +1,6 @@
+// Import the mobile menu functionality
+const { initializeMobileMenu } = require('../mobile-menu');
+
 // Mobile Menu Tests
 describe('Mobile Menu', () => {
     let mobileMenuBtn;
