@@ -1,5 +1,6 @@
 // Test setup file
 const { JSDOM } = require('jsdom');
+const { TextEncoder, TextDecoder } = require('util');
 
 // Create a new JSDOM instance
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
@@ -14,6 +15,8 @@ global.document = dom.window.document;
 global.navigator = dom.window.navigator;
 global.HTMLElement = dom.window.HTMLElement;
 global.Event = dom.window.Event;
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 // Mock window.getComputedStyle
 window.getComputedStyle = (element) => {

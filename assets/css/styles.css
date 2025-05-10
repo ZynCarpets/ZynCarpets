@@ -196,6 +196,8 @@ nav {
 @media (max-width: 900px) {
     .mobile-menu-btn {
         display: block;
+        position: relative;
+        z-index: 1002;
     }
 
     .nav-links {
@@ -209,13 +211,17 @@ nav {
         align-items: center;
         justify-content: center;
         gap: 2rem;
-        transition: right 0.3s ease;
-        z-index: 1000;
+        transition: all 0.3s ease-in-out;
+        z-index: 1001;
         padding: 2rem;
+        opacity: 0;
+        visibility: hidden;
     }
 
     .nav-links.active {
         right: 0;
+        opacity: 1;
+        visibility: visible;
     }
 
     .mobile-menu-btn.active span:nth-child(1) {
@@ -224,6 +230,7 @@ nav {
 
     .mobile-menu-btn.active span:nth-child(2) {
         opacity: 0;
+        transform: translateX(-20px);
     }
 
     .mobile-menu-btn.active span:nth-child(3) {
@@ -236,6 +243,12 @@ nav {
         opacity: 1;
         width: 100%;
         text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        color: var(--primary);
+        transform: translateX(5px);
     }
 }
 

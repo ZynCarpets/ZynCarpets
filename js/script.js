@@ -334,35 +334,80 @@ function initializeBlogPosts() {
 
 // Mobile menu functionality
 function initializeMobileMenu() {
+    console.log('Initializing mobile menu...');
+    
+    // Ensure DOM is fully loaded
+    if (document.readyState !== 'complete') {
+        console.log('DOM not fully loaded, waiting...');
+        window.addEventListener('load', () => {
+            console.log('DOM fully loaded, initializing mobile menu...');
+            setupMobileMenu();
+        });
+        return;
+    }
+    
+    setupMobileMenu();
+}
+
+function setupMobileMenu() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
     const navLinksItems = document.querySelectorAll('.nav-links a');
 
-    if (mobileMenuBtn && navLinks) {
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenuBtn.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    if (!mobileMenuBtn || !navLinks) {
+        console.error('Mobile menu elements not found:', {
+            mobileMenuBtn: !!mobileMenuBtn,
+            navLinks: !!navLinks
         });
-
-        // Close menu when clicking a link
-        navLinksItems.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target) && navLinks.classList.contains('active')) {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
+        return;
     }
+
+    console.log('Mobile menu elements found, setting up event listeners...');
+
+    // Remove any existing event listeners
+    const newMobileMenuBtn = mobileMenuBtn.cloneNode(true);
+    mobileMenuBtn.parentNode.replaceChild(newMobileMenuBtn, mobileMenuBtn);
+    
+    const newNavLinks = navLinks.cloneNode(true);
+    navLinks.parentNode.replaceChild(newNavLinks, navLinks);
+
+    // Toggle menu on button click
+    newMobileMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent event from bubbling up
+        console.log('Mobile menu button clicked');
+        newMobileMenuBtn.classList.toggle('active');
+        newNavLinks.classList.toggle('active');
+        document.body.style.overflow = newNavLinks.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close menu when clicking a link
+    newNavLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            console.log('Nav link clicked, closing menu');
+            newMobileMenuBtn.classList.remove('active');
+            newNavLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (newNavLinks.classList.contains('active') && 
+            !newNavLinks.contains(e.target) && 
+            !newMobileMenuBtn.contains(e.target)) {
+            console.log('Clicked outside menu, closing');
+            newMobileMenuBtn.classList.remove('active');
+            newNavLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Prevent clicks inside menu from closing it
+    newNavLinks.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    console.log('Mobile menu initialization complete');
 }
 
 // Slider functionality
@@ -550,7 +595,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         console.log('DOM Content Loaded and CONFIG is available');
         initializePage();
-        initializeMobileMenu();
         startSlideShow();
         
         // Pause slideshow when hovering over the slider
