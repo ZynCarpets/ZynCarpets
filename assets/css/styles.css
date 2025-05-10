@@ -195,7 +195,7 @@ nav {
 
 @media (max-width: 900px) {
     .mobile-menu-btn {
-        display: block !important;
+        display: block;
         position: relative;
         z-index: 1003;
     }
@@ -215,10 +215,15 @@ nav {
         z-index: 1002;
         padding: 2rem;
         margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .nav-links.active {
-        display: flex !important;
+        display: flex;
+        opacity: 1;
+        visibility: visible;
     }
 
     .mobile-menu-btn.active span:nth-child(1) {
@@ -246,7 +251,7 @@ nav {
 
     header {
         z-index: 1001;
-        position: relative;
+        position: fixed;
         background-color: var(--bg-dark);
     }
 }
