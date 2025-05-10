@@ -1,14 +1,38 @@
 // Mobile Menu Implementation
 function initializeMobileMenu() {
+    console.log('=== Mobile Menu Initialization Start ===');
+    
+    // Check if we're in a mobile viewport
+    const isMobileViewport = window.innerWidth <= 900;
+    console.log('Viewport width:', window.innerWidth, 'Is mobile viewport:', isMobileViewport);
+
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
 
+    console.log('Found elements:', {
+        mobileMenuBtn: mobileMenuBtn ? 'Found' : 'Not found',
+        navLinks: navLinks ? 'Found' : 'Not found'
+    });
+
     if (!mobileMenuBtn || !navLinks) {
-        console.error('Mobile menu elements not found:', { mobileMenuBtn, navLinks });
+        console.error('Mobile menu elements not found:', { 
+            mobileMenuBtn: mobileMenuBtn ? 'Found' : 'Not found',
+            navLinks: navLinks ? 'Found' : 'Not found'
+        });
         return;
     }
 
-    console.log('Mobile menu initialized with elements:', { mobileMenuBtn, navLinks });
+    // Log initial state
+    console.log('Initial element states:', {
+        buttonClasses: mobileMenuBtn.classList.toString(),
+        navClasses: navLinks.classList.toString(),
+        buttonDisplay: window.getComputedStyle(mobileMenuBtn).display,
+        navDisplay: window.getComputedStyle(navLinks).display,
+        navPosition: window.getComputedStyle(navLinks).position,
+        navRight: window.getComputedStyle(navLinks).right,
+        navVisibility: window.getComputedStyle(navLinks).visibility,
+        navOpacity: window.getComputedStyle(navLinks).opacity
+    });
 
     // Toggle menu when clicking the button
     mobileMenuBtn.addEventListener('click', (e) => {
@@ -26,11 +50,17 @@ function initializeMobileMenu() {
             button: mobileMenuBtn.classList.toString(),
             nav: navLinks.classList.toString()
         });
-        console.log('Menu visibility:', {
-            display: window.getComputedStyle(navLinks).display,
-            visibility: window.getComputedStyle(navLinks).visibility,
-            opacity: window.getComputedStyle(navLinks).opacity,
-            right: window.getComputedStyle(navLinks).right
+
+        // Log computed styles after toggle
+        console.log('Computed styles after toggle:', {
+            buttonDisplay: window.getComputedStyle(mobileMenuBtn).display,
+            navDisplay: window.getComputedStyle(navLinks).display,
+            navPosition: window.getComputedStyle(navLinks).position,
+            navRight: window.getComputedStyle(navLinks).right,
+            navVisibility: window.getComputedStyle(navLinks).visibility,
+            navOpacity: window.getComputedStyle(navLinks).opacity,
+            navTransform: window.getComputedStyle(navLinks).transform,
+            navZIndex: window.getComputedStyle(navLinks).zIndex
         });
     });
 
@@ -56,6 +86,18 @@ function initializeMobileMenu() {
     navLinks.addEventListener('click', (e) => {
         e.stopPropagation();
     });
+
+    // Add resize handler
+    window.addEventListener('resize', () => {
+        console.log('Window resized:', {
+            width: window.innerWidth,
+            isMobileViewport: window.innerWidth <= 900,
+            buttonDisplay: window.getComputedStyle(mobileMenuBtn).display,
+            navDisplay: window.getComputedStyle(navLinks).display
+        });
+    });
+
+    console.log('=== Mobile Menu Initialization Complete ===');
 }
 
 // Export the function for testing

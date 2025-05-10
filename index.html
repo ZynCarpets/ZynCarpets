@@ -51,8 +51,28 @@
         gtag('config', ''); // Will be set by script.js
     </script>
     
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="assets/css/animations.css">
+    <!-- CSS Loading Verification -->
+    <script>
+        function verifyCSSLoading() {
+            const styles = document.styleSheets;
+            console.log('=== CSS Loading Verification ===');
+            console.log('Number of stylesheets:', styles.length);
+            for (let i = 0; i < styles.length; i++) {
+                try {
+                    console.log(`Stylesheet ${i}:`, {
+                        href: styles[i].href,
+                        rules: styles[i].cssRules ? styles[i].cssRules.length : 'CORS restricted'
+                    });
+                } catch (e) {
+                    console.log(`Stylesheet ${i}: CORS restricted`);
+                }
+            }
+        }
+        window.addEventListener('load', verifyCSSLoading);
+    </script>
+    
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <!-- Schema.org Organization Markup -->
     <script type="application/ld+json">
