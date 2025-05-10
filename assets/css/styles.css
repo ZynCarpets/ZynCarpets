@@ -195,7 +195,7 @@ nav {
 
 @media (max-width: 900px) {
     .mobile-menu-btn {
-        display: block;
+        display: block !important;
         position: relative;
         z-index: 1002;
     }
@@ -222,10 +222,10 @@ nav {
     }
 
     .nav-links.active {
-        right: 0;
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(0);
+        right: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: translateX(0) !important;
         will-change: transform, opacity;
         z-index: 1001;
     }
