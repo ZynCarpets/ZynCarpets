@@ -216,6 +216,8 @@ nav {
         padding: 2rem;
         opacity: 0;
         visibility: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .nav-links.active {
@@ -244,11 +246,19 @@ nav {
         width: 100%;
         text-align: center;
         transition: all 0.3s ease;
+        display: block;
     }
 
     .nav-links a:hover {
         color: var(--primary);
         transform: translateX(5px);
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
     }
 }
 
