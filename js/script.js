@@ -635,14 +635,16 @@ function initializeScrollAnimations() {
 }
 
 // Initialize everything when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    // Wait a short moment to ensure CONFIG is loaded
-    setTimeout(() => {
-        if (typeof CONFIG === 'undefined') {
-            console.error('CONFIG failed to load after timeout');
-            return;
-        }
-        console.log('DOM Content Loaded and CONFIG is available');
+function initializeApp() {
+    if (typeof CONFIG === 'undefined') {
+        console.error('CONFIG not loaded. Retrying in 100ms...');
+        setTimeout(initializeApp, 100);
+        return;
+    }
+
+    console.log('Initializing application with CONFIG:', CONFIG);
+    
+    try {
         initializePage();
         startSlideShow();
         
@@ -678,8 +680,15 @@ document.addEventListener('DOMContentLoaded', () => {
             contactForm.setAttribute('action', CONFIG.formspree.endpoint);
             contactForm.setAttribute('data-formspree-id', CONFIG.formspree.formId);
         }
-    }, 100); // Small delay to ensure CONFIG is loaded
-});
+
+        console.log('Application initialized successfully');
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
+}
+
+// Start initialization when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApp);
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

@@ -22,12 +22,6 @@
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
     
-    <!-- Load configuration -->
-    <script src="js/config.js"></script>
-    
-    <meta name="google-site-verification" content="" id="google-site-verification" />
-    <title>Zyn Carpets - Find Your Peace in Clean Carpets</title>
-    
     <!-- Primary Meta Tags -->
     <meta name="title" content="Zyn Carpets - Professional Carpet Cleaning Services">
     <meta name="description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
@@ -321,8 +315,17 @@
     <script>
         // Initialize the page when the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', function() {
+            // Wait for config.js to load
+            if (typeof CONFIG === 'undefined') {
+                console.error('CONFIG not loaded. Make sure config.js is loaded before script.js');
+                return;
+            }
             initializePage();
         });
     </script>
+    <meta name="google-site-verification" content="" id="google-site-verification" />
+    <!-- Load configuration first, then main script -->
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html> 
