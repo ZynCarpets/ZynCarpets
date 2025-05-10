@@ -1,0 +1,22 @@
+{
+  "name": "zyncarpets",
+  "version": "1.0.0",
+  "description": "Zyncarpets website",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jsdom": "^22.1.0",
+    "identity-obj-proxy": "^3.0.0"
+  }
+} 
