@@ -20,9 +20,15 @@ function initializeMobileMenu() {
         e.preventDefault();
         e.stopPropagation();
         console.log('Mobile menu button clicked');
+        
+        // Add active class to button first
         newMobileMenuBtn.classList.toggle('active');
-        newNavLinks.classList.toggle('active');
-        document.body.classList.toggle('menu-open');
+        
+        // Add active class to nav links with a slight delay for animation
+        setTimeout(() => {
+            newNavLinks.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        }, 50);
     });
 
     // Close menu when clicking a nav link
