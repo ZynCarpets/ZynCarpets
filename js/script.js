@@ -142,8 +142,12 @@ function initializePage() {
     console.log('Initializing all page components...');
     try {
         console.log('Initializing mobile menu...');
-        initializeMobileMenu();
-        console.log('Mobile menu initialization complete');
+        if (typeof initializeMobileMenu === 'function') {
+            initializeMobileMenu();
+            console.log('Mobile menu initialization complete');
+        } else {
+            console.error('Mobile menu initialization function not found');
+        }
         
         initializeSlider();
         initializeServices();
