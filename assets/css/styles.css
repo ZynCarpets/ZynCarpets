@@ -218,16 +218,13 @@ nav {
         visibility: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        transform: translateX(100%);
     }
 
     .nav-links.active {
         right: 0 !important;
         opacity: 1 !important;
         visibility: visible !important;
-        transform: translateX(0) !important;
-        will-change: transform, opacity;
-        z-index: 1001;
+        will-change: opacity, visibility;
     }
 
     .mobile-menu-btn.active span:nth-child(1) {
