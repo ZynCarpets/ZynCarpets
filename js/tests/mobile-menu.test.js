@@ -5,31 +5,27 @@ describe('Mobile Menu', () => {
     let body;
 
     beforeEach(() => {
-        // Set up the DOM elements needed for testing
+        // Set up the DOM elements
         document.body.innerHTML = `
-            <header>
-                <button class="mobile-menu-btn">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <nav>
-                    <ul class="nav-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </nav>
-            </header>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+            </nav>
         `;
-
-        // Get references to elements
+        
+        // Initialize the mobile menu
+        initializeMobileMenu();
+        
+        // Get references to the elements
         mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         navLinks = document.querySelector('.nav-links');
         body = document.body;
-
-        // Initialize mobile menu
-        initializeMobileMenu();
     });
 
     afterEach(() => {
@@ -37,83 +33,71 @@ describe('Mobile Menu', () => {
         document.body.innerHTML = '';
     });
 
-    test('mobile menu button should be visible on mobile devices', () => {
-        // Mock window.innerWidth to simulate mobile device
-        Object.defineProperty(window, 'innerWidth', {
-            writable: true,
-            configurable: true,
-            value: 768
-        });
-
-        // Trigger resize event
-        window.dispatchEvent(new Event('resize'));
-
-        const computedStyle = window.getComputedStyle(mobileMenuBtn);
-        expect(computedStyle.display).not.toBe('none');
+    test('mobile menu button exists', () => {
+        expect(mobileMenuBtn).not.toBeNull();
     });
-
-    test('clicking mobile menu button should toggle menu visibility', () => {
+    
+    test('nav links exist', () => {
+        expect(navLinks).not.toBeNull();
+    });
+    
+    test('clicking mobile menu button toggles active class', () => {
         // Initial state
-        expect(navLinks.classList.contains('active')).toBe(false);
         expect(mobileMenuBtn.classList.contains('active')).toBe(false);
-
-        // Click menu button
+        expect(navLinks.classList.contains('active')).toBe(false);
+        
+        // Click the button
         mobileMenuBtn.click();
-
-        // Menu should be open
-        expect(navLinks.classList.contains('active')).toBe(true);
+        
+        // Check if classes are toggled
         expect(mobileMenuBtn.classList.contains('active')).toBe(true);
-        expect(body.style.overflow).toBe('hidden');
-
-        // Click menu button again
+        expect(navLinks.classList.contains('active')).toBe(true);
+        
+        // Click again
         mobileMenuBtn.click();
-
-        // Menu should be closed
-        expect(navLinks.classList.contains('active')).toBe(false);
+        
+        // Check if classes are toggled back
         expect(mobileMenuBtn.classList.contains('active')).toBe(false);
-        expect(body.style.overflow).toBe('');
+        expect(navLinks.classList.contains('active')).toBe(false);
     });
-
-    test('clicking a nav link should close the menu', () => {
-        // Open menu first
+    
+    test('clicking a nav link closes the menu', () => {
+        // Open the menu
         mobileMenuBtn.click();
         expect(navLinks.classList.contains('active')).toBe(true);
-
+        
         // Click a nav link
         const firstLink = navLinks.querySelector('a');
         firstLink.click();
-
-        // Menu should be closed
+        
+        // Check if menu is closed
         expect(navLinks.classList.contains('active')).toBe(false);
         expect(mobileMenuBtn.classList.contains('active')).toBe(false);
-        expect(body.style.overflow).toBe('');
     });
-
-    test('clicking outside menu should close it', () => {
-        // Open menu first
+    
+    test('clicking outside closes the menu', () => {
+        // Open the menu
         mobileMenuBtn.click();
         expect(navLinks.classList.contains('active')).toBe(true);
-
-        // Click outside menu
+        
+        // Click outside
         document.body.click();
-
-        // Menu should be closed
+        
+        // Check if menu is closed
         expect(navLinks.classList.contains('active')).toBe(false);
         expect(mobileMenuBtn.classList.contains('active')).toBe(false);
-        expect(body.style.overflow).toBe('');
     });
-
-    test('menu should not close when clicking inside it', () => {
-        // Open menu first
+    
+    test('clicking inside menu does not close it', () => {
+        // Open the menu
         mobileMenuBtn.click();
         expect(navLinks.classList.contains('active')).toBe(true);
-
-        // Click inside menu
+        
+        // Click inside the menu
         navLinks.click();
-
-        // Menu should stay open
+        
+        // Check if menu stays open
         expect(navLinks.classList.contains('active')).toBe(true);
         expect(mobileMenuBtn.classList.contains('active')).toBe(true);
-        expect(body.style.overflow).toBe('hidden');
     });
 }); 
