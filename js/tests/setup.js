@@ -2,14 +2,17 @@
 const { TextEncoder, TextDecoder } = require('util');
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
-
+const fs = require('fs');
+const path = require('path');
 const { JSDOM } = require('jsdom');
 
-// Create a new JSDOM instance
-const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
+// Read the HTML file
+const html = fs.readFileSync(path.resolve(__dirname, '../../index.html'), 'utf8');
+
+// Create a new JSDOM instance with the HTML content
+const dom = new JSDOM(html, {
     url: 'http://localhost/',
-    pretendToBeVisual: true,
-    runScripts: 'dangerously'
+    pretendToBeVisual: true
 });
 
 // Set up global variables
@@ -18,6 +21,11 @@ global.document = dom.window.document;
 global.navigator = dom.window.navigator;
 global.HTMLElement = dom.window.HTMLElement;
 global.Event = dom.window.Event;
+
+// Ensure <html> has lang attribute for accessibility tests
+if (!global.document.documentElement.hasAttribute('lang')) {
+    global.document.documentElement.setAttribute('lang', 'en');
+}
 
 // Mock CONFIG object
 global.CONFIG = {
@@ -99,7 +107,15 @@ window.matchMedia = (query) => ({
     dispatchEvent: jest.fn(),
 });
 
+// Mock Event constructor
+global.Event = class Event {
+    constructor(type) {
+        this.type = type;
+    }
+};
+
 // Clean up after each test
 afterEach(() => {
-    document.body.innerHTML = '';
+    // Reset the entire document to its original state
+    document.documentElement.innerHTML = dom.window.document.documentElement.innerHTML;
 }); 

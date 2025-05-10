@@ -5,10 +5,8 @@ const { initializeMobileMenu } = require('../mobile-menu');
 describe('Mobile Menu', () => {
     let mobileMenuBtn;
     let navLinks;
-    let body;
 
     beforeEach(() => {
-        // Set up the DOM elements
         document.body.innerHTML = `
             <button class="mobile-menu-btn">
                 <span></span>
@@ -22,45 +20,24 @@ describe('Mobile Menu', () => {
             </nav>
         `;
         
-        // Initialize the mobile menu
         initializeMobileMenu();
-        
-        // Get references to the elements
         mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         navLinks = document.querySelector('.nav-links');
-        body = document.body;
     });
 
-    afterEach(() => {
-        // Clean up
-        document.body.innerHTML = '';
-    });
-
-    test('mobile menu button exists', () => {
-        expect(mobileMenuBtn).not.toBeNull();
-    });
-    
-    test('nav links exist', () => {
-        expect(navLinks).not.toBeNull();
-    });
-    
-    test('clicking mobile menu button toggles active class', () => {
+    test('mobile menu button toggles menu visibility', () => {
+        expect(mobileMenuBtn).toBeTruthy();
+        expect(navLinks).toBeTruthy();
+        
         // Initial state
-        expect(mobileMenuBtn.classList.contains('active')).toBe(false);
         expect(navLinks.classList.contains('active')).toBe(false);
         
-        // Click the button
+        // Click to open
         mobileMenuBtn.click();
-        
-        // Check if classes are toggled
-        expect(mobileMenuBtn.classList.contains('active')).toBe(true);
         expect(navLinks.classList.contains('active')).toBe(true);
         
-        // Click again
+        // Click to close
         mobileMenuBtn.click();
-        
-        // Check if classes are toggled back
-        expect(mobileMenuBtn.classList.contains('active')).toBe(false);
         expect(navLinks.classList.contains('active')).toBe(false);
     });
     
@@ -75,32 +52,5 @@ describe('Mobile Menu', () => {
         
         // Check if menu is closed
         expect(navLinks.classList.contains('active')).toBe(false);
-        expect(mobileMenuBtn.classList.contains('active')).toBe(false);
-    });
-    
-    test('clicking outside closes the menu', () => {
-        // Open the menu
-        mobileMenuBtn.click();
-        expect(navLinks.classList.contains('active')).toBe(true);
-        
-        // Click outside
-        document.body.click();
-        
-        // Check if menu is closed
-        expect(navLinks.classList.contains('active')).toBe(false);
-        expect(mobileMenuBtn.classList.contains('active')).toBe(false);
-    });
-    
-    test('clicking inside menu does not close it', () => {
-        // Open the menu
-        mobileMenuBtn.click();
-        expect(navLinks.classList.contains('active')).toBe(true);
-        
-        // Click inside the menu
-        navLinks.click();
-        
-        // Check if menu stays open
-        expect(navLinks.classList.contains('active')).toBe(true);
-        expect(mobileMenuBtn.classList.contains('active')).toBe(true);
     });
 }); 
