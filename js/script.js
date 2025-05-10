@@ -17,22 +17,42 @@ function initializePage() {
     }
 
     console.log('Starting page initialization...');
+    
+    // Verify CONFIG structure
+    if (!CONFIG.company) {
+        console.error('Company configuration is missing');
+        return;
+    }
+
     console.log('Configuration loaded:', CONFIG);
     console.log('Company information:', CONFIG.company);
     
     // Set company information in the DOM
     console.log('Setting company information in DOM elements...');
-    const tagline = document.getElementById('tagline');
-    const welcomeTagline = document.getElementById('welcome-tagline');
-    const description = document.getElementById('description');
-    const footerCompanyName = document.getElementById('footer-company-name');
-    const footerDescription = document.getElementById('footer-description');
     
-    if (tagline) tagline.textContent = CONFIG.company.tagline;
-    if (welcomeTagline) welcomeTagline.textContent = CONFIG.company.tagline;
-    if (description) description.textContent = CONFIG.company.description;
-    if (footerCompanyName) footerCompanyName.textContent = CONFIG.company.name;
-    if (footerDescription) footerDescription.textContent = CONFIG.company.description;
+    // Helper function to safely set text content
+    const safeSetText = (elementId, text) => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.textContent = text;
+            return true;
+        }
+        console.warn(`Element with id '${elementId}' not found`);
+        return false;
+    };
+
+    // Set text content for all elements
+    const elementsToUpdate = {
+        'tagline': CONFIG.company.tagline,
+        'welcome-tagline': CONFIG.company.tagline,
+        'description': CONFIG.company.description,
+        'footer-company-name': CONFIG.company.name,
+        'footer-description': CONFIG.company.description
+    };
+
+    Object.entries(elementsToUpdate).forEach(([id, text]) => {
+        safeSetText(id, text);
+    });
     
     // Set contact information
     const footerPhone = document.getElementById('footer-phone');
@@ -43,7 +63,7 @@ function initializePage() {
         emailElement: footerEmail ? 'Found' : 'Not found'
     });
     
-    if (footerPhone && footerEmail) {
+    if (footerPhone && footerEmail && CONFIG.company.phone && CONFIG.company.email) {
         footerPhone.textContent = CONFIG.company.phone;
         footerEmail.textContent = CONFIG.company.email;
         console.log('Contact information set successfully:', { 
@@ -51,7 +71,7 @@ function initializePage() {
             email: CONFIG.company.email 
         });
     } else {
-        console.error('Footer contact elements not found! Check HTML structure.');
+        console.warn('Some contact elements or information missing');
     }
 
     // Set coverage area information
@@ -393,7 +413,7 @@ function initializeMobileMenu() {
         console.log('Mobile menu button clicked');
         newMobileMenuBtn.classList.toggle('active');
         newNavLinks.classList.toggle('active');
-        document.body.style.overflow = newNavLinks.classList.contains('active') ? 'hidden' : '';
+        document.body.classList.toggle('menu-open');
     });
 
     // Close menu when clicking a link
@@ -402,7 +422,7 @@ function initializeMobileMenu() {
             console.log('Nav link clicked, closing menu');
             newMobileMenuBtn.classList.remove('active');
             newNavLinks.classList.remove('active');
-            document.body.style.overflow = '';
+            document.body.classList.remove('menu-open');
         });
     });
 
@@ -414,13 +434,26 @@ function initializeMobileMenu() {
             console.log('Clicked outside menu, closing');
             newMobileMenuBtn.classList.remove('active');
             newNavLinks.classList.remove('active');
-            document.body.style.overflow = '';
+            document.body.classList.remove('menu-open');
         }
     });
 
     // Prevent clicks inside menu from closing it
     newNavLinks.addEventListener('click', (e) => {
         e.stopPropagation();
+    });
+
+    // Handle window resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (window.innerWidth > 900) {
+                newMobileMenuBtn.classList.remove('active');
+                newNavLinks.classList.remove('active');
+                document.body.classList.remove('menu-open');
+            }
+        }, 250);
     });
 
     console.log('Mobile menu initialization complete');
