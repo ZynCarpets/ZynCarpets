@@ -3,6 +3,9 @@
  * Loads configuration and initializes all components
  */
 function initializePage() {
+    console.log('Starting page initialization...');
+    console.log('Current CONFIG state:', typeof CONFIG, CONFIG);
+    
     // Check if configuration is loaded
     if (!CONFIG) {
         console.error('Configuration not loaded');
