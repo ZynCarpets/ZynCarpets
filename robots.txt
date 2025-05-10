@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /tests/
-
-# Sitemap
-Sitemap: https://zyncarpets.com/sitemap.xml 
