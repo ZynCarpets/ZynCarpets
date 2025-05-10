@@ -2,6 +2,10 @@
 const { JSDOM } = require('jsdom');
 const { TextEncoder, TextDecoder } = require('util');
 
+// Set up TextEncoder and TextDecoder globally before creating JSDOM
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
+
 // Create a new JSDOM instance
 const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
     url: 'http://localhost/',
@@ -15,8 +19,6 @@ global.document = dom.window.document;
 global.navigator = dom.window.navigator;
 global.HTMLElement = dom.window.HTMLElement;
 global.Event = dom.window.Event;
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
 
 // Mock CONFIG object
 global.CONFIG = {
