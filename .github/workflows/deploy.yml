@@ -22,16 +22,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Substitute secrets in js/script.js
+      - name: Verify presence of js/script.js
         run: |
-          echo "Starting secret substitution in js/script.js"
-          
+          echo "Checking if js/script.js exists..."
           if [ ! -f "js/script.js" ]; then
-            echo "Error: js/script.js not found!"
+            echo "Error: Core file js/script.js not found! This file is required for the build."
             exit 1
           fi
-          
-          echo "Secret substitution complete."
+          echo "js/script.js found. Secret substitution, if any, is handled by the build process."
 
       - name: Build
         run: npm run build
