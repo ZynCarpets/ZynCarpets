@@ -109,41 +109,50 @@ function initializeSlider() {
     const dotsContainer = document.getElementById('slider-dots');
     let touchStartX = 0;
     let touchEndX = 0;
-    let currentSlide = 0;
     
     const sliderImages = window.SITE_DATA.sliderImages;
+    if (!slider || !dotsContainer || !sliderImages || sliderImages.length === 0) {
+        console.warn('Slider elements not found or no images; aborting slider initialization.');
+        return;
+    }
     
     // Create slides from SITE_DATA
     console.log(`Creating ${sliderImages.length} slides...`);
+    slider.innerHTML = ''; // Clear existing slides if any (for re-initialization scenarios)
+    dotsContainer.innerHTML = ''; // Clear existing dots
+
     sliderImages.forEach((image, index) => {
         const slide = document.createElement('div');
-        slide.className = `slide ${index === 0 ? 'active' : ''}`;
+        // Initial active state will be set by global goToSlide(0) later
+        slide.className = 'slide'; 
         
-        // Create an img element for lazy loading
         const img = document.createElement('img');
-        img.src = index === 0 ? image.url : ''; // Load first image immediately
-        img.dataset.src = image.url; // Store URL in data attribute for lazy loading
+        // Initial src and lazy loading will be handled by goToSlide
+        img.dataset.src = image.url; 
         img.alt = image.alt;
-        img.loading = 'lazy';
+        img.loading = 'lazy'; // Standard attribute, browser handles if supported
         img.className = 'slide-image';
         slide.appendChild(img);
-        
         slider.appendChild(slide);
-        console.log(`Created slide ${index + 1}: ${image.alt}`);
         
-        // Create navigation dot
         const dot = document.createElement('span');
-        dot.className = `dot ${index === 0 ? 'active' : ''}`;
-        dot.addEventListener('click', () => goToSlide(index));
+        dot.className = 'dot';
+        dot.addEventListener('click', () => goToSlide(index)); // Calls global goToSlide
         dotsContainer.appendChild(dot);
     });
 
-    // Add intersection observer for lazy loading
+    // Initialize the first slide view
+    if (sliderImages.length > 0) {
+        goToSlide(0); // Set initial slide using global function
+    }
+
+    // Add intersection observer for lazy loading (if not fully handled by goToSlide)
+    // This observer seems to be for images not yet active, which is fine.
     const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const img = entry.target;
-                if (img.dataset.src) {
+                if (img.dataset.src && !img.src) { // Only load if src is not already set
                     img.src = img.dataset.src;
                     img.removeAttribute('data-src');
                     observer.unobserve(img);
@@ -151,9 +160,7 @@ function initializeSlider() {
             }
         });
     });
-
-    // Observe all slides except the first one
-    document.querySelectorAll('.slide:not(.active) img').forEach(img => {
+    document.querySelectorAll('#slider .slide img.slide-image[data-src]').forEach(img => {
         lazyLoadObserver.observe(img);
     });
 
@@ -170,36 +177,25 @@ function initializeSlider() {
         handleSwipe();
     }, { passive: true });
 
-    /**
-     * Handles swipe gestures for slide navigation
-     * Calculates swipe direction and distance
-     */
     function handleSwipe() {
-        const swipeThreshold = 50; // minimum distance for swipe
+        const swipeThreshold = 50; 
         const swipeDistance = touchEndX - touchStartX;
         console.log('Swipe distance:', swipeDistance);
+        let newSlideIndex = currentSlide; // Use global currentSlide
 
         if (Math.abs(swipeDistance) > swipeThreshold) {
             if (swipeDistance > 0) {
                 console.log('Swipe right detected - going to previous slide');
-                currentSlide = (currentSlide - 1 + sliderImages.length) % sliderImages.length;
+                newSlideIndex = (currentSlide - 1 + sliderImages.length) % sliderImages.length;
             } else {
                 console.log('Swipe left detected - going to next slide');
-                currentSlide = (currentSlide + 1) % sliderImages.length;
+                newSlideIndex = (currentSlide + 1) % sliderImages.length;
             }
-            goToSlide(currentSlide);
+            goToSlide(newSlideIndex); // Calls global goToSlide
         } else {
             console.log('Swipe distance too small, ignoring');
         }
     }
-
-    // Update currentSlide in goToSlide function
-    const originalGoToSlide = goToSlide;
-    goToSlide = function(n) {
-        console.log(`Navigating to slide ${n}`);
-        currentSlide = n;
-        originalGoToSlide(n);
-    };
 }
 
 // Initialize services
@@ -360,10 +356,9 @@ function initializeBlogPosts() {
 function initializeContactZipValidation() {
     const zipInput = document.getElementById('zip');
     const validationMessage = document.getElementById('zip-message');
-    const contactForm = document.getElementById('contact-form');
 
-    if (!zipInput || !validationMessage || !contactForm) {
-        console.error('Required elements not found for zip code validation');
+    if (!zipInput || !validationMessage || !window.contactForm) {
+        console.error('Required elements not found for zip code validation, or contactForm is missing globally');
         return;
     }
 
@@ -386,7 +381,7 @@ function initializeContactZipValidation() {
     });
 
     // Handle form submission
-    contactForm.addEventListener('submit', (e) => {
+    window.contactForm.addEventListener('submit', (e) => {
         // Show validation message on form submission
         validationMessage.style.display = 'block';
         
@@ -554,8 +549,7 @@ function initializeApp() {
 
         console.log('Setting up configuration values...');
         
-        const contactForm = document.getElementById('contact-form');
-        if (contactForm) {
+        if (window.contactForm) {
             console.log('Setting up contact form configuration');
             // The formId was part of CONFIG.formspree but typically Formspree uses the endpoint path.
             // If 'data-formspree-id' was actually used, it might need to be handled differently or was specific to a library.
@@ -1103,7 +1097,46 @@ function validateCSRFToken(token) {
     return token === storedToken;
 }
 
+let currentSlide = 0;
 let slideInterval;
+
+function goToSlide(slideIndex) {
+    console.log(`Navigating to slide ${slideIndex}`);
+    const slides = document.querySelectorAll('#slider .slide');
+    const dots = document.querySelectorAll('#slider-dots .dot');
+    const sliderImages = window.SITE_DATA && window.SITE_DATA.sliderImages ? window.SITE_DATA.sliderImages : [];
+
+    if (!slides.length || !dots.length || !sliderImages.length || slideIndex < 0 || slideIndex >= slides.length) {
+        console.warn('goToSlide: Invalid parameters or elements not found.');
+        return;
+    }
+
+    currentSlide = slideIndex;
+
+    slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+        // Handle lazy loading for the new active slide
+        if (index === currentSlide) {
+            const img = slide.querySelector('img.slide-image');
+            if (img && img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                // Optional: unobserve if an observer was set up for this specific image
+            }
+        }
+    });
+
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+}
+
+function nextSlide() {
+    const sliderImages = window.SITE_DATA && window.SITE_DATA.sliderImages ? window.SITE_DATA.sliderImages : [];
+    if (!sliderImages.length) return; // No images, nothing to slide
+    let newSlideIndex = (currentSlide + 1) % sliderImages.length;
+    goToSlide(newSlideIndex);
+}
 
 function startSlideShow() {
     console.log('Starting slideshow...');
@@ -1111,7 +1144,7 @@ function startSlideShow() {
     if (slideInterval) {
         clearInterval(slideInterval);
     }
-    slideInterval = setInterval(nextSlide, 6000); // Hardcoded interval from CONFIG.slider.interval
+    slideInterval = setInterval(nextSlide, 6000); // Use global nextSlide
 }
 
 function stopSlideShow() {

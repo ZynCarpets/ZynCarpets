@@ -289,11 +289,9 @@
         });
 
         // Track form submissions (only if validation passes)
-        const contactForm = document.getElementById('contact-form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', event => {
+        if (window.contactForm) {
+            window.contactForm.addEventListener('submit', event => {
                 // Assuming form validation happens before this and prevents submission if invalid
-                // If your form validation doesn't prevent default, you might double-count or count errors
                 gtag('event', 'form_submission', {
                     'event_category': 'Conversion',
                     'event_label': 'Contact Form Submitted',

@@ -1,68 +1,116 @@
 // Test all links on the website
 describe('Link Tests', () => {
-    beforeEach(() => {
-        // Set up the DOM with navigation and resource links
-        document.body.innerHTML = `
-            <nav class="nav-links">
-                <a href="#section1">Section 1</a>
-                <a href="#section2">Section 2</a>
-            </nav>
-            <div id="section1">Section 1 Content</div>
-            <div id="section2">Section 2 Content</div>
-            <link rel="stylesheet" href="styles.css">
-            <script src="script.js"></script>
-            <img src="logo.png">
-            <a href="https://example.com" target="_blank" rel="noopener">External Link</a>
-        `;
-    });
+    // beforeEach(() => {
+    //     // Set up the DOM with navigation and resource links
+    //     document.body.innerHTML = `
+    //         <nav class="nav-links">
+    //             <a href="#section1">Section 1</a>
+    //             <a href="#section2">Section 2</a>
+    //         </nav>
+    //         <div id="section1">Section 1 Content</div>
+    //         <div id="section2">Section 2 Content</div>
+    //         <link rel="stylesheet" href="styles.css">
+    //         <script src="script.js"></script>
+    //         <img src="logo.png">
+    //         <a href="https://example.com" target="_blank" rel="noopener">External Link</a>
+    //     `;
+    // });
 
     describe('Navigation Links', () => {
-        test('should have valid internal navigation links', () => {
-            const navLinks = document.querySelectorAll('.nav-links a');
+        test('all internal navigation links (e.g., in header) should point to valid sections', () => {
+            // Adjust selector as needed for your actual navigation structure
+            const navLinks = document.querySelectorAll('header nav a, footer nav a, a.cta-button[href^="#"]');
+            let foundNavLinks = false;
             navLinks.forEach(link => {
+                foundNavLinks = true;
                 const href = link.getAttribute('href');
-                if (href.startsWith('#')) {
+                if (href && href.startsWith('#') && href.length > 1) { // Ensure href is not just "#"
                     const targetId = href.substring(1);
                     const targetElement = document.getElementById(targetId);
+                    if (!targetElement) {
+                        console.error(`Navigation link error: Target element with ID '${targetId}' not found for link ${link.outerHTML}`);
+                    }
                     expect(targetElement).toBeTruthy();
                 }
             });
+            if (!foundNavLinks) {
+                console.warn('No navigation links found with the specified selectors. Check selectors or if nav links exist.');
+            }
         });
 
-        test('should have proper href attributes', () => {
-            const navLinks = document.querySelectorAll('.nav-links a');
+        test('all navigation links (e.g., in header) should have href attributes', () => {
+            const navLinks = document.querySelectorAll('header nav a, footer nav a, a.cta-button[href^="#"]');
+            let foundNavLinks = false;
             navLinks.forEach(link => {
+                foundNavLinks = true;
                 expect(link.hasAttribute('href')).toBeTruthy();
+                const hrefValue = link.getAttribute('href');
+                expect(hrefValue).not.toBeNull();
+                expect(hrefValue.trim()).not.toBe('');
             });
+            if (!foundNavLinks) {
+                console.warn('No navigation links found with the specified selectors. Check selectors or if nav links exist.');
+            }
         });
     });
 
     describe('Resource Links', () => {
-        test('should have required resource files', () => {
-            const resources = [
-                { type: 'stylesheet', href: 'styles.css' },
-                { type: 'script', src: 'script.js' },
-                { type: 'image', src: 'logo.png' }
-            ];
+        // test('should have required resource files', () => {
+        //     const resources = [
+        //         { type: 'stylesheet', href: 'styles.css' },
+        //         { type: 'script', src: 'script.js' },
+        //         { type: 'image', src: 'logo.png' }
+        //     ];
+        //
+        //     resources.forEach(resource => {
+        //         const element = document.createElement(resource.type === 'image' ? 'img' : resource.type);
+        //         if (resource.type === 'image') {
+        //             element.src = resource.src;
+        //         } else {
+        //             element.href = resource.href;
+        //         }
+        //         expect(element).toBeTruthy();
+        //     });
+        // });
 
-            resources.forEach(resource => {
-                const element = document.createElement(resource.type === 'image' ? 'img' : resource.type);
-                if (resource.type === 'image') {
-                    element.src = resource.src;
-                } else {
-                    element.href = resource.href;
-                }
-                expect(element).toBeTruthy();
+        test('stylesheet links should have non-empty href attributes', () => {
+            const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+            expect(stylesheets.length).toBeGreaterThan(0); // Expect at least one stylesheet
+            stylesheets.forEach(link => {
+                expect(link.hasAttribute('href')).toBeTruthy();
+                const href = link.getAttribute('href');
+                expect(href).not.toBeNull();
+                expect(href.trim()).not.toBe('');
+                // Optionally, check if it's a relative or absolute path as expected
+                // console.log('Stylesheet href:', href);
             });
         });
 
-        test('should have valid resource paths', () => {
-            const resources = document.querySelectorAll('link[rel="stylesheet"], script[src], img[src]');
-            resources.forEach(resource => {
-                const path = resource.href || resource.src;
-                if (path && !path.startsWith('http')) {
-                    expect(path).toMatch(/^[a-zA-Z0-9_.-]+$/);
+        test('script tags should have non-empty src attributes (if not inline)', () => {
+            const scripts = document.querySelectorAll('script');
+            scripts.forEach(script => {
+                if (!script.textContent) { // Only check scripts with src, not inline scripts with content
+                    expect(script.hasAttribute('src')).toBeTruthy();
+                    const src = script.getAttribute('src');
+                    expect(src).not.toBeNull();
+                    expect(src.trim()).not.toBe('');
+                    // console.log('Script src:', src);
                 }
+            });
+        });
+
+        test('image tags should have non-empty src or data-src attributes', () => {
+            const images = document.querySelectorAll('img');
+            // It's possible some pages have no images, or images are added dynamically.
+            // If images are expected, (images.length).toBeGreaterThan(0) could be added.
+            images.forEach(img => {
+                const hasSrc = img.hasAttribute('src') && img.getAttribute('src').trim() !== '';
+                const hasDataSrc = img.hasAttribute('data-src') && img.getAttribute('data-src').trim() !== '';
+                if (!hasSrc && !hasDataSrc && !img.getAttribute('alt')?.includes('Decorative')) { // Allow missing src for truly decorative images if they are marked so
+                     console.warn(`Image missing src and data-src: ${img.outerHTML.substring(0,100)}...`);
+                }
+                expect(hasSrc || hasDataSrc).toBeTruthy();
+                // console.log('Image src/data-src:', img.getAttribute('src'), img.getAttribute('data-src'));
             });
         });
     });

@@ -10,7 +10,11 @@ const { JSDOM } = require('jsdom');
 const siteContent = require('../../src/js/site-content.js');
 
 // Read the HTML file from src/index.html
-const html = fs.readFileSync(path.resolve(__dirname, '../../src/index.html'), 'utf8');
+let html = fs.readFileSync(path.resolve(__dirname, '../../src/index.html'), 'utf8');
+
+// Simulate build script replacement of GOOGLE_ANALYTICS_ID for testing
+const MOCK_GA_ID = 'GA_TEST_ID';
+html = html.replace(/{{GOOGLE_ANALYTICS_ID}}/g, MOCK_GA_ID);
 
 // Create a new JSDOM instance.
 // We need to inject SITE_DATA before any scripts in index.html run.
