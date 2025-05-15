@@ -513,9 +513,13 @@ function initializeApp() {
     window.pageInitialized = true;
     console.log('Initialization flag set');
 
+    // Get the contact form element and assign it to window.contactForm
+    // This makes it available globally for other initializers.
+    window.contactForm = document.getElementById('contact-form');
+
     try {
         console.log('Starting page initialization...');
-        initializePage();
+        initializePage(); // This will call initializeContactForm and initializeContactZipValidation
         console.log('Page initialization complete');
 
         console.log('Starting slideshow...');
@@ -550,12 +554,12 @@ function initializeApp() {
         console.log('Setting up configuration values...');
         
         if (window.contactForm) {
-            console.log('Setting up contact form configuration');
+            console.log('Setting up contact form configuration. Form element found.');
             // The formId was part of CONFIG.formspree but typically Formspree uses the endpoint path.
             // If 'data-formspree-id' was actually used, it might need to be handled differently or was specific to a library.
             // contactForm.setAttribute('data-formspree-id', 'YOUR_FORMSPREE_ID'); // Assuming this might not be needed if standard Formspree is used
         } else {
-            console.warn('Contact form element not found');
+            console.warn('Contact form element with ID \'contact-form\' NOT FOUND. Relevant features might not work.');
         }
 
         console.log('=== Application Initialization Complete ===');
@@ -587,88 +591,6 @@ window.addEventListener('scroll', function() {
         header.classList.remove('scrolled');
     }
 });
-
-// Form submission handling with Formspree
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            street: document.getElementById('street').value,
-            zip: document.getElementById('zip').value
-        };
-
-        // Validate all fields
-        let hasError = false;
-        const validations = {
-            name: validateName(formData.name),
-            email: validateEmail(formData.email),
-            phone: validatePhone(formData.phone),
-            street: validateStreet(formData.street),
-            zip: validateZip(formData.zip)
-        };
-
-        // Show validation messages for all fields
-        Object.entries(validations).forEach(([field, error]) => {
-            if (error) {
-                showValidationMessage(field, error, false);
-                hasError = true;
-            } else {
-                hideValidationMessage(field);
-            }
-        });
-
-        if (hasError) {
-            showFormValidation('Please correct the errors in the form before submitting.');
-            return;
-        }
-
-        try {
-            // Validate CSRF token
-            const csrfToken = contactForm.querySelector('input[name="_csrf"]').value;
-            if (!validateCSRFToken(csrfToken)) {
-                throw new Error('Invalid CSRF token');
-            }
-
-            // Submit to Formspree
-            const formAction = contactForm.getAttribute('action'); // Get action from form attribute
-            const response = await fetch(formAction, { // Use formAction here
-                method: 'POST',
-                body: JSON.stringify({
-                    ...formData,
-                    _csrf: csrfToken
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                showFormValidation('Thank you for your message! We will get back to you soon.', true);
-                contactForm.reset();
-                
-                // Add success animation to all fields
-                const fields = contactForm.querySelectorAll('input');
-                fields.forEach(field => {
-                    field.classList.add('field-success');
-                    setTimeout(() => {
-                        field.classList.remove('field-success');
-                    }, 1000);
-                });
-            } else {
-                throw new Error('Form submission failed');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            showFormValidation('Sorry, there was an error sending your message. Please try again later.');
-        }
-    });
-}
 
 // Form validation functions
 function validateName(name) {
@@ -862,8 +784,13 @@ function showToast(message) {
  */
 function initializeContactForm() {
     console.log('Initializing contact form...');
-    const form = document.getElementById('contact-form');
-    const formBackup = new FormBackup();
+    
+    if (!window.contactForm) {
+        console.error('initializeContactForm: window.contactForm not found or not a valid element. Form cannot be initialized.');
+        return;
+    }
+    const form = window.contactForm; // Use the globally set form.
+    // const formBackup = new FormBackup(); // Removed as per user request
     const submitButton = form.querySelector('button[type="submit"]');
 
     // Generate and set CSRF token
@@ -970,7 +897,7 @@ function initializeContactForm() {
 
             if (response.ok) {
                 // Backup the submission
-                await formBackup.backupSubmission(formData);
+                // await formBackup.backupSubmission(formData); // Removed as per user request
                 
                 // Show success message
                 showFormValidation('Thank you for your submission! We will contact you soon.', true);
