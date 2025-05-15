@@ -9,12 +9,12 @@ function initializeBlogPosts() {
         return;
     }
 
-    if (!window.SITE_DATA || !window.SITE_DATA.blogPosts || window.SITE_DATA.blogPosts.length === 0) {
-        console.warn('SITE_DATA.blogPosts not found or empty. Skipping blog posts initialization.');
+    if (!window.siteData || !window.siteData.blogPosts || window.siteData.blogPosts.length === 0) {
+        console.warn('siteData.blogPosts not found or empty. Skipping blog posts initialization.');
         blogGrid.innerHTML = '<p>No blog posts available at the moment.</p>'; // User-friendly message
         return;
     }
-    const blogPosts = window.SITE_DATA.blogPosts;
+    const blogPosts = window.siteData.blogPosts;
 
     // Clear existing content
     blogGrid.innerHTML = '';

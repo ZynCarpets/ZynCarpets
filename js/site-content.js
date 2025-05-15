@@ -55,6 +55,6 @@ const data = {
 
 if (typeof window !== 'undefined') {
     window.siteData = data; // For browser environment
-}
-
-module.exports = data; // For Node.js environment (build script) 
+} else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = data; // For Node.js environment (build script) 
+} 

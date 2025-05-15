@@ -1,6 +1,6 @@
 /**
  * Initializes testimonial cards in the testimonials grid.
- * Fetches testimonial data from window.SITE_DATA.testimonials.
+ * Fetches testimonial data from window.siteData.testimonials.
  */
 function initializeTestimonials() {
     const testimonialsGrid = document.getElementById('testimonials-grid');
@@ -9,12 +9,12 @@ function initializeTestimonials() {
         return;
     }
 
-    if (!window.SITE_DATA || !window.SITE_DATA.testimonials || window.SITE_DATA.testimonials.length === 0) {
-        console.warn('SITE_DATA.testimonials not found or empty. Skipping testimonials initialization.');
+    if (!window.siteData || !window.siteData.testimonials || window.siteData.testimonials.length === 0) {
+        console.warn('siteData.testimonials not found or empty. Skipping testimonials initialization.');
         testimonialsGrid.innerHTML = '<p>No testimonials available at the moment.</p>'; // User-friendly message
         return;
     }
-    const testimonials = window.SITE_DATA.testimonials;
+    const testimonials = window.siteData.testimonials;
 
     // Clear existing content
     testimonialsGrid.innerHTML = '';
@@ -31,7 +31,7 @@ function initializeTestimonials() {
         // For now, assuming SITE_DATA is trusted.
         card.innerHTML = `
             <div class="rating">${stars}</div>
-            <p class="content">${testimonial.content}</p>
+            <p class="content">${testimonial.quote}</p>
             <p class="author">- ${testimonial.author}</p>
         `;
         

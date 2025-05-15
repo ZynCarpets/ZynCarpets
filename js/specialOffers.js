@@ -1,6 +1,6 @@
 /**
  * Initializes special offer cards in the offers container.
- * Fetches offer data from window.SITE_DATA.specialOffers.
+ * Fetches offer data from window.siteData.specialOffers.
  */
 function initializeSpecialOffers() {
     const offersContainer = document.querySelector('.offers-container');
@@ -9,12 +9,12 @@ function initializeSpecialOffers() {
         return;
     }
 
-    if (!window.SITE_DATA || !window.SITE_DATA.specialOffers || window.SITE_DATA.specialOffers.length === 0) {
-        console.warn('SITE_DATA.specialOffers not found or empty. Skipping special offers initialization.');
+    if (!window.siteData || !window.siteData.specialOffers || window.siteData.specialOffers.length === 0) {
+        console.warn('siteData.specialOffers not found or empty. Skipping special offers initialization.');
         offersContainer.innerHTML = '<p>No special offers available at the moment.</p>'; // User-friendly message
         return;
     }
-    const specialOffers = window.SITE_DATA.specialOffers;
+    const specialOffers = window.siteData.specialOffers;
 
     // Clear existing content
     offersContainer.innerHTML = '';
@@ -41,7 +41,7 @@ function initializeSpecialOffers() {
             ${priceHtml}
             <p class="details">${details}</p>
             <button class="cta-button">Book Now</button> 
-            <!-- Consider making button text/action configurable via SITE_DATA -->
+            <!-- Consider making button text/action configurable via siteData -->
         `;
         
         offersContainer.appendChild(offerElement);
