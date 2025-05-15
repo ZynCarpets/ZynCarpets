@@ -7,7 +7,7 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 // Load the actual site content
-const siteContent = require('../../src/js/site-content.js');
+const siteContent = require('./site-content.js');
 
 // Read the HTML file from src/index.html
 let html = fs.readFileSync(path.resolve(__dirname, '../../src/index.html'), 'utf8');
@@ -21,6 +21,21 @@ html = html.replace(/{{GOOGLE_ANALYTICS_ID}}/g, MOCK_GA_ID);
 // One way is to add a script tag to the HTML string before JSDOM parses it.
 const siteDataScript = `<script>window.SITE_DATA = ${JSON.stringify(siteContent)};</script>`;
 const modifiedHtml = html.replace("</head>", `${siteDataScript}</head>`);
+
+// ---- TEMPORARY DEBUGGING ----
+const sliderPath = path.resolve(__dirname, '../../js/slider.js'); // Path relative to setup.js to root js/
+const scriptPath = path.resolve(__dirname, '../../js/script.js'); // Path relative to setup.js to root js/
+
+try {
+    const sliderContent = fs.readFileSync(sliderPath, 'utf8');
+    console.log('DEBUG: Start of js/slider.js as seen by setup.js:\n', sliderContent.substring(0, 100));
+
+    const scriptContent = fs.readFileSync(scriptPath, 'utf8');
+    console.log('DEBUG: Start of js/script.js as seen by setup.js:\n', scriptContent.substring(0, 100));
+} catch (e) {
+    console.error('DEBUG: Error reading script files directly in setup.js:', e);
+}
+// ---- END TEMPORARY DEBUGGING ----
 
 const dom = new JSDOM(modifiedHtml, {
     url: 'http://localhost/',
