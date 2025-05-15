@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Zyncarpets website",
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "node src/build.js",
     "test": "jest",
     "test:watch": "jest --watch"
   },

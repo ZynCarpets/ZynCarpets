@@ -1,5 +1,5 @@
 // src/js/site-content.js
-module.exports = {
+const data = {
     companyInfo: {
         tagline: "Your trusted partner in carpet care", // Used in hero
         welcomeTagline: "Your trusted partner in carpet care", // Used in logo showcase
@@ -52,3 +52,9 @@ module.exports = {
         { title: 'Area Rug Cleaning', discount: 25, details: 'Minimum charges apply. Not valid with other offers.', type: 'discount' }
     ]
 }; 
+
+if (typeof window !== 'undefined') {
+    window.siteData = data; // For browser environment
+}
+
+module.exports = data; // For Node.js environment (build script) 
