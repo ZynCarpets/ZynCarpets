@@ -52,36 +52,41 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
 
 - **Security & Performance**
   - Security headers implementation
-  - Automated form submission backups
-  - Rate limiting and spam protection
+  - Form submission via Formspree (handles spam protection, rate limiting)
   - Content Security Policy
 
 ## Project Structure
 
 ```
 zyncarpets/
-├── index.html          # Main HTML file
-├── assets/            # Static assets
-│   ├── css/          # Stylesheets
-│   └── images/       # Images
-├── js/               # JavaScript files
-│   ├── script.js     # Main application logic
-│   ├── config.js     # Configuration
-│   ├── config.template.js # Template for configuration
-│   └── backup.js     # Form backup functionality
-├── data/             # Data files
-│   └── form-submissions.json
-├── docs/             # Documentation
-│   ├── README.md     # This file
-│   └── TODO.md       # Project tasks and notes
-├── tests/            # Test files
-├── .github/          # GitHub Actions workflows
-│   └── workflows/
-│       └── deploy.yml
-├── robots.txt        # Search engine crawler rules
-├── sitemap.xml       # XML sitemap
-└── 404.html          # Custom 404 page
+├── index.html              # Main HTML file for the Zyn Carpets website
+├── 404.html                # Custom 404 error page
+├── assets/                 # Static assets
+│   ├── css/                # CSS stylesheets (e.g., styles.css, animations.css)
+│   └── images/             # Image files (e.g., logo.png, hero images, etc.)
+├── js/                     # Client-side JavaScript files
+│   ├── script.js           # Main application logic, UI interactions, and content setup
+│   └── mobile-menu.js      # JavaScript for mobile navigation menu
+├── scripts/                # Build-related scripts
+│   └── build.js            # Node.js script for building the project (e.g., processing HTML, hashing CSS)
+├── tests/                  # Jest test files (e.g., *.test.js)
+├── docs/                   # Project documentation
+│   ├── README.md           # This detailed documentation file
+│   └── TODO.md             # List of tasks and issues
+├── .github/                # GitHub specific files
+│   └── workflows/          # GitHub Actions workflow configurations
+│       └── deploy.yml      # Workflow for building and deploying the site to GitHub Pages
+├── .babelrc                # Babel configuration (for JavaScript transpilation, e.g., for Jest)
+├── .gitignore              # Specifies intentionally untracked files that Git should ignore
+├── jest.config.js          # Jest testing framework configuration
+├── package.json            # npm package manifest (project metadata, dependencies, scripts)
+├── package-lock.json       # Records exact versions of dependencies
+├── README.md               # Main project README (overview and quick start)
+├── robots.txt              # Instructions for search engine crawlers
+└── sitemap.xml             # XML sitemap for search engines
 ```
+
+Note: Most of the site's dynamic content and configuration (e.g., services, testimonials, company info) are currently managed directly within `js/script.js`. Environment-specific variables (like API keys) are injected into HTML placeholders by the `scripts/build.js` script during the build process (see `scripts/build.js` and the GitHub Actions workflow in `.github/workflows/deploy.yml`).
 
 ## Technologies Used
 
@@ -92,10 +97,9 @@ zyncarpets/
   - Font Awesome for icons
 
 - **Backend & Services**
-  - Formspree for form handling
+  - Formspree for form handling and submission storage
   - Google Analytics for tracking
   - GitHub Actions for CI/CD
-  - Automated backup system
 
 ## Getting Started
 
@@ -103,6 +107,7 @@ zyncarpets/
 
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 - Git (for version control)
+- Node.js and npm (for running build scripts and managing dependencies)
 - Code editor (VS Code recommended)
 
 ### Local Development
@@ -113,21 +118,43 @@ zyncarpets/
    cd zyncarpets
    ```
 
-2. Set up configuration:
-   - Copy `js/config.template.js` to `js/config.js`
-   - Update the configuration values in `js/config.js`
+2. Install dependencies (optional, if you need to run tests or other npm scripts locally):
+   ```bash
+   npm install
+   ```
 
-3. Open `index.html` in your browser to view the site locally
+3. Open `index.html` in your browser to view the site locally. Note that some features, like Google Analytics or Formspree integration, rely on API keys that are injected during the build process and might not be fully functional when running the source `index.html` directly without a build. For the full experience, including environment variable injection, you can run the build script:
+   ```bash
+   npm run build
+   ```
+   Then open `dist/index.html`.
 
 ## Deployment
 
-### GitHub Pages Deployment with GitHub Actions
+The project is deployed to GitHub Pages using a GitHub Actions workflow defined in `.github/workflows/deploy.yml`.
 
-The project uses GitHub Actions for automated deployment to GitHub Pages. The workflow is configured to:
-- Build and deploy on push to main branch
-- Generate and deploy sitemap
-- Handle custom domain configuration
-- Implement security headers
+### Secret Management
+
+Sensitive information such as API keys and configuration IDs (e.g., Google Analytics ID, Google Site Verification Code, Formspree Form ID) are managed as GitHub Secrets for the repository.
+
+### Build and Deployment Process
+
+The GitHub Actions workflow performs the following key steps on every push to the `main` branch:
+
+1.  **Checkout Code**: Checks out the latest version of your repository.
+2.  **Setup Node.js**: Sets up the Node.js environment specified in the workflow.
+3.  **Install Dependencies**: Runs `npm install` to install project dependencies.
+4.  **Build Project**: 
+    *   Runs the `npm run build` command, which executes the `scripts/build.js` script.
+    *   During this step, GitHub Secrets (made available as environment variables to the build script) are used by `scripts/build.js` to replace placeholders (e.g., `{{GOOGLE_ANALYTICS_ID}}`, `{{FORMSPREE_ENDPOINT}}`, `{{GOOGLE_SITE_VERIFICATION}}`) in the source HTML files (`index.html`, `404.html`, etc.).
+    *   The processed HTML files, along with other necessary assets (CSS, JavaScript, images), are placed in the `dist/` directory. This includes operations like CSS hashing for cache busting.
+5.  **Deploy to GitHub Pages**: The contents of the `dist/` directory are deployed to the `gh-pages` branch, which makes the site live on GitHub Pages.
+
+This process ensures that secrets are not hardcoded in the repository and are securely injected only during the build and deployment on the GitHub Actions runners.
+
+### GitHub Pages Configuration
+
+To ensure GitHub Pages serves your site correctly from the `gh-pages` branch:
 
 1. Enable GitHub Pages:
    - Go to repository settings
@@ -153,9 +180,10 @@ The project uses GitHub Actions for automated deployment to GitHub Pages. The wo
 ## Customization
 
 ### Content Updates
-- Modify `js/config.js` for dynamic content
-- Update images in the `assets/images` directory
-- Edit styles in the `assets/css` directory
+- Modify content directly within `js/script.js` for elements like services, testimonials, features, etc.
+- For site configuration values that are injected during build (e.g., Google Analytics ID, Formspree endpoint, Google Site Verification code), ensure the corresponding GitHub Secrets are correctly set in your repository settings. The `scripts/build.js` script handles their injection into the HTML placeholders (`{{PLACEHOLDER_NAME}}`) during the deployment workflow.
+- Update images in the `assets/images` directory.
+- Edit styles in the `assets/css` directory.
 
 ## Browser Support
 
@@ -173,9 +201,7 @@ The project uses GitHub Actions for automated deployment to GitHub Pages. The wo
 - X-Content-Type-Options headers
 - Referrer-Policy configuration
 - X-XSS-Protection headers
-- Form submission rate limiting
-- Automated backup system for form submissions
-- 30-day backup retention policy
+- Form submissions handled by Formspree (includes security features)
 
 ### Security Best Practices
 1. Keep dependencies updated
@@ -183,9 +209,8 @@ The project uses GitHub Actions for automated deployment to GitHub Pages. The wo
 3. Implement Content Security Policy (CSP)
 4. Regular security audits
 5. Follow OWASP security guidelines
-6. Automated backup system
-7. Rate limiting for form submissions
-8. Spam protection through Formspree
+6. Rely on Formspree for secure form submission handling and data storage
+7. Spam protection through Formspree
 
 ## Contributing
 

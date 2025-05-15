@@ -39,13 +39,6 @@
 1. [x] Complete Google Search Console Setup
    - [x] Verify site ownership through environment variable
 
-2. [x] Set up automated backups of form submissions
-   - [x] Implement backup system (JSON file-based)
-   - [x] Set up automated backup schedule (daily)
-   - [x] Configure GitHub Actions for backup management
-   - [x] Implement 30-day backup retention
-   - [x] Add backup verification system
-
 ## Completed Tasks ✅
 1. [x] Post-Deployment Checks
    - [x] Test all links on the website
@@ -81,18 +74,20 @@
    - [ ] Implement conversion funnels
    - [ ] Add heat mapping
    - [ ] Set up goal tracking
+   - [ ] Implement content versioning
 
 3. [ ] Content Management
    - [ ] Create content update schedule
    - [ ] Set up blog post template
-   - [ ] Implement content versioning
-   - [ ] Create content backup strategy
 
 4. [ ] Security Enhancements
    - [ ] Implement rate limiting for API endpoints
    - [ ] Add CAPTCHA for form submissions
    - [ ] Set up security monitoring
    - [ ] Implement automated security scanning
+   - [ ] Document deployment process
+   - [ ] Create maintenance guide
+   - [x] Add helpful navigation options
 
 5. [ ] User Experience
    - [ ] Add loading states for form submissions
@@ -228,10 +223,6 @@
    - [x] Implement proper error handling
    - [x] Add helpful navigation options
 
-7. [ ] Set up automated backups of form submissions
-   - [ ] Implement backup system (database or file-based)
-   - [ ] Set up automated backup schedule
-
 ## Security Checklist
 1. [ ] Verify all sensitive data is in environment variables
 2. [ ] Check that no API keys are exposed in code
@@ -244,24 +235,24 @@
 # Zyncarpets Website Issues TODO
 
 ## Critical Issues
-1. [ ] Fix process.env reference error
-   - Error: Uncaught ReferenceError: process is not defined
-   - Location: index:51:24
+1. [x] ~~Fix process.env reference error~~ (Resolved by streamlining config; was likely misattributed or related to local dev without build)
+   - ~~Error: Uncaught ReferenceError: process is not defined~~
+   - ~~Location: index:51:24~~
 
-2. [ ] Fix Formspree integration
-   - Error: Formspree form ID is not properly configured
-   - Error: Form submission handler not called
-   - Error: Failed to fetch due to Content Security Policy violation
-   - Location: script.js:600
+2. [ ] Fix Formspree integration (Verify on live site after deployment)
+   - [x] ~~Error: Formspree form ID is not properly configured~~ (Resolved: Endpoint now built from secret and injected by build script)
+   - [ ] Error: Form submission handler not called (Verify on live site)
+   - [ ] Error: Failed to fetch due to Content Security Policy violation (Verify on live site; CSP in index.html seems correct)
+   - ~~Location: script.js:600~~ (Line number likely outdated)
 
-3. [ ] Fix Content Security Policy
-   - Issue: CSP blocking Formspree connection
-   - Current directive: "connect-src 'self' https://www.google-analytics.com"
-   - Need to add formspree.io to allowed domains
+3. [x] ~~Fix Content Security Policy~~ (Resolved: CSP in index.html includes formspree.io/f/)
+   - ~~Issue: CSP blocking Formspree connection~~
+   - ~~Current directive: "connect-src 'self' https://www.google-analytics.com"~~ (Outdated)
+   - ~~Need to add formspree.io to allowed domains~~ (Done)
 
-4. [ ] Fix X-Frame-Options header
-   - Issue: X-Frame-Options set in meta tag instead of HTTP header
-   - Location: zyncarpets.com/:19
+4. [ ] Fix X-Frame-Options header (Hosting platform limitation for GitHub Pages; review if high security concern)
+   - Issue: X-Frame-Options set in meta tag instead of HTTP header (Not found in meta tags; general advice for HTTP headers)
+   - ~~Location: zyncarpets.com/:19~~
 
 ## Security Issues
 1. [ ] Implement CSRF protection for contact form
@@ -345,6 +336,16 @@
    - Other external resources
 
 ## Code Fixes
-1. [ ] Fix validateFormData function
-   - Error: ReferenceError: validateFormData is not defined
-   - Location: script.js:839 
+1. [x] ~~Fix validateFormData function~~ (No longer called; individual field validation functions like `validateName`, `validateEmail` are used instead)
+   - ~~Error: ReferenceError: validateFormData is not defined~~
+   - ~~Location: script.js:839~~ (Line number outdated)
+
+## Dynamic Content Population (from js/script.js)
+- [ ] Hero Section: Populate slides in `div#slider` (see `src/partials/hero.html`)
+- [ ] Hero Section: Populate slider dots in `div#slider-dots` (see `src/partials/hero.html`)
+- [ ] Services Section: Populate service cards in `div#services-grid` (see `src/partials/services.html`)
+- [ ] Special Offers Section: Populate offers in `div.offers-container` (see `src/partials/special_offers.html`)
+- [ ] About Section: Populate feature cards in `div#features-grid` (see `src/partials/about.html`)
+- [ ] Testimonials Section: Populate testimonial cards in `div#testimonials-grid` (see `src/partials/testimonials.html`)
+- [ ] Pricing Section: Populate pricing cards in `div#pricing-grid` (see `src/partials/pricing.html`)
+- [ ] Blog Section: Populate blog post summaries in `div#blog-grid` (see `src/partials/blog.html`) 

@@ -3,6 +3,10 @@ const path = require('path');
 const crypto = require('crypto');
 require('dotenv').config();
 
+// Base directory for source files
+const srcDir = path.join(__dirname, '..', 'src');
+const siteContentData = require('../src/js/site-content.js'); // Load the site content
+
 // Create dist directory if it doesn't exist
 const distDir = path.join(__dirname, '..', 'dist');
 if (!fs.existsSync(distDir)) {
@@ -44,12 +48,12 @@ function copyRecursive(src, dest) {
     }
 }
 
-// Copy js directory
+// Copy js directory (assuming it's still in the root, not src/js)
 const jsSrc = path.join(__dirname, '..', 'js');
 const jsDest = path.join(distDir, 'js');
 copyRecursive(jsSrc, jsDest);
 
-// Copy entire assets directory
+// Copy entire assets directory (assuming it's still in the root, not src/assets)
 const assetsSrc = path.join(__dirname, '..', 'assets');
 const assetsDest = path.join(distDir, 'assets');
 copyRecursive(assetsSrc, assetsDest);
@@ -71,18 +75,60 @@ if (fs.existsSync(cssDir)) {
     });
 }
 
-// Process all HTML files in the project root
-const htmlFiles = fs.readdirSync(path.join(__dirname, '..')).filter(file => file.endsWith('.html'));
+// Function to process {{INCLUDE partialPath}} directives
+function processIncludes(htmlContent, currentFileDir) {
+    const includeRegex = /\{\{INCLUDE\s+(.*?)\s*\}\}/g;
+    let match;
+    let processedContent = htmlContent;
+
+    let newHtmlContent = htmlContent;
+    while ((match = includeRegex.exec(htmlContent)) !== null) {
+        const partialPath = match[1].trim();
+        const fullPartialPath = path.resolve(srcDir, partialPath);
+
+        if (fs.existsSync(fullPartialPath)) {
+            try {
+                const partialFileContent = fs.readFileSync(fullPartialPath, 'utf8');
+                const processedPartialContent = processIncludes(partialFileContent, path.dirname(fullPartialPath));
+                newHtmlContent = newHtmlContent.replace(match[0], processedPartialContent);
+            } catch (error) {
+                console.error(`Error reading or processing partial ${fullPartialPath}:`, error);
+                newHtmlContent = newHtmlContent.replace(match[0], `<!-- Error including ${partialPath}: ${error.message} -->`);
+            }
+        } else {
+            console.warn(`Partial file not found: ${fullPartialPath} (referenced in a file in ${currentFileDir})`);
+            newHtmlContent = newHtmlContent.replace(match[0], `<!-- Partial not found: ${partialPath} -->`);
+        }
+    }
+    return newHtmlContent;
+}
+
+// Process all HTML files in the src directory
+const htmlFiles = fs.readdirSync(srcDir).filter(file => file.endsWith('.html'));
+
 htmlFiles.forEach(htmlFile => {
-    const htmlPath = path.join(__dirname, '..', htmlFile);
+    const htmlPath = path.join(srcDir, htmlFile);
     let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+
+    // Process includes first
+    htmlContent = processIncludes(htmlContent, srcDir);
+
+    // Inject SITE_DATA script into the head
+    const siteDataScript = `<script>window.SITE_DATA = ${JSON.stringify(siteContentData)};</script>`;
+    htmlContent = htmlContent.replace("</head>", `${siteDataScript}</head>`);
+
     // Replace CSS references with hashed versions
-    const cssFiles = fs.readdirSync(cssDir).filter(file => file.endsWith('.css'));
-    cssFiles.forEach(file => {
-        const oldPath = `assets/css/${file.replace(/\.\w{8}\.css$/, '.css')}`;
-        const newPath = `assets/css/${file}`;
-        htmlContent = htmlContent.replace(oldPath, newPath);
-    });
+    if (fs.existsSync(cssDir)) {
+        const builtCssFiles = fs.readdirSync(cssDir).filter(file => file.endsWith('.css'));
+        builtCssFiles.forEach(file => {
+            const originalFileName = file.replace(/\.\w{8}\.css$/, '.css');
+            const oldPathString = `assets/css/${originalFileName}`;
+            const newPathString = `assets/css/${file}`;
+            const escapedOldPath = oldPathString.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+            htmlContent = htmlContent.replace(new RegExp(escapedOldPath, 'g'), newPathString);
+        });
+    }
+    
     // Replace environment variables
     const processedContent = htmlContent
         .replace('{{GOOGLE_ANALYTICS_ID}}', process.env.GOOGLE_ANALYTICS_ID || '')

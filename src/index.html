@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdnjs.cloudflare.com; 
+                   style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; 
+                   img-src 'self' data: https:; 
+                   font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com; 
+                   connect-src 'self' https://www.google-analytics.com https://formspree.io/f/; 
+                   frame-src 'self'; 
+                   object-src 'none'; 
+                   base-uri 'self'; 
+                   form-action 'self' https://formspree.io/f/;
+                   upgrade-insecure-requests;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Zyn Carpets - Professional Carpet Cleaning Services">
+    <meta name="description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://zyncarpets.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://zyncarpets.com/">
+    <meta property="og:title" content="Zyn Carpets - Professional Carpet Cleaning Services">
+    <meta property="og:description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
+    <meta property="og:image" content="https://zyncarpets.com/assets/images/logo.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://zyncarpets.com/">
+    <meta name="twitter:title" content="Zyn Carpets - Professional Carpet Cleaning Services">
+    <meta name="twitter:description" content="Experience exceptional carpet cleaning services in Madison, Huntsville, and Athens. Deep cleaning, stain removal, and sanitization services for your home or business.">
+    <meta name="twitter:image" content="https://zyncarpets.com/assets/images/logo.png">
+    
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="{{GOOGLE_SITE_VERIFICATION}}" />
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{GOOGLE_ANALYTICS_ID}}" id="google-analytics-src"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{GOOGLE_ANALYTICS_ID}}');
+    </script>
+    
+    <!-- CSS Loading Verification -->
+    <script>
+        function verifyCSSLoading() {
+            const styles = document.styleSheets;
+            console.log('=== CSS Loading Verification ===');
+            console.log('Number of stylesheets:', styles.length);
+            for (let i = 0; i < styles.length; i++) {
+                try {
+                    console.log(`Stylesheet ${i}:`, {
+                        href: styles[i].href,
+                        rules: styles[i].cssRules ? styles[i].cssRules.length : 'CORS restricted'
+                    });
+                } catch (e) {
+                    console.log(`Stylesheet ${i}: CORS restricted`);
+                }
+            }
+        }
+        window.addEventListener('load', verifyCSSLoading);
+    </script>
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!-- Schema.org Organization Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Zyn Carpets",
+      "url": "https://zyncarpets.com/",
+      "logo": "https://zyncarpets.com/assets/images/logo.png",
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "telephone": "+1-555-123-4567",
+        "contactType": "customer service",
+        "email": "peace@zyncarpets.com"
+      }],
+      "sameAs": [
+        "https://www.facebook.com/",
+        "https://www.instagram.com/"
+      ]
+    }
+    </script>
+</head>
+<body>
+    {{INCLUDE partials/header.html}}
+
+    <main>
+        {{INCLUDE partials/logo_showcase.html}}
+        {{INCLUDE partials/hero.html}}
+        {{INCLUDE partials/services.html}}
+        {{INCLUDE partials/special_offers.html}}
+        {{INCLUDE partials/about.html}}
+        {{INCLUDE partials/testimonials.html}}
+        {{INCLUDE partials/pricing.html}}
+        {{INCLUDE partials/coverage.html}}
+        {{INCLUDE partials/blog.html}}
+        {{INCLUDE partials/contact.html}}
+    </main>
+
+    {{INCLUDE partials/footer.html}}
+
+    <!-- Load configuration first, then main script -->
+    <script src="js/mobile-menu.js"></script>
+    <script src="js/script.js"></script>
+    
+    <!-- Google Analytics Event Tracking -->
+    <script>
+        // Track button clicks
+        document.querySelectorAll('button, a.cta-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const buttonText = button.textContent.trim() || button.getAttribute('aria-label') || 'button_click';
+                gtag('event', 'button_click', {
+                    'event_category': 'Engagement',
+                    'event_label': buttonText,
+                    'value': 1
+                });
+            });
+        });
+
+        // Track form submissions (only if validation passes)
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', event => {
+                // Assuming form validation happens before this and prevents submission if invalid
+                // If your form validation doesn't prevent default, you might double-count or count errors
+                gtag('event', 'form_submission', {
+                    'event_category': 'Conversion',
+                    'event_label': 'Contact Form Submitted',
+                    'value': 10 // Arbitrary value for a conversion
+                });
+            });
+        }
+
+        // Track coverage check
+        const coverageButton = document.getElementById('check-coverage');
+        if (coverageButton) {
+            coverageButton.addEventListener('click', () => {
+                const zipCode = document.getElementById('zip-code').value;
+                gtag('event', 'coverage_check', {
+                    'event_category': 'Engagement',
+                    'event_label': zipCode || 'empty_zip_check',
+                    'value': 2
+                });
+            });
+        }
+
+        // Track scroll depth
+        let scrollDepthTracked = { 25: false, 50: false, 75: false, 100: false };
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercentage = (scrollPosition / maxScroll) * 100;
+
+            Object.keys(scrollDepthTracked).forEach(depth => {
+                if (scrollPercentage >= parseInt(depth) && !scrollDepthTracked[depth]) {
+                    gtag('event', 'scroll_depth', {
+                        'event_category': 'Engagement',
+                        'event_label': `Scrolled ${depth}%`,
+                        'value': parseInt(depth),
+                        'non_interaction': true // Important for scroll events
+                    });
+                    scrollDepthTracked[depth] = true;
+                }
+            });
+        }, { passive: true });
+    </script>
+</body>
+</html> 

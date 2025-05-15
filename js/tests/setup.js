@@ -6,13 +6,23 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
 
-// Read the HTML file
-const html = fs.readFileSync(path.resolve(__dirname, '../../index.html'), 'utf8');
+// Load the actual site content
+const siteContent = require('../../src/js/site-content.js');
 
-// Create a new JSDOM instance with the HTML content
-const dom = new JSDOM(html, {
+// Read the HTML file from src/index.html
+const html = fs.readFileSync(path.resolve(__dirname, '../../src/index.html'), 'utf8');
+
+// Create a new JSDOM instance.
+// We need to inject SITE_DATA before any scripts in index.html run.
+// One way is to add a script tag to the HTML string before JSDOM parses it.
+const siteDataScript = `<script>window.SITE_DATA = ${JSON.stringify(siteContent)};</script>`;
+const modifiedHtml = html.replace("</head>", `${siteDataScript}</head>`);
+
+const dom = new JSDOM(modifiedHtml, {
     url: 'http://localhost/',
-    pretendToBeVisual: true
+    pretendToBeVisual: true,
+    runScripts: "dangerously", // Important to execute scripts in the HTML, including the one we injected
+    resources: "usable" // To allow script loading if index.html loads external scripts (like js/script.js)
 });
 
 // Set up global variables
@@ -26,34 +36,6 @@ global.Event = dom.window.Event;
 if (!global.document.documentElement.hasAttribute('lang')) {
     global.document.documentElement.setAttribute('lang', 'en');
 }
-
-// Mock CONFIG object
-global.CONFIG = {
-    company: {
-        name: 'Test Company',
-        tagline: 'Test Tagline',
-        description: 'Test Description',
-        phone: '123-456-7890',
-        email: 'test@example.com'
-    },
-    serviceAreasInfo: {
-        title: 'Test Areas',
-        areas: ['Area 1', 'Area 2'],
-        states: ['State 1', 'State 2']
-    },
-    serviceAreas: {
-        '12345': true,
-        '67890': true
-    },
-    sliderImages: [
-        { url: 'test1.jpg', alt: 'Test 1' },
-        { url: 'test2.jpg', alt: 'Test 2' }
-    ],
-    formspree: {
-        endpoint: 'https://formspree.io/f/test',
-        formId: 'test-form'
-    }
-};
 
 // Mock gtag function
 global.gtag = jest.fn();
