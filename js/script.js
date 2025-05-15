@@ -3,15 +3,9 @@
  * Loads configuration and initializes all components
  */
 function initializePage() {
+    console.log('VERY_SPECIFIC_TEST_LOG_INITIALIZE_PAGE'); // Test log
     console.log('Starting page initialization...');
-    console.log('Current CONFIG state:', typeof CONFIG, CONFIG);
     
-    // Check if configuration is loaded
-    if (!CONFIG) {
-        console.error('Configuration not loaded');
-        return;
-    }
-
     // Prevent scroll to hash on page load
     if (window.location.hash) {
         window.scrollTo(0, 0);
@@ -19,17 +13,6 @@ function initializePage() {
         history.replaceState(null, null, window.location.pathname);
     }
 
-    console.log('Starting page initialization...');
-    
-    // Verify CONFIG structure
-    if (!CONFIG.company) {
-        console.error('Company configuration is missing');
-        return;
-    }
-
-    console.log('Configuration loaded:', CONFIG);
-    console.log('Company information:', CONFIG.company);
-    
     // Set company information in the DOM
     console.log('Setting company information in DOM elements...');
     
@@ -44,13 +27,14 @@ function initializePage() {
         return false;
     };
 
-    // Set text content for all elements
+    // Set text content for all elements using SITE_DATA
+    const { companyInfo } = window.SITE_DATA;
     const elementsToUpdate = {
-        'tagline': CONFIG.company.tagline,
-        'welcome-tagline': CONFIG.company.tagline,
-        'description': CONFIG.company.description,
-        'footer-company-name': CONFIG.company.name,
-        'footer-description': CONFIG.company.description
+        'tagline': companyInfo.tagline,
+        'welcome-tagline': companyInfo.welcomeTagline,
+        'description': companyInfo.description,
+        'footer-company-name': companyInfo.footerCompanyName,
+        'footer-description': companyInfo.footerDescription
     };
 
     Object.entries(elementsToUpdate).forEach(([id, text]) => {
@@ -66,12 +50,12 @@ function initializePage() {
         emailElement: footerEmail ? 'Found' : 'Not found'
     });
     
-    if (footerPhone && footerEmail && CONFIG.company.phone && CONFIG.company.email) {
-        footerPhone.textContent = CONFIG.company.phone;
-        footerEmail.textContent = CONFIG.company.email;
+    if (footerPhone && footerEmail) {
+        footerPhone.textContent = companyInfo.footerPhone;
+        footerEmail.textContent = companyInfo.footerEmail;
         console.log('Contact information set successfully:', { 
-            phone: CONFIG.company.phone, 
-            email: CONFIG.company.email 
+            phone: companyInfo.footerPhone,
+            email: companyInfo.footerEmail
         });
     } else {
         console.warn('Some contact elements or information missing');
@@ -79,63 +63,11 @@ function initializePage() {
 
     // Set coverage area information
     const coverageSubtitle = document.getElementById('coverage-subtitle');
-    if (coverageSubtitle && CONFIG.serviceAreasInfo) {
-        const areas = CONFIG.serviceAreasInfo.areas.join(', ');
-        const states = CONFIG.serviceAreasInfo.states.join(', ');
-        coverageSubtitle.textContent = `${CONFIG.serviceAreasInfo.title} ${areas}, ${states}`;
+    if (coverageSubtitle) {
+        const areas = companyInfo.coverageAreas.join(', ');
+        const states = companyInfo.coverageStates.join(', ');
+        coverageSubtitle.textContent = `Currently serving ${areas}, ${states}`;
         console.log('Coverage area information set:', { areas, states });
-    }
-
-    // Reorder sections based on configuration
-    console.log('Reordering page sections according to configuration...');
-    const main = document.querySelector('main');
-    if (!main) {
-        console.error('Main element not found!');
-        return;
-    }
-
-    const sections = Array.from(main.children);
-    
-    // Create a map of section IDs to their elements for easier access
-    const sectionMap = {};
-    sections.forEach(section => {
-        const id = section.id || section.className;
-        if (id) {
-            sectionMap[id] = section;
-            console.log(`Mapped section: ${id}`);
-        }
-    });
-
-    // Store original content as backup
-    const originalContent = main.innerHTML;
-
-    try {
-        // Clear main element and rebuild in configured order
-        main.innerHTML = '';
-        console.log('Rebuilding sections in configured order:', CONFIG.sectionOrder);
-
-        // Add sections in the specified order
-        CONFIG.sectionOrder.forEach(sectionId => {
-            const section = sectionMap[sectionId];
-            if (section) {
-                main.appendChild(section);
-                console.log(`Added section: ${sectionId}`);
-            } else {
-                console.warn(`Section not found: ${sectionId}`);
-            }
-        });
-
-        // Verify that content was added
-        if (main.children.length === 0) {
-            console.error('No sections were added! Restoring original content...');
-            main.innerHTML = originalContent;
-            return;
-        }
-    } catch (error) {
-        console.error('Error during section reordering:', error);
-        // Restore original content if something goes wrong
-        main.innerHTML = originalContent;
-        return;
     }
 
     // Initialize all components
@@ -179,9 +111,11 @@ function initializeSlider() {
     let touchEndX = 0;
     let currentSlide = 0;
     
-    // Create slides from configuration
-    console.log(`Creating ${CONFIG.sliderImages.length} slides...`);
-    CONFIG.sliderImages.forEach((image, index) => {
+    const sliderImages = window.SITE_DATA.sliderImages;
+    
+    // Create slides from SITE_DATA
+    console.log(`Creating ${sliderImages.length} slides...`);
+    sliderImages.forEach((image, index) => {
         const slide = document.createElement('div');
         slide.className = `slide ${index === 0 ? 'active' : ''}`;
         
@@ -248,10 +182,10 @@ function initializeSlider() {
         if (Math.abs(swipeDistance) > swipeThreshold) {
             if (swipeDistance > 0) {
                 console.log('Swipe right detected - going to previous slide');
-                currentSlide = (currentSlide - 1 + CONFIG.sliderImages.length) % CONFIG.sliderImages.length;
+                currentSlide = (currentSlide - 1 + sliderImages.length) % sliderImages.length;
             } else {
                 console.log('Swipe left detected - going to next slide');
-                currentSlide = (currentSlide + 1) % CONFIG.sliderImages.length;
+                currentSlide = (currentSlide + 1) % sliderImages.length;
             }
             goToSlide(currentSlide);
         } else {
@@ -271,8 +205,13 @@ function initializeSlider() {
 // Initialize services
 function initializeServices() {
     const servicesGrid = document.getElementById('services-grid');
+    if (!servicesGrid) {
+        console.warn('Services grid not found');
+        return;
+    }
+    const services = window.SITE_DATA.services;
     
-    CONFIG.services.forEach(service => {
+    services.forEach(service => {
         const serviceCard = document.createElement('div');
         serviceCard.className = 'service-card';
         serviceCard.innerHTML = `
@@ -287,8 +226,13 @@ function initializeServices() {
 // Initialize features
 function initializeFeatures() {
     const featuresGrid = document.getElementById('features-grid');
+    if (!featuresGrid) {
+        console.warn('Features grid not found');
+        return;
+    }
+    const features = window.SITE_DATA.features;
     
-    CONFIG.features.forEach(feature => {
+    features.forEach(feature => {
         const featureCard = document.createElement('div');
         featureCard.className = 'feature';
         featureCard.innerHTML = `
@@ -302,23 +246,26 @@ function initializeFeatures() {
 
 // Initialize social links
 function initializeSocialLinks() {
-    const socialLinks = document.getElementById('social-links');
-    
-    // Map of social media platforms to their Font Awesome classes
+    const { socialMediaLinks } = window.SITE_DATA;
+    const socialLinksContainer = document.getElementById('social-links');
+    if (!socialLinksContainer) {
+        console.warn('Social links container not found');
+        return;
+    }
     const socialIcons = {
         facebook: 'fa-facebook-f',
         instagram: 'fa-instagram',
         twitter: 'fa-twitter'
     };
     
-    Object.entries(CONFIG.socialMedia).forEach(([platform, url]) => {
+    Object.entries(socialMediaLinks).forEach(([platform, url]) => {
         if (socialIcons[platform]) {
             const link = document.createElement('a');
             link.href = url;
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
             link.innerHTML = `<i class="fab ${socialIcons[platform]}"></i>`;
-            socialLinks.appendChild(link);
+            socialLinksContainer.appendChild(link);
         }
     });
 }
@@ -326,20 +273,25 @@ function initializeSocialLinks() {
 // Initialize pricing cards
 function initializePricing() {
     const pricingGrid = document.getElementById('pricing-grid');
-    
-    CONFIG.pricing.forEach(plan => {
+    if (!pricingGrid) {
+        console.warn('Pricing grid not found');
+        return;
+    }
+    const pricingTiers = window.SITE_DATA.pricingTiers;
+
+    pricingTiers.forEach(tier => {
         const pricingCard = document.createElement('div');
-        pricingCard.className = `pricing-card${plan.featured ? ' featured' : ''}`;
+        pricingCard.className = `pricing-card${tier.featured ? ' featured' : ''}`;
         
-        const featuresList = plan.features.map(feature => 
+        const featuresList = tier.features.map(feature => 
             `<li><i class="fas fa-check"></i> ${feature}</li>`
         ).join('');
         
         pricingCard.innerHTML = `
             <div class="pricing-header">
-                <h3>${plan.title}</h3>
-                <div class="price">$${plan.price}</div>
-                <p class="price-subtitle">${plan.subtitle}</p>
+                <h3>${tier.title}</h3>
+                <div class="price">$${tier.price}</div>
+                <p class="price-subtitle">${tier.subtitle}</p>
             </div>
             <ul class="pricing-features">
                 ${featuresList}
@@ -354,33 +306,43 @@ function initializePricing() {
 // Initialize testimonials
 function initializeTestimonials() {
     const testimonialsGrid = document.getElementById('testimonials-grid');
-    
-    CONFIG.testimonials.forEach(testimonial => {
-        const testimonialCard = document.createElement('div');
-        testimonialCard.className = 'testimonial-card';
+    if (!testimonialsGrid) {
+        console.warn('Testimonials grid not found');
+        return;
+    }
+    const testimonials = window.SITE_DATA.testimonials;
+
+    testimonials.forEach(testimonial => {
+        const card = document.createElement('div');
+        card.className = 'testimonial-card';
         
         // Create star rating
         const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
         
-        testimonialCard.innerHTML = `
+        card.innerHTML = `
             <div class="rating">${stars}</div>
             <p class="content">${testimonial.content}</p>
             <p class="author">- ${testimonial.author}</p>
         `;
         
-        testimonialsGrid.appendChild(testimonialCard);
+        testimonialsGrid.appendChild(card);
     });
 }
 
 // Initialize blog posts
 function initializeBlogPosts() {
     const blogGrid = document.getElementById('blog-grid');
-    
-    CONFIG.blogPosts.forEach(post => {
-        const blogCard = document.createElement('div');
-        blogCard.className = 'blog-card';
+    if (!blogGrid) {
+        console.warn('Blog grid not found');
+        return;
+    }
+    const blogPosts = window.SITE_DATA.blogPosts;
+
+    blogPosts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'blog-card';
         
-        blogCard.innerHTML = `
+        postElement.innerHTML = `
             <img src="${post.image}" alt="${post.title}" loading="lazy">
             <div class="content">
                 <h3>${post.title}</h3>
@@ -390,7 +352,7 @@ function initializeBlogPosts() {
             </div>
         `;
         
-        blogGrid.appendChild(blogCard);
+        blogGrid.appendChild(postElement);
     });
 }
 
@@ -482,18 +444,27 @@ function checkZipCodeCoverage(zipCode) {
     if (zipCode.length !== 5) {
         return false;
     }
-    
+    const serviceAreas = {
+        '35756': true, '35757': true, '35758': true,
+        '35801': true, '35802': true, '35803': true, '35804': true, '35805': true, '35806': true, '35807': true, '35808': true, '35809': true, '35810': true, '35811': true, '35812': true, '35813': true, '35814': true, '35815': true, '35816': true, '35824': true,
+        '35611': true, '35613': true, '35614': true
+    };
     // Check if zip code exists in service areas
-    return CONFIG.serviceAreas.hasOwnProperty(zipCode) && CONFIG.serviceAreas[zipCode] === true;
+    return serviceAreas.hasOwnProperty(zipCode) && serviceAreas[zipCode] === true;
 }
 
 // Initialize special offers
 function initializeSpecialOffers() {
     const offersContainer = document.querySelector('.offers-container');
-    
-    CONFIG.specialOffers.forEach(offer => {
-        const offerCard = document.createElement('div');
-        offerCard.className = 'offer-card';
+    if (!offersContainer) {
+        console.warn('Offers container not found');
+        return;
+    }
+    const specialOffers = window.SITE_DATA.specialOffers;
+
+    specialOffers.forEach(offer => {
+        const offerElement = document.createElement('div');
+        offerElement.className = 'offer-card';
         
         let priceHtml = '';
         if (offer.type === 'price') {
@@ -502,14 +473,14 @@ function initializeSpecialOffers() {
             priceHtml = `<p class="discount">$${offer.discount} OFF</p>`;
         }
         
-        offerCard.innerHTML = `
+        offerElement.innerHTML = `
             <h3>${offer.title}</h3>
             ${priceHtml}
             <p class="details">${offer.details}</p>
             <button class="cta-button">Book Now</button>
         `;
         
-        offersContainer.appendChild(offerCard);
+        offersContainer.appendChild(offerElement);
     });
 }
 
@@ -547,26 +518,6 @@ function initializeApp() {
     window.pageInitialized = true;
     console.log('Initialization flag set');
 
-    if (typeof CONFIG === 'undefined') {
-        console.error('CONFIG not loaded. Retrying in 100ms...');
-        setTimeout(initializeApp, 100);
-        return;
-    }
-
-    console.log('CONFIG loaded successfully:', {
-        hasCompany: !!CONFIG.company,
-        hasSliderImages: !!CONFIG.sliderImages,
-        hasServices: !!CONFIG.services,
-        hasFeatures: !!CONFIG.features,
-        hasSocialMedia: !!CONFIG.socialMedia,
-        hasPricing: !!CONFIG.pricing,
-        hasTestimonials: !!CONFIG.testimonials,
-        hasBlogPosts: !!CONFIG.blogPosts,
-        hasSpecialOffers: !!CONFIG.specialOffers,
-        hasServiceAreas: !!CONFIG.serviceAreas,
-        hasFormspree: !!CONFIG.formspree
-    });
-    
     try {
         console.log('Starting page initialization...');
         initializePage();
@@ -601,36 +552,14 @@ function initializeApp() {
             console.log(`Set lazy loading for image ${index + 1}`);
         });
 
-        // Set configuration values
         console.log('Setting up configuration values...');
         
-        const googleSiteVerification = document.getElementById('google-site-verification');
-        if (googleSiteVerification) {
-            console.log('Setting Google site verification');
-            googleSiteVerification.content = CONFIG.GOOGLE_SITE_VERIFICATION;
-        } else {
-            console.warn('Google site verification element not found');
-        }
-
-        const googleAnalyticsSrc = document.getElementById('google-analytics-src');
-        if (googleAnalyticsSrc) {
-            console.log('Setting up Google Analytics');
-            googleAnalyticsSrc.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.GOOGLE_ANALYTICS_ID}`;
-            if (window.gtag) {
-                console.log('Initializing gtag with ID:', CONFIG.GOOGLE_ANALYTICS_ID);
-                gtag('config', CONFIG.GOOGLE_ANALYTICS_ID);
-            } else {
-                console.warn('gtag function not found');
-            }
-        } else {
-            console.warn('Google Analytics source element not found');
-        }
-
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
             console.log('Setting up contact form configuration');
-            contactForm.setAttribute('action', CONFIG.formspree.endpoint);
-            contactForm.setAttribute('data-formspree-id', CONFIG.formspree.formId);
+            // The formId was part of CONFIG.formspree but typically Formspree uses the endpoint path.
+            // If 'data-formspree-id' was actually used, it might need to be handled differently or was specific to a library.
+            // contactForm.setAttribute('data-formspree-id', 'YOUR_FORMSPREE_ID'); // Assuming this might not be needed if standard Formspree is used
         } else {
             console.warn('Contact form element not found');
         }
@@ -653,6 +582,16 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             behavior: 'smooth'
         });
     });
+});
+
+// Add scroll-based header styling
+window.addEventListener('scroll', function() {
+    const header = document.querySelector('header');
+    if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
 });
 
 // Form submission handling with Formspree
@@ -703,7 +642,8 @@ if (contactForm) {
             }
 
             // Submit to Formspree
-            const response = await fetch(CONFIG.formspree.endpoint, {
+            const formAction = contactForm.getAttribute('action'); // Get action from form attribute
+            const response = await fetch(formAction, { // Use formAction here
                 method: 'POST',
                 body: JSON.stringify({
                     ...formData,
@@ -735,16 +675,6 @@ if (contactForm) {
         }
     });
 }
-
-// Add scroll-based header styling
-window.addEventListener('scroll', function() {
-    const header = document.querySelector('header');
-    if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
-    }
-});
 
 // Form validation functions
 function validateName(name) {
@@ -797,9 +727,13 @@ function validateZip(zip) {
     if (!zipRegex.test(zip)) {
         return 'Please enter a valid 5-digit zip code';
     }
-    
+    const serviceAreas = {
+        '35756': true, '35757': true, '35758': true,
+        '35801': true, '35802': true, '35803': true, '35804': true, '35805': true, '35806': true, '35807': true, '35808': true, '35809': true, '35810': true, '35811': true, '35812': true, '35813': true, '35814': true, '35815': true, '35816': true, '35824': true,
+        '35611': true, '35613': true, '35614': true
+    };
     // Check if zip code is in service area
-    if (!CONFIG.serviceAreas[zip]) {
+    if (!serviceAreas[zip]) { // Using direct property access as we know it's an object of booleans
         return 'Sorry, we don\'t currently service this area.';
     }
     
@@ -1028,7 +962,8 @@ function initializeContactForm() {
             }
 
             // Submit to Formspree
-            const response = await fetch(CONFIG.formspree.endpoint, {
+            const formAction = form.getAttribute('action'); // Get action from form attribute
+            const response = await fetch(formAction, { // Use formAction here
                 method: 'POST',
                 body: JSON.stringify({
                     ...formData,
@@ -1166,4 +1101,22 @@ function generateCSRFToken() {
 function validateCSRFToken(token) {
     const storedToken = document.querySelector('input[name="_csrf"]').value;
     return token === storedToken;
-} 
+}
+
+let slideInterval;
+
+function startSlideShow() {
+    console.log('Starting slideshow...');
+    // Clear any existing interval to prevent multiple slideshows running
+    if (slideInterval) {
+        clearInterval(slideInterval);
+    }
+    slideInterval = setInterval(nextSlide, 6000); // Hardcoded interval from CONFIG.slider.interval
+}
+
+function stopSlideShow() {
+    console.log('Stopping slideshow...');
+    if (slideInterval) {
+        clearInterval(slideInterval);
+    }
+}
