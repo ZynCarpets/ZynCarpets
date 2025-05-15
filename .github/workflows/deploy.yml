@@ -22,26 +22,57 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Create and configure config file
+      - name: Substitute secrets in js/script.js
         run: |
-          mkdir -p js
-          cp js/config.template.js js/config.js
-          sed -i "s/YOUR_GA_ID/${{ secrets.GOOGLE_ANALYTICS_ID }}/g" js/config.js
-          sed -i "s/YOUR_VERIFICATION_CODE/${{ secrets.GOOGLE_SITE_VERIFICATION }}/g" js/config.js
-          sed -i "s|YOUR_FORMSPREE_ENDPOINT|https://formspree.io/f/${{ secrets.FORMSPREE_FORM_ID }}|g" js/config.js
-          sed -i "s/YOUR_FORMSPREE_ID/${{ secrets.FORMSPREE_FORM_ID }}/g" js/config.js
+          echo "Starting secret substitution in js/script.js"
+          
+          if [ ! -f "js/script.js" ]; then
+            echo "Error: js/script.js not found!"
+            exit 1
+          fi
+          
+          echo "Substituting GOOGLE_ANALYTICS_ID..."
+          # Matches 'YOUR_GA_ID_HERE' in js/script.js
+          sed -i "s|'YOUR_GA_ID_HERE'|'${{ secrets.GOOGLE_ANALYTICS_ID }}'|g" js/script.js
+          
+          echo "Substituting GOOGLE_SITE_VERIFICATION_CODE..."
+          # Matches 'YOUR_GOOGLE_SITE_VERIFICATION_CODE' in js/script.js
+          sed -i "s|'YOUR_GOOGLE_SITE_VERIFICATION_CODE'|'${{ secrets.GOOGLE_SITE_VERIFICATION }}'|g" js/script.js
+          
+          echo "Substituting FORMSPREE_ENDPOINT..."
+          # Constructs the endpoint and replaces 'YOUR_FORMSPREE_ENDPOINT' in js/script.js
+          # Note the use of a different delimiter (#) for sed because the replacement string contains slashes.
+          sed -i "s#'YOUR_FORMSPREE_ENDPOINT'#'https://formspree.io/f/${{ secrets.FORMSPREE_FORM_ID }}'#g" js/script.js
+          
+          echo "Secret substitution complete."
+
+          echo "Verifying substitutions (placeholders should ideally be gone):"
+          if grep -q "'YOUR_GA_ID_HERE'" js/script.js; then
+            echo "WARNING: GOOGLE_ANALYTICS_ID placeholder still found."
+          else
+            echo "GOOGLE_ANALYTICS_ID placeholder likely replaced."
+          fi
+          if grep -q "'YOUR_GOOGLE_SITE_VERIFICATION_CODE'" js/script.js; then
+            echo "WARNING: GOOGLE_SITE_VERIFICATION_CODE placeholder still found."
+          else
+            echo "GOOGLE_SITE_VERIFICATION_CODE placeholder likely replaced."
+          fi
+          if grep -q "'YOUR_FORMSPREE_ENDPOINT'" js/script.js; then
+            echo "WARNING: FORMSPREE_ENDPOINT placeholder still found."
+          else
+            echo "FORMSPREE_ENDPOINT placeholder likely replaced."
+          fi
+        env:
+          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+          GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_SITE_VERIFICATION }}
+          FORMSPREE_FORM_ID: ${{ secrets.FORMSPREE_FORM_ID }}
 
       - name: Build
         run: npm run build
-
-      - name: Copy config to dist
-        run: |
-          mkdir -p dist/js
-          cp js/config.js dist/js/
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: dist
-          clean: false 
+          clean: true    
