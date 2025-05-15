@@ -3,7 +3,7 @@
  * Fetches link data from window.SITE_DATA.socialMediaLinks.
  */
 function initializeSocialLinks() {
-    const { socialMediaLinks } = window.SITE_DATA;
+    const { socialMediaLinks } = window.siteData;
     const socialLinksContainer = document.getElementById('social-links');
 
     if (!socialLinksContainer) {
@@ -12,8 +12,8 @@ function initializeSocialLinks() {
     }
 
     // Ensure SITE_DATA and socialMediaLinks are available
-    if (!window.SITE_DATA || !window.SITE_DATA.socialMediaLinks) {
-        console.warn('SITE_DATA or SITE_DATA.socialMediaLinks not found. Skipping social links initialization.');
+    if (!window.siteData || !window.siteData.socialMediaLinks) {
+        console.warn('siteData or siteData.socialMediaLinks not found. Skipping social links initialization.');
         return;
     }
 

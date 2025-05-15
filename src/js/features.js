@@ -5,7 +5,7 @@ function initializeFeatures() {
         console.warn('Features grid not found');
         return;
     }
-    const features = window.SITE_DATA.features;
+    const features = window.siteData.features;
     
     features.forEach(feature => {
         const featureCard = document.createElement('div');

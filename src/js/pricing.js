@@ -1,6 +1,6 @@
 /**
  * Initializes pricing cards in the pricing grid.
- * Fetches pricing tier data from window.SITE_DATA.pricingTiers.
+ * Fetches pricing tier data from window.siteData.pricingTiers.
  */
 function initializePricing() {
     const pricingGrid = document.getElementById('pricing-grid');
@@ -9,12 +9,12 @@ function initializePricing() {
         return;
     }
 
-    if (!window.SITE_DATA || !window.SITE_DATA.pricingTiers || window.SITE_DATA.pricingTiers.length === 0) {
-        console.warn('SITE_DATA.pricingTiers not found or empty. Skipping pricing initialization.');
+    if (!window.siteData || !window.siteData.pricingTiers || window.siteData.pricingTiers.length === 0) {
+        console.warn('siteData.pricingTiers not found or empty. Skipping pricing initialization.');
         pricingGrid.innerHTML = '<p>No pricing information available at the moment.</p>'; // User-friendly message
         return;
     }
-    const pricingTiers = window.SITE_DATA.pricingTiers;
+    const pricingTiers = window.siteData.pricingTiers;
 
     // Clear existing content
     pricingGrid.innerHTML = '';
@@ -27,12 +27,12 @@ function initializePricing() {
             `<li><i class="fas fa-check"></i> ${feature}</li>`
         ).join('');
         
-        // Sanitize HTML content from SITE_DATA if necessary, for now assuming it's safe
+        // Sanitize HTML content from siteData if necessary, for now assuming it's safe
         pricingCard.innerHTML = `
             <div class="pricing-header">
-                <h3>${tier.title}</h3>
-                <div class="price">$${tier.price}</div>
-                <p class="price-subtitle">${tier.subtitle}</p>
+                <h3>${tier.name}</h3>
+                <div class="price">$${tier.pricePerSqFt}</div>
+                <p class="price-subtitle">per sq ft</p>
             </div>
             <ul class="pricing-features">
                 ${featuresList}

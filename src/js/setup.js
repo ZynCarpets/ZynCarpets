@@ -19,7 +19,7 @@ html = html.replace(/{{GOOGLE_ANALYTICS_ID}}/g, MOCK_GA_ID);
 // Create a new JSDOM instance.
 // We need to inject SITE_DATA before any scripts in index.html run.
 // One way is to add a script tag to the HTML string before JSDOM parses it.
-const siteDataScript = `<script>window.SITE_DATA = ${JSON.stringify(siteContent)};</script>`;
+const siteDataScript = `<script>window.siteData = ${JSON.stringify(siteContent)};</script>`;
 const modifiedHtml = html.replace("</head>", `${siteDataScript}</head>`);
 
 // ---- TEMPORARY DEBUGGING ----

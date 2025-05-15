@@ -5,7 +5,7 @@ function initializeServices() {
         console.warn('Services grid not found');
         return;
     }
-    const services = window.SITE_DATA.services;
+    const services = window.siteData.services;
     
     services.forEach(service => {
         const serviceCard = document.createElement('div');

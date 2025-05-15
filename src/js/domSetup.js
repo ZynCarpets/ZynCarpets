@@ -21,11 +21,11 @@ function safeSetText(elementId, text) {
 function initializeDomContent() {
     console.log('[domSetup] Setting company information in DOM elements...');
 
-    if (!window.SITE_DATA || !window.SITE_DATA.companyInfo) {
-        console.error('[domSetup] window.SITE_DATA or window.SITE_DATA.companyInfo is not available. Cannot set DOM content.');
+    if (!window.siteData || !window.siteData.companyInfo) {
+        console.error('[domSetup] window.siteData or window.siteData.companyInfo is not available. Cannot set DOM content.');
         return;
     }
-    const { companyInfo } = window.SITE_DATA;
+    const { companyInfo } = window.siteData;
 
     // Set text content for various elements
     const elementsToUpdate = {
@@ -41,7 +41,7 @@ function initializeDomContent() {
         if (text !== undefined) { // Only attempt to set if text is provided
             safeSetText(id, text);
         } else {
-            console.warn(`[domSetup] No text provided for element ID '${id}' in SITE_DATA.companyInfo.`);
+            console.warn(`[domSetup] No text provided for element ID '${id}' in siteData.companyInfo.`);
         }
     });
     
@@ -49,12 +49,12 @@ function initializeDomContent() {
     if (companyInfo.footerPhone !== undefined) {
         safeSetText('footer-phone', companyInfo.footerPhone);
     } else {
-        console.warn(`[domSetup] No footerPhone provided in SITE_DATA.companyInfo.`);
+        console.warn(`[domSetup] No footerPhone provided in siteData.companyInfo.`);
     }
     if (companyInfo.footerEmail !== undefined) {
         safeSetText('footer-email', companyInfo.footerEmail);
     } else {
-        console.warn(`[domSetup] No footerEmail provided in SITE_DATA.companyInfo.`);
+        console.warn(`[domSetup] No footerEmail provided in siteData.companyInfo.`);
     }
     
     // Set coverage area information
@@ -67,7 +67,7 @@ function initializeDomContent() {
             coverageSubtitle.textContent = `Currently serving ${areas}, ${states}`;
             console.log('[domSetup] Coverage area information set:', { areas, states });
         } else {
-            console.warn('[domSetup] Coverage area data (coverageAreas or coverageStates) missing or empty in SITE_DATA.companyInfo. Coverage subtitle not set.');
+            console.warn('[domSetup] Coverage area data (coverageAreas or coverageStates) missing or empty in siteData.companyInfo. Coverage subtitle not set.');
             coverageSubtitle.textContent = 'Coverage information currently unavailable.'; // Fallback text
         }
     } else {
