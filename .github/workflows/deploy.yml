@@ -22,14 +22,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Verify presence of js/script.js
+      - name: Verify presence of script.js
         run: |
           echo "Checking if js/script.js exists..."
-          if [ ! -f "js/script.js" ]; then
-            echo "Error: Core file js/script.js not found! This file is required for the build."
+          if [ ! -f "src/js/script.js" ]; then
+            echo "Error: Core file src/js/script.js not found! This file is required for the build."
             exit 1
           fi
-          echo "js/script.js found. Secret substitution, if any, is handled by the build process."
+          echo "src/js/script.js found. Secret substitution, if any, is handled by the build process."
 
       - name: Build
         run: npm run build
