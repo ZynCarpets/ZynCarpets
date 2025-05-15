@@ -1,4 +1,5 @@
-// Template configuration object
+// Configuration object
+console.log('Loading configuration...');
 const CONFIG = {
     // Available section types:
     // - hero: Main hero section with slider
@@ -37,6 +38,33 @@ const CONFIG = {
         CONTACT: 'contact'
     },
 
+    // Service Areas Information
+    serviceAreasInfo: {
+        title: 'Currently serving',
+        areas: ['Madison', 'Huntsville', 'Athens'],
+        states: ['Alabama']
+    },
+
+    // Slider Images
+    sliderImages: [
+        {
+            url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Professional carpet cleaning service'
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Clean, modern carpet'
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1583845112239-97ef1341b271?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Carpet cleaning equipment'
+        },
+        {
+            url: 'https://images.unsplash.com/photo-1583845112265-7dc320c5f677?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
+            alt: 'Fresh, clean carpet'
+        }
+    ],
+
     // Company Information
     company: {
         name: 'Zyn Carpets',
@@ -52,13 +80,6 @@ const CONFIG = {
         facebook: 'https://facebook.com/zyncarpets',
         instagram: 'https://instagram.com/zyncarpets',
         twitter: 'https://twitter.com/zyncarpets'
-    },
-
-    // Service Areas Information
-    serviceAreasInfo: {
-        title: 'Currently serving',
-        areas: ['Madison', 'Huntsville', 'Athens'],
-        states: ['Alabama']
     },
 
     // Services
@@ -130,26 +151,6 @@ const CONFIG = {
         '35613': true, // Athens
         '35614': true  // Athens
     },
-
-    // Slider Images
-    sliderImages: [
-        {
-            url: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
-            alt: 'Professional carpet cleaning service'
-        },
-        {
-            url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
-            alt: 'Clean, modern carpet'
-        },
-        {
-            url: 'https://images.unsplash.com/photo-1583845112239-97ef1341b271?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
-            alt: 'Carpet cleaning equipment'
-        },
-        {
-            url: 'https://images.unsplash.com/photo-1583845112265-7dc320c5f677?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80',
-            alt: 'Fresh, clean carpet'
-        }
-    ],
 
     // Slider Settings
     slider: {
@@ -246,15 +247,16 @@ const CONFIG = {
     ],
 
     // Google Analytics and Search Console
-    GOOGLE_ANALYTICS_ID: 'G-2N6JWQ6RQ1',
-    GOOGLE_SITE_VERIFICATION: 'i0o7NkRMms2nPz-bI4kE9CMW6Hf--QojqA8ExNg8tOo',
+    GOOGLE_ANALYTICS_ID: '***',
+    GOOGLE_SITE_VERIFICATION: 'YOUR_VERIFICATION_CODE',
 
     // Formspree Configuration
     formspree: {
-        endpoint: 'https://formspree.io/f/xzzrvpeb',
-        formId: 'xzzrvpeb'
+        endpoint: 'YOUR_FORMSPREE_ENDPOINT',
+        formId: 'YOUR_FORMSPREE_ID'
     }
 };
+console.log('Configuration loaded successfully:', CONFIG);
 
 // Make CONFIG globally available
 window.CONFIG = CONFIG; 
