@@ -6,6 +6,22 @@ function initializePage() {
     console.log('VERY_SPECIFIC_TEST_LOG_INITIALIZE_PAGE'); // Test log
     console.log('Starting page initialization...');
     
+    // Verify SITE_DATA is available
+    if (!window.SITE_DATA) {
+        console.error('SITE_DATA is not available. Cannot initialize page.');
+        // Wait a short time and try again
+        setTimeout(() => {
+            if (window.SITE_DATA) {
+                console.log('SITE_DATA is now available, proceeding with initialization');
+                initializePage();
+            } else {
+                console.error('SITE_DATA still not available after delay');
+            }
+        }, 100);
+        return;
+    }
+    console.log('SITE_DATA is available:', window.SITE_DATA);
+    
     initializeDomContent(); // Call the new DOM setup function
 
     // Prevent scroll to hash on page load
@@ -26,19 +42,82 @@ function initializePage() {
             console.error('Mobile menu initialization function not found');
         }
         
-        initializeSocialLinks();
-        initializePricing();
-        initializeTestimonials();
-        initializeBlogPosts();
-        initializeSpecialOffers();
-        initializeContactForm();
-        initializeContactZipValidation();
-        initializeScrollAnimations();
-        initializeLazyLoading();
-        initializePhoneFormatting();
+        if (typeof initializeSocialLinks === 'function') {
+            initializeSocialLinks();
+        } else {
+            console.error('Social links initialization function not found');
+        }
+        
+        if (typeof initializePricing === 'function') {
+            initializePricing();
+        } else {
+            console.error('Pricing initialization function not found');
+        }
+        
+        if (typeof initializeTestimonials === 'function') {
+            initializeTestimonials();
+        } else {
+            console.error('Testimonials initialization function not found');
+        }
+        
+        if (typeof initializeBlogPosts === 'function') {
+            initializeBlogPosts();
+        } else {
+            console.error('Blog posts initialization function not found');
+        }
+        
+        if (typeof initializeSpecialOffers === 'function') {
+            initializeSpecialOffers();
+        } else {
+            console.error('Special offers initialization function not found');
+        }
+        
+        if (typeof initializeServices === 'function') {
+            initializeServices();
+        } else {
+            console.error('Services initialization function not found');
+        }
+        
+        if (typeof initializeFeatures === 'function') {
+            initializeFeatures();
+        } else {
+            console.error('Features initialization function not found');
+        }
+        
+        if (typeof initializeContactForm === 'function') {
+            initializeContactForm();
+        } else {
+            console.error('Contact form initialization function not found');
+        }
+        
+        if (typeof initializeContactZipValidation === 'function') {
+            initializeContactZipValidation();
+        } else {
+            console.error('Contact zip validation initialization function not found');
+        }
+        
+        if (typeof initializeScrollAnimations === 'function') {
+            initializeScrollAnimations();
+        } else {
+            console.error('Scroll animations initialization function not found');
+        }
+        
+        if (typeof initializeLazyLoading === 'function') {
+            initializeLazyLoading();
+        } else {
+            console.error('Lazy loading initialization function not found');
+        }
+        
+        if (typeof initializePhoneFormatting === 'function') {
+            initializePhoneFormatting();
+        } else {
+            console.error('Phone formatting initialization function not found');
+        }
+        
         console.log('Page initialization complete!');
     } catch (error) {
         console.error('Error during component initialization:', error);
+        console.error('Error stack:', error.stack);
     }
 }
 

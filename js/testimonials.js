@@ -1,40 +1,54 @@
 /**
- * Initializes testimonial cards in the testimonials grid.
- * Fetches testimonial data from window.siteData.testimonials.
+ * Initializes testimonials section.
+ * Fetches testimonial data from window.SITE_DATA.testimonials.
  */
 function initializeTestimonials() {
-    const testimonialsGrid = document.getElementById('testimonials-grid');
-    if (!testimonialsGrid) {
-        console.warn('Testimonials grid (#testimonials-grid) not found. Skipping testimonials initialization.');
+    console.log('[testimonials] Initializing testimonials...');
+    
+    const testimonialsContainer = document.getElementById('testimonials-grid');
+    if (!testimonialsContainer) {
+        console.warn('[testimonials] Testimonials container (#testimonials-grid) not found. Skipping testimonials initialization.');
         return;
     }
 
-    if (!window.siteData || !window.siteData.testimonials || window.siteData.testimonials.length === 0) {
-        console.warn('siteData.testimonials not found or empty. Skipping testimonials initialization.');
-        testimonialsGrid.innerHTML = '<p>No testimonials available at the moment.</p>'; // User-friendly message
+    if (!window.SITE_DATA || !window.SITE_DATA.testimonials || window.SITE_DATA.testimonials.length === 0) {
+        console.warn('[testimonials] SITE_DATA.testimonials not found or empty. Skipping testimonials initialization.');
+        testimonialsContainer.innerHTML = '<p>No testimonials available at the moment.</p>';
         return;
     }
-    const testimonials = window.siteData.testimonials;
+    
+    const testimonials = window.SITE_DATA.testimonials;
+    console.log('[testimonials] Found', testimonials.length, 'testimonials to initialize');
 
     // Clear existing content
-    testimonialsGrid.innerHTML = '';
+    testimonialsContainer.innerHTML = '';
 
-    testimonials.forEach(testimonial => {
-        const card = document.createElement('div');
-        card.className = 'testimonial-card';
+    testimonials.forEach((testimonial, index) => {
+        const testimonialCard = document.createElement('div');
+        testimonialCard.className = 'testimonial-card';
         
-        // Ensure rating is a number and within bounds (0-5)
-        const rating = Math.max(0, Math.min(5, parseInt(testimonial.rating, 10) || 0));
-        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        // Create star rating
+        const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
         
-        // Sanitize content and author if they come from user input or less trusted SITE_DATA sources.
-        // For now, assuming SITE_DATA is trusted.
-        card.innerHTML = `
-            <div class="rating">${stars}</div>
-            <p class="content">${testimonial.quote}</p>
-            <p class="author">- ${testimonial.author}</p>
+        testimonialCard.innerHTML = `
+            <div class="testimonial-content">
+                <div class="rating">${stars}</div>
+                <p class="quote">${testimonial.quote}</p>
+            </div>
+            <div class="testimonial-author">
+                <div class="author-info">
+                    <p class="author-name">${testimonial.author}</p>
+                    <p class="author-location">${testimonial.location}</p>
+                </div>
+            </div>
         `;
         
-        testimonialsGrid.appendChild(card);
+        testimonialsContainer.appendChild(testimonialCard);
+        console.log(`[testimonials] Added testimonial ${index + 1}`);
     });
-} 
+    
+    console.log('[testimonials] Testimonials initialization complete');
+}
+
+// Make the function available globally
+window.initializeTestimonials = initializeTestimonials; 
