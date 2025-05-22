@@ -1,0 +1,50 @@
+:root {
+  /* Primary Colors */
+  --primary: #CDB773;      /* Gold */
+  --primary-light: #B99956; /* Lighter Gold */
+  --primary-dark: #95652D;  /* Darker Gold */
+  
+  /* Background Colors */
+  --bg-dark: #000000;      /* Pure black */
+  --bg-light: #1A1A1A;     /* Slightly lighter black */
+  --bg-lighter: #2A2A2A;   /* Even lighter black */
+  
+  /* Text Colors */
+  --text-light: #FFFFFF;   /* Pure white */
+  --text-muted: #CCCCCC;   /* Light gray */
+  
+  /* Accent Colors */
+  --accent: #CDB773;       /* Gold */
+  --accent-light: #B99956; /* Lighter Gold */
+  
+  /* Utility Colors */
+  --success: #4CAF50;      /* Green */
+  --error: #FF5252;        /* Red */
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Border Radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.4s ease;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Z-index layers */
+  --z-header: 1000;
+  --z-modal: 2000;
+  --z-toast: 3000;
+} 

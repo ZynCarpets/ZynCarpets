@@ -1,45 +1,37 @@
-/**
- * Initializes social media links in the designated container.
- * Fetches link data from window.SITE_DATA.socialMediaLinks.
- */
+// Initialize social media links
 function initializeSocialLinks() {
-    const { socialMediaLinks } = window.siteData;
-    const socialLinksContainer = document.getElementById('social-links');
-
-    if (!socialLinksContainer) {
-        console.warn('Social links container (#social-links) not found. Skipping social links initialization.');
+    console.log('[socialLinks] Initializing social media links...');
+    
+    if (!window.SITE_DATA || !window.SITE_DATA.socialMediaLinks) {
+        console.error('[socialLinks] SITE_DATA or socialMediaLinks not available');
         return;
     }
-
-    // Ensure SITE_DATA and socialMediaLinks are available
-    if (!window.siteData || !window.siteData.socialMediaLinks) {
-        console.warn('siteData or siteData.socialMediaLinks not found. Skipping social links initialization.');
-        return;
+    
+    const socialLinks = window.SITE_DATA.socialMediaLinks;
+    
+    // Update Facebook link
+    const facebookLink = document.querySelector('a[href="#facebook"]');
+    if (facebookLink && socialLinks.facebook) {
+        facebookLink.href = socialLinks.facebook;
+        console.log('[socialLinks] Facebook link updated');
     }
+    
+    // Update Instagram link
+    const instagramLink = document.querySelector('a[href="#instagram"]');
+    if (instagramLink && socialLinks.instagram) {
+        instagramLink.href = socialLinks.instagram;
+        console.log('[socialLinks] Instagram link updated');
+    }
+    
+    // Update Twitter link
+    const twitterLink = document.querySelector('a[href="#twitter"]');
+    if (twitterLink && socialLinks.twitter) {
+        twitterLink.href = socialLinks.twitter;
+        console.log('[socialLinks] Twitter link updated');
+    }
+    
+    console.log('[socialLinks] Social media links initialization complete');
+}
 
-    const socialIcons = {
-        facebook: 'fa-facebook-f',
-        instagram: 'fa-instagram',
-        twitter: 'fa-twitter',
-        linkedin: 'fa-linkedin-in', // Added example
-        youtube: 'fa-youtube'    // Added example
-        // Add other platforms and their Font Awesome icons here
-    };
-
-    // Clear any existing links to prevent duplication if re-initialized
-    socialLinksContainer.innerHTML = '';
-
-    Object.entries(socialMediaLinks).forEach(([platform, url]) => {
-        if (url && socialIcons[platform.toLowerCase()]) { // Ensure URL exists and platform is supported
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.rel = 'noopener noreferrer';
-            link.setAttribute('aria-label', `Visit our ${platform} page`); // Accessibility
-            link.innerHTML = `<i class="fab ${socialIcons[platform.toLowerCase()]}"></i>`;
-            socialLinksContainer.appendChild(link);
-        } else if (url) {
-            console.warn(`Social media platform "${platform}" is not configured with an icon.`);
-        }
-    });
-} 
+// Make the function available globally
+window.initializeSocialLinks = initializeSocialLinks; 

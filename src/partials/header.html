@@ -1,22 +1,27 @@
 <header>
-    <nav>
-        <div class="logo-container">
-            <img src="assets/images/logo.png" alt="Zyn Carpets Logo" class="logo-img" loading="lazy">
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="logo-container">
+                <a href="#logo-showcase" class="logo-link">
+                    <img src="assets/images/logo.png" alt="Zyn Carpets Logo" class="logo-img" loading="lazy">
+                </a>
+            </div>
+            <ul class="nav-links" id="nav-links" role="navigation" aria-label="Main navigation">
+                <li><a href="#logo-showcase">Home</a></li>
+                <li><a href="#welcome">Welcome</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#special-offers">Offers</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#coverage">Coverage</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
         </div>
-        <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
+        <button class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
             <span></span>
             <span></span>
             <span></span>
         </button>
-        <ul class="nav-links">
-            <li><a href="#services">Services</a></li>
-            <li><a href="#special-offers">Offers</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#coverage">Coverage</a></li>
-            <li><a href="#blog">Blog</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
     </nav>
 </header> 

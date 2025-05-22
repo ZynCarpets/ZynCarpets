@@ -1,0 +1,495 @@
+/* Media Queries for Zyn Carpets */
+
+/* Large Screens (1024px and below) */
+@media (max-width: 1024px) {
+    /* Services Section */
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    /* Contact Section */
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}
+
+/* Mobile Navigation (900px and below) */
+@media (max-width: 900px) {
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+        display: block !important;
+        margin-left: auto;
+        position: relative;
+        z-index: calc(var(--z-header) + 5);
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .mobile-menu-btn span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background-color: var(--text-light);
+        margin: 5px auto;
+        transition: transform var(--transition-normal), opacity var(--transition-normal);
+        transform-origin: center;
+    }
+    
+    .mobile-menu-btn.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    
+    .mobile-menu-btn.open span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-menu-btn.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Navigation Links */
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: var(--bg-dark);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        margin: 0;
+        z-index: calc(var(--z-header) + 4);
+        overflow-y: auto;
+        transform: translateX(-100%);
+        transition: transform var(--transition-normal);
+    }
+
+    .nav-links.open {
+        display: flex;
+        transform: translateX(0);
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+        margin: 1rem 0;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity var(--transition-normal), transform var(--transition-normal);
+    }
+
+    .nav-links.open li {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.4rem;
+        color: var(--text-light);
+        text-decoration: none;
+        transition: color var(--transition-normal);
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus {
+        color: var(--primary);
+    }
+
+    /* Prevent body scroll when menu is open */
+    body.menu-open {
+        overflow: hidden;
+    }
+
+    /* Header & Navigation */
+    header {
+        position: fixed;
+        z-index: var(--z-header);
+    }
+
+    nav {
+        position: relative;
+        z-index: calc(var(--z-header) + 1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .logo-container {
+        z-index: calc(var(--z-header) + 5);
+        gap: 0.5rem;
+        padding: 0.2rem 0;
+        max-width: 50%;
+    }
+
+    .logo-link {
+        pointer-events: auto;
+    }
+
+    .logo-img {
+        height: 35px;
+        max-height: 35px;
+    }
+}
+
+/* Desktop Navigation (above 900px) */
+@media (min-width: 901px) {
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2.5rem;
+        margin-left: 4rem;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: var(--text-light);
+        font-weight: 500;
+        font-size: 1.1rem;
+        transition: all var(--transition-normal);
+        position: relative;
+        padding: 0.5rem 0;
+        opacity: 0.9;
+    }
+
+    .nav-links a:hover {
+        color: var(--primary);
+        opacity: 1;
+    }
+
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--primary);
+        transition: width var(--transition-normal);
+        border-radius: var(--border-radius-sm);
+    }
+
+    .nav-links a:hover::after {
+        width: 100%;
+    }
+
+    .mobile-menu-btn {
+        display: none;
+    }
+}
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+    /* Navigation */
+    nav {
+        padding: 0.2rem 5%;
+        height: 70px;
+    }
+    
+    header {
+        max-height: 70px;
+    }
+
+    /* Section Headers */
+    .services h2,
+    .about h2,
+    .contact h2,
+    .testimonials h2 {
+        font-size: 2.2rem;
+        margin-bottom: 3rem;
+    }
+
+    /* About Section */
+    .about {
+        padding: 4rem 1rem;
+    }
+    
+    .feature-card {
+        padding: 2rem;
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+    }
+
+    /* Testimonials */
+    .testimonials {
+        padding: 4rem 1rem;
+    }
+    
+    .testimonial-card {
+        padding: 2rem;
+    }
+    
+    .testimonial-card::before {
+        font-size: 6rem;
+        top: 15px;
+        left: 15px;
+    }
+
+    /* Contact Form */
+    .contact-container {
+        padding: 2rem;
+    }
+    
+    #contact-form input,
+    #contact-form textarea {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 16px;
+    }
+
+    .cta-button,
+    .secondary-button {
+        padding: 1rem 2rem;
+        min-height: 48px;
+    }
+
+    .zip-code-check input {
+        padding: 1rem;
+        font-size: 16px;
+        min-height: 48px;
+    }
+
+    .zip-code-check button {
+        padding: 1rem 2rem;
+        min-height: 48px;
+    }
+
+    /* Social Links */
+    .social-links {
+        gap: 1rem;
+    }
+    
+    .social-links a {
+        font-size: 1.8rem;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .social-links a i {
+        font-size: 1.3rem;
+    }
+}
+
+/* Mobile Phones (480px and below) */
+@media (max-width: 480px) {
+    /* Logo Showcase */
+    .logo-showcase {
+        padding: 3rem 1rem;
+    }
+
+    .showcase-logo {
+        width: 150px;
+    }
+
+    .logo-showcase h2 {
+        font-size: 1.8rem;
+    }
+
+    .logo-showcase p {
+        font-size: 1rem;
+    }
+
+    /* About Section */
+    .about {
+        padding: 3rem 1rem;
+    }
+
+    .about h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .feature-card {
+        padding: 1.5rem;
+    }
+
+    .feature-icon {
+        font-size: 2rem;
+    }
+
+    /* Testimonials */
+    .testimonials {
+        padding: 3rem 1rem;
+    }
+
+    .testimonials h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .testimonial-card {
+        padding: 1.5rem;
+    }
+
+    .testimonial-card::before {
+        font-size: 4rem;
+        top: 10px;
+        left: 10px;
+    }
+
+    /* Hero Section */
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    /* Contact Form */
+    .contact-container {
+        padding: 1.5rem;
+    }
+
+    #contact-form input,
+    #contact-form textarea {
+        padding: 0.8rem;
+        font-size: 14px;
+    }
+
+    .cta-button,
+    .secondary-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* Social Links */
+    .social-links a {
+        font-size: 1.5rem;
+        width: 35px;
+        height: 35px;
+    }
+
+    .social-links a i {
+        font-size: 1.1rem;
+    }
+}
+
+/* Touch Device Styles */
+@media (hover: none) {
+    /* Remove redundant hover effects on touch devices */
+    .feature-card:hover,
+    .testimonial-card:hover,
+    .service-card:hover,
+    .cta-button:hover,
+    .secondary-button:hover,
+    .social-links a:hover {
+        transform: none;
+    }
+}
+
+/* Mobile First Media Queries */
+
+/* Small devices (phones, 576px and up) */
+@media (min-width: 576px) {
+    .container {
+        max-width: 540px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .container {
+        max-width: 720px;
+    }
+
+    nav {
+        padding: 0.2rem 5%;
+        height: 70px;
+    }
+    
+    header {
+        max-height: 70px;
+    }
+    
+    .logo-img {
+        height: 35px;
+        max-height: 35px;
+    }
+    
+    .logo-container {
+        gap: 0.5rem;
+        padding: 0.2rem 0;
+        max-width: 50%;
+    }
+
+    .nav-links a {
+        font-size: 1.2rem;
+        padding: 0.5rem 0;
+    }
+
+    .features {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .testimonials-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .blog-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .container {
+        max-width: 960px;
+    }
+
+    .features {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pricing-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+    .nav-links a:active,
+    .service-card:active,
+    input:active,
+    a:active,
+    .pricing-card.featured:active,
+    .blog-card .read-more:active,
+    .service-card i:active,
+    .feature i:active,
+    .social-links a:active,
+    .mobile-menu-btn:active span,
+    #contact-form button:active,
+    .zip-code-check button:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
+
+    .dot:active {
+        transform: scale(1.2);
+    }
+} 

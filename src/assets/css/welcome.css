@@ -1,0 +1,39 @@
+/* Welcome Section (Logo Showcase) Styles */
+
+.logo-showcase {
+    padding: 6rem 2rem;
+    background-color: var(--bg-dark);
+    text-align: center;
+}
+
+.logo-showcase-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.showcase-logo {
+    width: 300px;
+    height: auto;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.showcase-logo:hover {
+    transform: scale(1.05);
+}
+
+.logo-showcase h2 {
+    color: var(--text-light);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.logo-showcase p {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Import media queries for welcome section */
+@import 'media.css'; 

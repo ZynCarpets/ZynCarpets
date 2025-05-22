@@ -19,38 +19,75 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
     npm install
     ```
 
-3.  **View locally:**
-    *   For a basic preview (without API keys for Analytics, Formspree, etc.):
-        Open `index.html` directly in your browser.
-    *   For a full local preview (with secrets injected, similar to the deployed version):
-        a.  Create a `.env` file in the project root. Add your secrets here, for example:
-            ```env
-            GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
-            GOOGLE_SITE_VERIFICATION=your_verification_string
-            FORMSPREE_FORM_ID=your_formspree_id
-            ```
-        b.  Run the build script:
-            ```bash
-            npm run build
-            ```
-        c.  Open `dist/index.html` in your browser.
+3.  **Environment Setup:**
+    Create a `.env` file in the project root with the following variables:
+    ```env
+    # Required
+    GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
+    GOOGLE_SITE_VERIFICATION=your_verification_string
 
-## Overview of Project Structure
+    # Optional
+    FORMSPREE_ENDPOINT=your_formspree_endpoint
+    FORMSPREE_FORM_ID=your_formspree_id
+    ```
+
+4.  **Development:**
+    ```bash
+    # Build the project
+    npm run build
+
+    # Start development server
+    npm run dev
+    ```
+
+5.  **Testing:**
+    ```bash
+    # Run tests
+    npm test
+
+    # Run tests in watch mode
+    npm run test:watch
+    ```
+
+## Build Process
+
+The build process:
+1. Validates environment variables
+2. Creates a backup of the current `dist` directory
+3. Processes and combines CSS files in the correct order:
+   - variables.css (CSS variables)
+   - animations.css (animations)
+   - component styles (slider.css, welcome.css, reviews.css)
+   - styles.css (main styles)
+   - media.css (responsive styles)
+   - main.css (additional styles)
+4. Minifies CSS and generates source maps
+5. Processes HTML files and injects environment variables
+6. Copies assets to the dist directory
+
+## Project Structure
 
 ```
 zyncarpets/
-├── index.html              # Main HTML entry point
-├── assets/                 # CSS, images, and other static assets
-├── js/                     # Client-side JavaScript (e.g., main script, mobile menu)
-├── scripts/                # Build scripts (e.g., build.js for processing HTML and assets)
-├── docs/                   # Project documentation
-├── tests/                  # Automated tests (Jest)
-├── .github/                # GitHub Actions workflows (e.g., deployment)
-├── package.json            # Project dependencies and npm scripts
-└── ...                     # Other configuration and project files
+├── src/                    # Source files
+│   ├── assets/            # Static assets
+│   │   ├── css/          # CSS files
+│   │   └── images/       # Images
+│   ├── js/               # JavaScript files
+│   ├── partials/         # HTML partials
+│   └── build.js          # Build script
+├── dist/                  # Build output
+├── tests/                # Test files
+├── docs/                 # Documentation
+└── package.json          # Project configuration
 ```
 
-For a detailed project structure and more in-depth information, please see the [docs/README.md](docs/README.md) file.
+## Development
+
+- CSS files are processed in a specific order to ensure proper cascading
+- The build script handles CSS minification and source map generation
+- Environment variables are injected into HTML during build
+- Development server serves the `dist` directory
 
 ## License
 
