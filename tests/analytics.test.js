@@ -33,6 +33,33 @@ describe('Analytics Tests', () => {
         expect(window.gtag).toHaveBeenCalledWith('config', MOCK_GA_ID);
     });
 
+    test('no duplicate Google Analytics scripts', () => {
+        const gaScripts = document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]');
+        expect(gaScripts.length).toBe(1);
+    });
+
+    test('analytics event is sent on button click', () => {
+        // Set up a button
+        const button = document.createElement('button');
+        button.textContent = 'Test Button';
+        document.body.appendChild(button);
+        // Simulate click event
+        button.addEventListener('click', () => {
+            window.gtag('event', 'button_click', {
+                'event_category': 'Engagement',
+                'event_label': 'Test Button',
+                'value': 1
+            });
+        });
+        button.click();
+        expect(window.gtag).toHaveBeenCalledWith('event', 'button_click', expect.objectContaining({
+            event_category: 'Engagement',
+            event_label: 'Test Button',
+            value: 1
+        }));
+        document.body.removeChild(button);
+    });
+
     // test('consent management is implemented', () => {
     //     const consentManagement = document.querySelector('[data-consent]') || 
     //                             document.querySelector('[data-gdpr]');

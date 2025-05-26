@@ -1,5 +1,5 @@
 // Mobile Menu Implementation
-document.addEventListener('DOMContentLoaded', () => {
+function initializeMobileMenu() {
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
     const body = document.body;
@@ -15,6 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
         navLinks.classList.toggle('open');
         body.classList.toggle('menu-open');
     }
+
+    // Remove previous event listeners if any (for test re-runs)
+    menuBtn.onclick = null;
+    navLinks.onclick = null;
+    document.onclick = null;
+    document.onkeydown = null;
+    window.onresize = null;
 
     // Event Listeners
     menuBtn.addEventListener('click', toggleMenu);
@@ -47,9 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleMenu();
         }
     });
-});
+}
+
+// For browser usage, auto-initialize on DOMContentLoaded
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initializeMobileMenu);
+}
 
 // Export for testing
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { MobileMenu };
+    module.exports = { initializeMobileMenu };
 } 

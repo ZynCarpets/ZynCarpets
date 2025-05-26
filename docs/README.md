@@ -61,32 +61,35 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
 zyncarpets/
 ├── index.html              # Main HTML file for the Zyn Carpets website
 ├── 404.html                # Custom 404 error page
-├── assets/                 # Static assets
-│   ├── css/                # CSS stylesheets (e.g., styles.css, animations.css)
-│   └── images/             # Image files (e.g., logo.png, hero images, etc.)
-├── js/                     # Client-side JavaScript files
-│   ├── script.js           # Main application logic, UI interactions, and content setup
-│   └── mobile-menu.js      # JavaScript for mobile navigation menu
-├── scripts/                # Build-related scripts
-│   └── build.js            # Node.js script for building the project (e.g., processing HTML, hashing CSS)
-├── tests/                  # Jest test files (e.g., *.test.js)
-├── docs/                   # Project documentation
-│   ├── README.md           # This detailed documentation file
-│   └── TODO.md             # List of tasks and issues
-├── .github/                # GitHub specific files
-│   └── workflows/          # GitHub Actions workflow configurations
-│       └── deploy.yml      # Workflow for building and deploying the site to GitHub Pages
-├── .babelrc                # Babel configuration (for JavaScript transpilation, e.g., for Jest)
-├── .gitignore              # Specifies intentionally untracked files that Git should ignore
-├── jest.config.js          # Jest testing framework configuration
-├── package.json            # npm package manifest (project metadata, dependencies, scripts)
-├── package-lock.json       # Records exact versions of dependencies
-├── README.md               # Main project README (overview and quick start)
-├── robots.txt              # Instructions for search engine crawlers
-└── sitemap.xml             # XML sitemap for search engines
+├── src/                    # Source files
+│   ├── assets/            # Static assets
+│   │   ├── css/          # CSS stylesheets
+│   │   └── images/       # Image files
+│   ├── js/               # JavaScript files
+│   ├── partials/         # HTML partials
+├── dist/                  # Build output (gitignored)
+├── tests/                 # Jest test files
+├── docs/                  # Project documentation
+│   ├── README.md          # This detailed documentation file
+│   └── TODO.md            # List of tasks and issues
+├── .github/               # GitHub specific files
+│   └── workflows/         # GitHub Actions workflow configurations
+│       └── deploy.yml     # Workflow for building and deploying the site to GitHub Pages
+├── .babelrc               # Babel configuration
+├── .gitignore             # Specifies intentionally untracked files
+├── jest.config.js         # Jest testing framework configuration
+├── package.json           # npm package manifest
+├── package-lock.json      # Records exact versions of dependencies
+├── README.md              # Main project README
+├── robots.txt             # Instructions for search engine crawlers
+└── sitemap.xml            # XML sitemap for search engines
 ```
 
-Note: Most of the site's dynamic content and configuration (e.g., services, testimonials, company info) are currently managed directly within `js/script.js`. Environment-specific variables (like API keys) are injected into HTML placeholders by the `scripts/build.js` script during the build process (see `scripts/build.js` and the GitHub Actions workflow in `.github/workflows/deploy.yml`).
+> **Note:** The `dist/` directory is generated during the build process and is excluded from version control via `.gitignore`.
+
+Most of the site's dynamic content and configuration (e.g., services, testimonials, company info) are currently managed directly within `src/js/`.
+
+Environment-specific variables (like API keys) are injected into HTML placeholders by the build script during the build process (see `.github/workflows/deploy.yml`).
 
 ## Technologies Used
 
@@ -180,10 +183,10 @@ To ensure GitHub Pages serves your site correctly from the `gh-pages` branch:
 ## Customization
 
 ### Content Updates
-- Modify content directly within `js/script.js` for elements like services, testimonials, features, etc.
+- Modify content directly within `src/js/script.js` for elements like services, testimonials, features, etc.
 - For site configuration values that are injected during build (e.g., Google Analytics ID, Formspree endpoint, Google Site Verification code), ensure the corresponding GitHub Secrets are correctly set in your repository settings. The `scripts/build.js` script handles their injection into the HTML placeholders (`{{PLACEHOLDER_NAME}}`) during the deployment workflow.
-- Update images in the `assets/images` directory.
-- Edit styles in the `assets/css` directory.
+- Update images in the `src/assets/images` directory.
+- Edit styles in the `src/assets/css` directory.
 
 ## Browser Support
 

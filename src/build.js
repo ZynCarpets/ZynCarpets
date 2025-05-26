@@ -1,13 +1,18 @@
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
-const CleanCSS = require('clean-css');
-const critical = require('critical');
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
+import CleanCSS from 'clean-css';
+import critical from 'critical';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load .env file only in development
 if (process.env.NODE_ENV !== 'production') {
     try {
-        require('dotenv').config();
+        const dotenv = await import('dotenv');
+        dotenv.config();
     } catch (error) {
         console.warn('No .env file found, using environment variables');
     }
@@ -16,7 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Base directory for source files
 const srcDir = path.join(__dirname, '..', 'src');
 const distDir = path.join(__dirname, '..', 'dist');
-const siteContentData = require('./js/site-content.js');
+import siteContentData from './js/site-content.js';
 
 // Required environment variables
 const requiredEnvVars = ['GOOGLE_ANALYTICS_ID', 'GOOGLE_SITE_VERIFICATION'];
@@ -24,11 +29,23 @@ const optionalEnvVars = ['FORMSPREE_ENDPOINT', 'FORMSPREE_FORM_ID'];
 
 // Validate environment variables
 function validateEnvVars() {
+    console.log('Checking environment variables...');
+    console.log('NODE_ENV:', process.env.NODE_ENV);
+    
+    // Log all environment variables (without values) for debugging
+    console.log('Available environment variables:', Object.keys(process.env).filter(key => 
+        key.startsWith('GOOGLE_') || key.startsWith('FORMSPREE_')
+    ));
+
     const missing = requiredEnvVars.filter(varName => !process.env[varName]);
     if (missing.length > 0) {
         if (process.env.NODE_ENV === 'production') {
+            console.error('Missing required GitHub Secrets:', missing.join(', '));
+            console.error('Please ensure these secrets are set in your GitHub repository settings under Settings > Secrets and variables > Actions');
             throw new Error(`Missing required GitHub Secrets: ${missing.join(', ')}`);
         } else {
+            console.error('Missing required environment variables:', missing.join(', '));
+            console.error('Please add them to your .env file or set them as environment variables');
             throw new Error(`Missing required environment variables: ${missing.join(', ')}. Please add them to your .env file or set them as environment variables.`);
         }
     }
@@ -229,6 +246,7 @@ async function processCSS() {
 
 // Function to process {{INCLUDE partialPath}} directives
 function processIncludes(htmlContent, currentFileDir) {
+    console.log('Processing includes...');
     const includeRegex = /\{\{INCLUDE\s+(.*?)\s*\}\}/g;
     let match;
     let processedContent = htmlContent;
@@ -237,10 +255,12 @@ function processIncludes(htmlContent, currentFileDir) {
     while ((match = includeRegex.exec(htmlContent)) !== null) {
         const partialPath = match[1].trim();
         const fullPartialPath = path.resolve(srcDir, partialPath);
+        console.log('Processing include:', partialPath);
 
         if (fs.existsSync(fullPartialPath)) {
             try {
                 const partialFileContent = fs.readFileSync(fullPartialPath, 'utf8');
+                console.log('Successfully read partial:', partialPath);
                 const processedPartialContent = processIncludes(partialFileContent, path.dirname(fullPartialPath));
                 newHtmlContent = newHtmlContent.replace(match[0], processedPartialContent);
             } catch (error) {
@@ -248,8 +268,8 @@ function processIncludes(htmlContent, currentFileDir) {
                 newHtmlContent = newHtmlContent.replace(match[0], `<!-- Error including ${partialPath}: ${error.message} -->`);
             }
         } else {
-            console.warn(`Partial file not found: ${fullPartialPath} (referenced in a file in ${currentFileDir})`);
-            newHtmlContent = newHtmlContent.replace(match[0], `<!-- Partial not found: ${partialPath} -->`);
+            console.error(`Partial file not found: ${fullPartialPath}`);
+            newHtmlContent = newHtmlContent.replace(match[0], `<!-- Missing partial: ${partialPath} -->`);
         }
     }
     return newHtmlContent;
@@ -278,9 +298,17 @@ async function build() {
     try {
         // Set NODE_ENV if not set
         process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+        console.log('Starting build process in', process.env.NODE_ENV, 'mode');
 
         // Validate environment variables
         validateEnvVars();
+
+        // Verify site content data
+        console.log('Verifying site content data...');
+        if (!siteContentData) {
+            throw new Error('Site content data is missing or invalid');
+        }
+        console.log('Site content data verified successfully');
 
         // Backup current dist directory
         backupDist();
@@ -291,31 +319,39 @@ async function build() {
         // Copy JS files
         const jsSrcDir = path.join(srcDir, 'js');
         const jsDestDir = path.join(distDir, 'js');
+        console.log('Copying JS files from', jsSrcDir, 'to', jsDestDir);
         copyRecursive(jsSrcDir, jsDestDir);
 
         // Copy assets
         const assetsSrcDir = path.join(srcDir, 'assets');
         const assetsDestDir = path.join(distDir, 'assets');
+        console.log('Copying assets from', assetsSrcDir, 'to', assetsDestDir);
         copyRecursive(assetsSrcDir, assetsDestDir);
 
         // Process CSS files
+        console.log('Processing CSS files...');
         const cssResult = await processCSS();
+        console.log('CSS processing completed');
 
         // Process HTML files
         const htmlFiles = fs.readdirSync(srcDir).filter(file => file.endsWith('.html'));
+        console.log('Found HTML files:', htmlFiles);
 
         if (htmlFiles.length === 0) {
             throw new Error('No HTML files found in src directory');
         }
 
         htmlFiles.forEach(htmlFile => {
+            console.log(`Processing ${htmlFile}...`);
             const htmlPath = path.join(srcDir, htmlFile);
             let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
             // Process includes first
+            console.log(`Processing includes for ${htmlFile}...`);
             htmlContent = processIncludes(htmlContent, srcDir);
 
             // Process SITE_DATA template variables
+            console.log(`Processing template variables for ${htmlFile}...`);
             htmlContent = processSiteDataTemplates(htmlContent, siteContentData);
 
             // Inject SITE_DATA script
@@ -338,15 +374,15 @@ async function build() {
             
             // Replace environment variables with defaults for optional ones
             const processedContent = htmlContent
-                .replace('{{GOOGLE_ANALYTICS_ID}}', process.env.GOOGLE_ANALYTICS_ID)
-                .replace('{{GOOGLE_SITE_VERIFICATION}}', process.env.GOOGLE_SITE_VERIFICATION)
+                .replace('{{GOOGLE_ANALYTICS_ID}}', process.env.GOOGLE_ANALYTICS_ID || '')
+                .replace('{{GOOGLE_SITE_VERIFICATION}}', process.env.GOOGLE_SITE_VERIFICATION || '')
                 .replace('{{FORMSPREE_ENDPOINT}}', process.env.FORMSPREE_ENDPOINT || '')
                 .replace('{{FORMSPREE_FORM_ID}}', process.env.FORMSPREE_FORM_ID || '');
             
             // Write processed HTML to dist
             const destPath = path.join(distDir, htmlFile);
             fs.writeFileSync(destPath, processedContent);
-            console.log(`Processed ${htmlFile} -> ${destPath}`);
+            console.log(`Successfully processed ${htmlFile} -> ${destPath}`);
         });
 
         console.log(`Build completed successfully in ${process.env.NODE_ENV} mode!`);

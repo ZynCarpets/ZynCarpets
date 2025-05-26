@@ -50,6 +50,6 @@ const SITE_DATA = {
 
 if (typeof window !== 'undefined') {
     window.SITE_DATA = SITE_DATA; // For browser environment
-} else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    module.exports = SITE_DATA; // For Node.js environment (build script) 
-} 
+}
+
+export default SITE_DATA; 

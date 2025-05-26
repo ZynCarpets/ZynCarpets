@@ -17,57 +17,32 @@ describe('Slider Functionality - Basic Script Execution Test', () => {
     beforeEach(() => {
         window.SITE_DATA = JSON.parse(JSON.stringify(mockSiteDataWithSlides));
         loadHtml(); // Load dist/index.html
-        
-        console.log('[TEST] Scripts found by getElementsByTagName after loadHtml():');
-        const scriptsInDoc = document.getElementsByTagName('script');
-        for (let i = 0; i < scriptsInDoc.length; i++) {
-            const scriptSrc = scriptsInDoc[i].src || 'inline';
-            const scriptTextStart = scriptsInDoc[i].textContent.substring(0, 70).replace(/\n/g, ' ').trim() + '...';
-            console.log(`  - Script ${i}: src="${scriptSrc}", textContentStart="${scriptTextStart}"`);
-        }
 
-        // Attempt to manually load and execute slider.js
-        try {
-            const sliderScriptPath = path.resolve(__dirname, '../../dist/js/slider.js'); // Path relative to tests/slider.test.js
-            console.log(`[TEST] Attempting to read slider.js from: ${sliderScriptPath}`);
-            if (fs.existsSync(sliderScriptPath)) {
-                const sliderScriptContent = fs.readFileSync(sliderScriptPath, 'utf8');
-                console.log('[TEST] slider.js content loaded, length:', sliderScriptContent.length);
-                console.log('[TEST] Executing slider.js content using window.eval()...');
-                window.eval(sliderScriptContent); // Execute in global context
-                console.log('[TEST] slider.js content executed via eval.');
-            } else {
-                console.error(`[TEST] ERROR: slider.js not found at ${sliderScriptPath}`);
-            }
-        } catch (e) {
-            console.error('[TEST] ERROR during manual load/eval of slider.js:', e);
-        }
-        
-        // Re-set SITE_DATA just in case, for the dummy initializeSlider if it uses it.
-        window.SITE_DATA = JSON.parse(JSON.stringify(mockSiteDataWithSlides));
+        // Set test flag and require the source file directly
+        window.__TEST__ = true;
+        require('../src/js/slider');
+        window.initializeSlider();
     });
 
     afterEach(() => {
-        document.body.innerHTML = ''; 
+        document.body.innerHTML = '';
         if (window.SITE_DATA) delete window.SITE_DATA;
         if (window.sliderScriptLoaded) delete window.sliderScriptLoaded;
-        if (window.initializeSlider) delete window.initializeSlider;
+        if (window.__TEST__) delete window.__TEST__;
         jest.clearAllTimers();
         jest.useRealTimers();
     });
 
     test('slider.js script should load and define globals (after manual eval)', () => {
-        console.log('[TEST] Checking window.sliderScriptLoaded (after eval):', window.sliderScriptLoaded);
         expect(window.sliderScriptLoaded).toBe(true);
-        console.log('[TEST] Checking typeof window.initializeSlider (after eval):', typeof window.initializeSlider);
         expect(typeof window.initializeSlider).toBe('function');
     });
 
     test('calling dummy window.initializeSlider executes its log (after manual eval)', () => {
         if (typeof window.initializeSlider === 'function') {
-            window.initializeSlider(); 
+            window.initializeSlider();
             const dummyElem = document.getElementById('sliderTestElement');
-            // Check if the dummy element was created by the eval'd script
+            // Check if the dummy element was created by the test hook
             expect(dummyElem).toBeTruthy();
             expect(dummyElem.textContent).toBe('Slider script was here');
         } else {

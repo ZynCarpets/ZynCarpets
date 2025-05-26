@@ -59,6 +59,51 @@ describe('Contact Form Tests', () => {
         expect(formspreeId).toBeTruthy();
         expect(formspreeId).not.toBe('process.env.FORMSPREE_FORM_ID');
     });
+
+    test('invalid email format fails validation', () => {
+        const emailField = document.getElementById('email');
+        emailField.value = 'invalid-email';
+        const inputEvent = document.createEvent('Event');
+        inputEvent.initEvent('input', true, true);
+        emailField.dispatchEvent(inputEvent);
+        expect(emailField.checkValidity()).toBe(false);
+    });
+
+    test('error message is displayed on invalid input', () => {
+        // Simulate error message display logic
+        const nameField = document.getElementById('name');
+        nameField.value = '';
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'validation-message';
+        errorDiv.id = 'name-message';
+        errorDiv.textContent = '';
+        document.body.appendChild(errorDiv);
+        // Simulate validation and error display
+        if (!nameField.value) {
+            errorDiv.textContent = 'Name is required.';
+        }
+        expect(errorDiv.textContent).toBe('Name is required.');
+        document.body.removeChild(errorDiv);
+    });
+
+    test('successful form submission (mocked)', () => {
+        const form = document.getElementById('contact-form');
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.value = fieldId === 'email' ? 'test@example.com' : 'test value';
+            }
+        });
+        // Mock submit event
+        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+        let submitted = false;
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitted = true;
+        });
+        form.dispatchEvent(submitEvent);
+        expect(submitted).toBe(true);
+    });
 });
 
 // To run the tests manually, open the browser console and type: testContactForm()

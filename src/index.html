@@ -100,6 +100,56 @@
       ]
     }
     </script>
+    <!-- Schema.org LocalBusiness Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Zyn Carpets",
+      "image": "https://zyncarpets.com/assets/images/logo.png",
+      "telephone": "+1-555-123-4567",
+      "email": "peace@zyncarpets.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Main St",
+        "addressLocality": "Madison",
+        "addressRegion": "AL",
+        "postalCode": "35758",
+        "addressCountry": "US"
+      },
+      "url": "https://zyncarpets.com/",
+      "priceRange": "$$",
+      "description": "Professional carpet cleaning services in Madison, Huntsville, and Athens.",
+      "areaServed": [
+        "Madison, AL",
+        "Huntsville, AL",
+        "Athens, AL"
+      ],
+      "openingHours": "Mo-Sa 08:00-18:00",
+      "sameAs": [
+        "https://www.facebook.com/",
+        "https://www.instagram.com/"
+      ]
+    }
+    </script>
+    <!-- Schema.org Service Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Carpet Cleaning",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Zyn Carpets"
+      },
+      "areaServed": [
+        "Madison, AL",
+        "Huntsville, AL",
+        "Athens, AL"
+      ],
+      "description": "Deep cleaning, stain removal, and sanitization for carpets in homes and businesses."
+    }
+    </script>
 </head>
 <body>
     {{INCLUDE partials/header.html}}

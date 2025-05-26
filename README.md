@@ -41,11 +41,21 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
     ```
 
 5.  **Testing:**
+    
+    This project uses [Jest](https://jestjs.io/) for testing, with configuration in `jest.config.js` and a setup file at `tests/setup.js` that mocks Google Analytics, `window.matchMedia`, and provides helpers for loading HTML and `SITE_DATA`.
+    
+    > **Note:** Some integration tests may require a built `dist/index.html` file. If you encounter errors about missing HTML or `SITE_DATA`, run the build first:
+    > ```bash
+    > npm run build
+    > ```
+    
+    To run tests:
     ```bash
-    # Run tests
     npm test
-
-    # Run tests in watch mode
+    ```
+    
+    To run tests in watch mode:
+    ```bash
     npm run test:watch
     ```
 
@@ -53,7 +63,7 @@ A modern, responsive landing page for Zyn Carpets, a locally-owned carpet cleani
 
 The build process:
 1. Validates environment variables
-2. Creates a backup of the current `dist` directory
+2. Creates a backup of the current `dist` directory (if present)
 3. Processes and combines CSS files in the correct order:
    - variables.css (CSS variables)
    - animations.css (animations)
@@ -65,6 +75,8 @@ The build process:
 5. Processes HTML files and injects environment variables
 6. Copies assets to the dist directory
 
+> **Note:** The `dist/` directory is generated during the build process and is excluded from version control via `.gitignore`.
+
 ## Project Structure
 
 ```
@@ -75,8 +87,7 @@ zyncarpets/
 │   │   └── images/       # Images
 │   ├── js/               # JavaScript files
 │   ├── partials/         # HTML partials
-│   └── build.js          # Build script
-├── dist/                  # Build output
+├── dist/                  # Build output (gitignored)
 ├── tests/                # Test files
 ├── docs/                 # Documentation
 └── package.json          # Project configuration

@@ -105,10 +105,20 @@ describe('Accessibility Tests', () => {
     describe('ARIA Roles', () => {
         test('elements have valid ARIA roles', () => {
             const validRoles = [
-                'button', 'link', 'checkbox', 'radio', 'textbox', 
-                'combobox', 'listbox', 'menu', 'menuitem', 'tab', 'tabpanel', 'alert'
+                // Landmark roles
+                'banner', 'navigation', 'main', 'complementary', 'contentinfo', 'region', 'search',
+                // Widget roles
+                'button', 'link', 'checkbox', 'radio', 'textbox', 'combobox', 'listbox', 'menu', 'menuitem', 'tab', 'tabpanel', 'alert',
+                'menuitemcheckbox', 'menuitemradio', 'option', 'progressbar', 'scrollbar', 'slider', 'spinbutton', 'switch', 'textbox', 'treeitem',
+                // Document structure roles
+                'article', 'columnheader', 'definition', 'directory', 'document', 'feed', 'figure', 'group', 'heading', 'img', 'list', 'listitem', 'math', 'none', 'note', 'presentation', 'row', 'rowgroup', 'rowheader', 'separator', 'table', 'term', 'timer', 'toolbar', 'tooltip', 'tree', 'treegrid',
+                // Live region roles
+                'alert', 'log', 'marquee', 'status', 'timer',
+                // Window roles
+                'alertdialog', 'dialog',
+                // Other
+                'application'
             ];
-            
             const elementsWithRoles = document.querySelectorAll('[role]');
             elementsWithRoles.forEach(element => {
                 const role = element.getAttribute('role');
