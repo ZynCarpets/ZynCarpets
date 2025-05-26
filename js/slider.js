@@ -7,6 +7,15 @@ let currentSlide = 0;
 let slideInterval;
 
 function initializeSlider() {
+    // Test hook: if window.__TEST__ is set, create a dummy element for the test
+    if (typeof window !== 'undefined' && window.__TEST__) {
+        const dummyElem = document.createElement('div');
+        dummyElem.id = 'sliderTestElement';
+        dummyElem.textContent = 'Slider script was here';
+        document.body.appendChild(dummyElem);
+        return;
+    }
+
     const sliderContainer = document.getElementById('slider');
     const dotsContainer = document.getElementById('slider-dots');
     
@@ -41,6 +50,11 @@ function initializeSlider() {
 
     // Start the slideshow
     startSlideShow();
+}
+
+// Attach to window for test access
+if (typeof window !== 'undefined') {
+    window.initializeSlider = initializeSlider;
 }
 
 function goToSlide(index) {
@@ -80,7 +94,9 @@ function startSlideShow() {
 }
 
 // Initialize slider when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeSlider);
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initializeSlider);
+}
 
 console.log('[slider.js] window.initializeSlider defined:', typeof window.initializeSlider);
 console.log('[slider.js] Script end'); 

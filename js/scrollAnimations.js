@@ -25,6 +25,29 @@ function initializeScrollAnimations() {
         if (!welcomeSection) console.warn('Scroll Animation: Welcome section (#welcome) not found.');
     }
 
+    // === Google Analytics Section View Tracking ===
+    const sectionElements = document.querySelectorAll('section[id]');
+    const sectionViewTracked = {};
+    
+    if (window.gtag && sectionElements.length > 0) {
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    if (!sectionViewTracked[sectionId]) {
+                        window.gtag('event', 'section_view', {
+                            'event_category': 'Section',
+                            'event_label': sectionId,
+                            'non_interaction': true
+                        });
+                        sectionViewTracked[sectionId] = true;
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        sectionElements.forEach(section => sectionObserver.observe(section));
+    }
+
     // Active navigation link based on scroll position
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-links a');
